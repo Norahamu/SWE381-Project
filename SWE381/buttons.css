@@ -3,17 +3,21 @@
     margin-left: 10px;
 }
 
-.edit {
+.button1 {
+    width: 80px;
+    height: 30px;
+    background-color: #a1d775;
+    color: white;
     border: none;
-    color: #fff;
-    background: rgb(177, 225, 177);
+    cursor: pointer;
+    float: right;
+    margin-left: 10px;
     border-radius: 20px;
     background-size: 100% auto;
     font-family: inherit;
     font-size: 10px;
-    padding: 0.6em 1.5em;
-}
-
+    padding: 0.6em 1.5em
+   }
 button:hover {
     background-position: right center;
     background-size: 200% auto;
@@ -21,16 +25,29 @@ button:hover {
     animation: pulse512 1.5s infinite;
 }
 
-.cancel {
+ .button2{
+    width: 80px;
+    height: 30px;
+    background-color: red;
+    color: white;
     border: none;
-    color: #fff;
-    background: rgb(230, 106, 106);
+    cursor: pointer;
+    float: right;
+    margin-left: 10px;
     border-radius: 20px;
     background-size: 100% auto;
     font-family: inherit;
     font-size: 10px;
     padding: 0.6em 1.5em;
-}
+
+   }
+   .text2{
+    position: relative;
+    right: -400px;
+    top: -2.2em;
+    font-weight: bold;
+    font-family: "Open Sans", sans-serif;
+  }
 
 @keyframes pulse512 {
     0% {
