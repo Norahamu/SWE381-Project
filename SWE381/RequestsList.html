@@ -23,6 +23,8 @@
   <!-- Main CSS File -->
   <link href="style.css" rel="stylesheet">
   <link rel="stylesheet" href="buttons.css">
+	 <link href="sessionsStyle.css" rel="stylesheet">
+</head>
 </head>
 <body>
 
@@ -44,7 +46,7 @@
     </nav>
   </header>
   <!-- End Header -->
-   <br>
+    <br>
   <br>
   <br>
 <br>
@@ -52,38 +54,36 @@
  <div class="section-title">
 <h2>Requests List</h2> </div>
 <br>
-<div class="cards">
-		             <div>
-                <div class="card grey" >
-    <img src="assets/img/MohammedAbdullah.jpg" alt="Mohammed Ibraheem" class="image--cover">
-    <br>
-    <strong>Mohammed Ibraheem</strong> <br>
+<div id="site">
+  <section class="section-bg">
+    <div class="section-title">
+      <h2>List Request</h2>
+    </div>
     
-</div>       
-            </div> 
-     
-             <div>
-                <div class="card grey" >
-    <img src="assets/img/team/team-3.jpg" alt="Michael" class="image--cover">
-    <br>
-    <strong>Michael</strong> <br>
-    <button type="button" onclick="window.location.href='editrequest.html'" class="edit">edit-request</button>
-    <br>
-    <strong></strong> <button type="button" class="cancel">cancel-request</button>
-</div>       
-            </div> 
-  
-               <div>
- <div class="card grey" >
-    <img src="assets/img/NUHAFAISAL.jpg" alt="Nuha" class="image--cover">
-    <br>
-    <strong>Nuha Faisal</strong> <br>
-
+    <div class="sessions">
+      <div class="session">
+        <img src="assets/img/EmanA.png" alt="user icon" class="userBlue">
+        <strong>Eman A</strong> <br>
+        
+        <h6 class="text2">Approve Request</h6>
+        
+      </div>
+      <div class="session" class="container" >
+        <img src="assets/img/IbrahimN.png" alt="user icon" class="userBlue">
+        <strong> Ibraheem N</strong> 
+        <button type="button" onclick="window.location.href='editrequest.html'" class="button1">edit</button>
+        <button type="button" class="button2">cancel</button><br><br>
+        <h6 class="text2">Pending Request</h6>
+      </div>
+      <div class="session">
+        <img src="assets/img/kimberly.png" alt="user icon" class="userBlue">
+        <strong>Kimberly</strong> <br>
+        <h6 class="text2">Decline Request</h6>
+        
+      </div>
+    </div>
+  </section>
 </div>
-              
-            </div> 
-</div>
-			</section>
 		
 			
       <!-- ======= Footer ======= -->
