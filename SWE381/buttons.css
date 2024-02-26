@@ -1,0 +1,123 @@
+.edit1 {
+    background: rgb(177, 225, 177);
+    margin-left: 10px;
+}
+
+.edit {
+    border: none;
+    color: #fff;
+    background: rgb(177, 225, 177);
+    border-radius: 20px;
+    background-size: 100% auto;
+    font-family: inherit;
+    font-size: 10px;
+    padding: 0.6em 1.5em;
+}
+
+button:hover {
+    background-position: right center;
+    background-size: 200% auto;
+    -webkit-animation: pulse 2s infinite;
+    animation: pulse512 1.5s infinite;
+}
+
+.cancel {
+    border: none;
+    color: #fff;
+    background: rgb(230, 106, 106);
+    border-radius: 20px;
+    background-size: 100% auto;
+    font-family: inherit;
+    font-size: 10px;
+    padding: 0.6em 1.5em;
+}
+
+@keyframes pulse512 {
+    0% {
+        box-shadow: 0 0 0 0 #05bada66;
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
+    }
+}
+
+.cards {
+    flex-direction: column;
+    gap: 20px;
+	 align-items: flex-start; 
+}
+
+.cards .card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    height: 200px;
+    width: 900px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: 400ms;
+}
+
+.image--cover {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 0px;
+    object-fit: cover;
+    object-position: center right;
+}
+
+.cards .card p.tip {
+    font-size: 1em;
+    font-weight: 700;
+}
+
+.cards .card p.second-text {
+    font-size: 0.7em;
+}
+
+.cards .card:hover {
+    transform: scale(1.1, 1.1);
+}
+
+.cards:hover > .card:not(:hover) {
+    transform: scale(0.9, 0.9);
+}
+
+.subtitle {
+    color: #002;
+    font-size: 13px;
+    animation: bit 0.6s alternate infinite;
+}
+
+@keyframes bit {
+    from {
+        opacity: 0.3;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.wrapper {
+    padding: 0px;
+}
+
+.image--cover {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 0px;
+    object-fit: cover;
+    object-position: center right;
+}

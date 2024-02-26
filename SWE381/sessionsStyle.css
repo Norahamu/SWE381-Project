@@ -1,0 +1,171 @@
+
+
+.menu {
+    display: flex;
+    position: relative;
+    right: -42%;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #333;
+    padding: 30px;
+}
+
+.menu a:hover {
+    background-color: #7e91b9;
+}
+
+.session{
+	width:600px;
+	height: 100px;
+    background-color: rgb(235, 235, 235);
+    padding: 20px;
+    margin: 15px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.userBlue {
+    width:55px;
+    height: 55px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 0px;
+    object-fit: cover;
+    object-position: center;
+}
+
+
+.sessions{
+	display: flex;
+	flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+}
+
+.button {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  right: -250px;
+  top: -6.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(40,58,90,0.9);
+  border-radius: 50%;
+  cursor: pointer;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.13);
+  border: none;
+}
+
+.fa {
+position: relative;
+  right: -420px;
+  top: -2.8em;
+  
+}
+
+.time{
+  position: relative;
+  right: -450px;
+  top: -2.2em;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+}
+
+.bell {
+  width: 18px;
+}
+
+.bell path {
+  fill: white;
+}
+
+.button:hover {
+  background-color: rgb(56, 56, 56);
+}
+
+.button:hover .bell {
+  animation: bellRing 0.9s both;
+}
+
+/* bell ringing animation keyframes*/
+@keyframes bellRing {
+  0%,
+  100% {
+    transform-origin: top;
+  }
+
+  15% {
+    transform: rotateZ(10deg);
+  }
+
+  30% {
+    transform: rotateZ(-10deg);
+  }
+
+  45% {
+    transform: rotateZ(5deg);
+  }
+
+  60% {
+    transform: rotateZ(-5deg);
+  }
+
+  75% {
+    transform: rotateZ(2deg);
+  }
+}
+
+.button:active {
+  transform: scale(0.8);
+}
+.btn {
+  border: none;
+  width: 7em;
+  height: 3em;
+  border-radius: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-width: 1cm;
+  border-color:rgba(40,58,90,0.9) ;
+  cursor: pointer;
+  transition: all 450ms ease-in-out;
+  position: relative;
+   right: -230px;
+   top: -6.2em;
+}
+
+.sparkle {
+  fill: #AAAAAA;
+  transition: all 800ms ease;
+}
+
+.text {
+  font-weight: 600;
+  color:rgba(40,58,90,0.9);
+  font-size: medium;
+}
+
+.btn:hover {
+  background: linear-gradient(rgba(40, 58, 90, 0.9),rgba(40, 58, 90, 0.9),rgba(40, 58, 90, 0.9));
+  
+  transform: translateY(-2px);
+}
+
+.btn:hover .text {
+  color: white;
+}
+
+.btn:hover .sparkle {
+  fill:rgb(235, 235, 235);
+  transform: scale(1.2);
+}

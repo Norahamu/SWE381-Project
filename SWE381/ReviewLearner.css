@@ -1,0 +1,65 @@
+/*--------------------------------------------------------------
+# Review leen
+--------------------------------------------------------------*/
+
+* {font-family: "Poppins", sans-serif;}
+
+#sel/*select a partner*/{ color: #7e91b9;}
+
+
+
+div { justify-content: center;
+  text-align: left;
+  align-items: center;}
+
+.row1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 8rem;
+  width: 95%;
+  padding: 1rem 2rem;
+  margin-right: 6rem;
+  margin-bottom: 2rem;}
+
+div.evaluationfeedback {
+  align-items: center;
+  justify-content: center;
+  width: 95%;
+  padding: 1rem 2rem;
+  margin-right: 6rem;
+  margin-bottom: 2rem;
+  text-align: center;}
+
+h1 {color: black;
+  text-align: center;
+  font-size: xx-large;}
+
+h2 {color: black;
+  text-align: center;
+  font-size: x-large;}
+
+.evaluation div select /*select a partner box*/
+{width: 200px;
+  font-size: large;
+  background-color: whitesmoke;}
+
+  .rating:not(:checked) > input {  position: absolute;
+  appearance: none;}
+.rating:not(:checked) > label {
+  float: right;  cursor: pointer;
+  font-size: 30px;  color: #666;
+}
+.rating:not(:checked) > label:before {  content: '★';
+}
+.rating > input:checked + label:hover,.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {  color: #e58e09;
+}
+.rating:not(:checked) > label:hover,.rating:not(:checked) > label:hover ~ label {
+  color: #ff9e0b;}
+.rating > input:checked ~ label {
+  color: #ffa723;}
+
+
+body {background-color: var(--background);}

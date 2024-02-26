@@ -1,0 +1,355 @@
+
+
+
+.insideHeader{
+    display: flex;
+}
+
+
+.RightPartOfInsideHeader{
+   display: flex;
+   margin-top: 40px;
+}
+
+
+.personal{
+    
+    height: 150px; width: 150px;  margin-right: 190px; margin-left: 20px; margin-top: 10px; border-radius: 70px;
+}
+.SmallIcon{
+    height: 30px; 
+    width: 30px; 
+    border-radius: 8px;
+    margin-right: 0px; 
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+
+
+.name{
+  
+
+font-family: 'Lato';
+display: inline;
+font-style: normal;
+font-weight: 700;
+font-size: 35px;
+line-height: 18px;
+margin-bottom: 40px;
+margin-left: 10px;
+color: #37517e;
+
+text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25); 
+
+
+
+}
+
+
+.Icon{
+   color: #1F64FF;
+    height: 40px; 
+    width: 40px; 
+   margin-bottom: 20px;
+   margin-left: 200px;
+}
+
+.toPutInLine{
+    color:#37517e;;
+    display: inline;
+    margin-bottom: 40px;
+    
+}
+
+
+
+.test{
+    color: #37517e;
+    margin-left: 150px;
+    margin-top: 0px;
+}
+
+.language{
+  margin-left: 27px;
+}
+
+
+
+
+.rating:not(:checked) > input {
+  position: absolute;
+  appearance: none;
+}
+
+.rating:not(:checked) > label {
+  float: right;
+  cursor: pointer;
+  font-size: 30px;
+  color: #666;
+}
+
+.rating:not(:checked) > label:before {
+  content: '★';
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+  color: #e58e09;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: #ff9e0b;
+}
+
+.rating > input:checked ~ label {
+  color: #ffa723;
+}
+
+.cheakpoint{
+    display: flex;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+
+
+/* aleen */
+#site{
+	display: flex;
+    
+    flex-direction: column;
+  
+    width:100%;
+}
+
+.review{
+	width:70%;
+    background-color: rgb(235, 235, 235);
+    padding: 20px;
+    margin: 15px;
+    border-radius: 50px;
+}
+
+.userBlue {
+    width:55px;
+    height: 55px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 0px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.stars{
+	display: flex;
+	font-size: 18px;
+	justify-content: flex-end;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: end;
+    position: relative;
+	right: 1em;
+	top: -1em;
+    }
+
+.checked{
+	color: orange;
+}
+
+
+
+.strong{
+	line-height: 0.03cm;
+}
+
+.heading{
+	position: relative;
+	bottom: -0.5em;
+
+}
+
+
+h6{
+	color: #979797;
+    font-size: 0.8rem;
+    padding-left: 60px;
+    position: relative;
+    top: -5em;
+    font-family: "Open Sans", sans-serif;
+	margin-top: 17px;
+}
+
+
+.Aleen{
+	font-family: "Jost", sans-serif;
+	line-height: 20px;
+	font-size: 17px;
+    font-weight: 500;
+    top: -3em;
+}
+
+
+
+/*leen */ 
+
+
+.leen{
+    
+    margin-top: 40px;
+    margin-left: 120px;
+      
+}
+
+.button {
+    margin-top: 20px;
+    margin-left: 30px;
+  --font-color: #323232;
+  --bg-color: #fff;
+  --main-color: #37517e;;
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  font-size: 17px;
+  font-weight: 600;
+  color: #37517e;;
+  cursor: pointer;
+}
+
+.button:active {
+  box-shadow: 0px 0px var(--main-color);
+  transform: translate(3px, 3px);
+}
+
+
+.BookInitialDiscussion{
+     justify-content: center; 
+    align-items: center;
+   
+     border-radius: 5px;
+     padding: 5px;
+   margin-left: 50px;
+  
+   margin-top: 100px;
+   text-decoration:none;
+    
+    
+  outline-offset: -3px;
+  cursor: pointer;
+  transition: 400ms;
+  
+  
+ font-family: "Poppins", sans-serif;
+  
+  
+ 
+  
+ 
+  transition: 0.3s;
+  line-height: 1;
+  color: #37517e;
+  animation-delay: 0.8s;
+ 
+  border: 2px solid #37517e;
+}
+
+.BookInitialDiscussion:hover{
+    background:#37517e;
+  color: #fff;
+  text-decoration: none;
+}
+
+
+.tooltip-container {
+  height: 10px;
+  width: 70px;
+  border-radius: 5px;
+  background-color: #fff;
+  background-image: linear-gradient(
+    to left bottom,
+    #f2f5f8,
+    #ecf1f2,
+    #e7eceb,
+    #e3e7e4,
+    #e1e2de
+  );
+  border: 1px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.151);
+  position: absolute;
+  transition: transform 0.3s ease;
+padding:20px;
+margin-bottom: -150px;
+
+}
+
+.tooltip-container::before {
+  position: absolute;
+  content: "";
+  top: -50%;
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  border-radius: 5px;
+ 
+  background-image: linear-gradient(
+    to left bottom,
+    #f2f5f8,
+    #e4eaec,
+    #d8dfde,
+    #cdd3cf,
+    #c5c7c1
+  );
+  width: 100%;
+  height: 50%;
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(-150deg) translateY(-110%);
+  transition: transform 0.3s ease;
+}
+
+.tooltip-container .text {
+  color: rgb(32, 30, 30);
+  font-weight: bold;
+  font-size: 40px;
+  text-decoration: none;
+}
+
+
+.tooltip-container:hover {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.tooltip-container:hover::before {
+  transform: rotateY(0);
+  background-image: none;
+  background-color: white;
+}
+
+.tooltip-container:hover .tooltip {
+  top: -90px;
+  opacity: 1;
+  transition-duration: 0.3s;
+}
+
+
+.test1{
+    margin-top:70px;
+    margin-left: 150px;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+margin-left:20%;
+padding:10px;
+}
+

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8"> <!-- character encoding-->
+ <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings-->
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
+<title>Post Language Learning Request</title>
+   <!-- icon -->
+  <link href="assets/img/Lingoblue.png" rel="icon" >
+
+  <!-- Google Fonts -->
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
+ 
+
+  <!-- Vendor CSS Files -->
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+
+  <!-- Main CSS File -->
+  <link href="style.css" rel="stylesheet">
+
+</head>
+<body>
+<!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center">
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+    </div>
+    <nav id="navbar" class="navbar">
+      <ul> 
+    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
+    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
+    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+      </ul>
+
+    </nav>
+  </header>
+  <!-- End Header -->
+  <br>
+  <br>
+  <br>
+  <br>
+
+<section id="req" class="req section-bg">
+      <div class="container aos-init aos-animate" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Post a Language Learning Request</h2></div>
+
+        <div class="row">
+
+          <div class="col-lg-12 mt-5 mt-lg-0 d-flex align-items-stretch">
+            <form action="#" method="post" class="php-email-form">
+              <div class="row">
+                <div class="form-group">
+                  <label for="lang">Language</label>
+                  <input type="text" class="form-control" placeholder="Enter the language" name="language" id="lang" required="">
+                </div>
+              <div class="form-group">
+                <label for="level">Proficiency Level</label>
+                <input type="text" class="form-control" placeholder="Enter your proficiency level" name="level" id="level" required="">
+              </div>
+			                <div class="form-group">
+                <label for="level">Session Duration</label>
+                <input type="text" class="form-control" placeholder="Enter the session duration" name="level" id="level" required="">
+              </div>
+			  </div>
+			   <p>Preferred Schedule</p>
+           <input type="datetime-local" name="datetime-local" >
+			         <div class="text-center"><button type="button" onclick="window.location.href='RequestsList.html'">Post</button>
+              </div>
+            </form>
+          </div>
+        </div>
+                   
+
+
+    
+      </div>
+</section>
+
+
+
+  
+      <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <p>
+              King Saud University <br>
+              Riyadh <br>
+              Saudi Arabia <br><br>
+              <strong>Email:</strong> lingo@project.com<br>
+            </p>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+			  <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.html">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.html">Language Learning Requests</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="PartnersList.html">Partner List</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.html">Review my partner</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom clearfix">
+      <div class="copyright">
+        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits"></div>
+    </div>
+  </footer>
+</body>
+</html>

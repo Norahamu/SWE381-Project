@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css" media="screen">
+  <title>Sign up as a learner Page</title>
+     <!-- icon -->
+  <link href="assets/img/Lingoblue.png" rel="icon">
+  <!-- Google Fonts -->
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
+ 
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <!-- Main CSS File -->
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center">
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+    </div>
+    <nav id="navbar" class="navbar">
+      <ul>
+        <li class="dropdown">
+          <a class="getstarted scrollto" href="#"><span>Get Started</span> <i class="bi bi-chevron-down"></i></a>
+          <ul>
+            <li class="dropdown">
+              <a href="#"><span>Sign Up</span> <i class="bi bi-chevron-right"></i></a>
+              <ul>
+                <li><a href="signuppartner.html">Sign Up as a language partner</a></li>
+                <li><a href="signuplearner.html">Sign Up as a learner</a></li>
+              </ul>
+            </li>
+           <li class="dropdown">
+          <a href="#"><span>Log in</span> <i class="bi bi-chevron-right"></i></a>
+		  <ul>
+            <li><a  href="loginpartner.html">Log in as a language partner </a></li>
+            <li><a  href="loginlearner.html">Log in as a learner</a></li>
+		</ul>
+		</li>
+          </ul>
+        </li>
+        <li><a class="nav-link scrollto" href="HomePage.html">Home</a></li>
+        <li><a class="nav-link scrollto" href="HomePage.html">About</a></li>
+        <li><a class="nav-link scrollto" href="HomePage.html">How it works?</a></li>
+        <li><a class="nav-link scrollto" href="HomePage.html">Find a language partner</a></li>
+        <li><a class="nav-link scrollto" href="HomePage.html">Become a language partner</a></li>
+        <li><a class="nav-link scrollto" href="HomePage.html">Contact</a></li>
+      </ul>
+      <i class="bi bi-list mobile-nav-toggle"></i>
+    </nav>
+	<!-- .navbar -->
+  </header>
+  <!-- End Header -->
+  <!-- ======= Sign up as a language learner Section ======= -->
+  <section id="signuplearner" class="signuplearner section-bg">
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+      <br>
+      <br>
+      <br>
+      <div class="section-title">
+        <h2>Sign up as a learner</h2>
+      </div>
+      <div class="row">
+        <div class="col-lg-5 d-flex align-items-stretch">
+          <div class="info">
+            <div class="login">
+              <h4>If you already have an account, log in:</h4>
+		     <div class="text-center"><a href="loginpartner.html" class="btn-sign">Log in as a language partner</a></div>
+             <div class="text-center"><a href="loginlearner.html" class="btn-sign">Log in as a learner</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
+          <form action="forms/signuplearner.php" method="post" class="php-email-form">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="fname">First Name*</label>
+                <input type="text" placeholder="Enter your first name" name="First name" class="form-control" id="fname" required="">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="lname">Last Name*</label>
+                <input type="text" placeholder="Enter your last name" name="Last name" class="form-control" id="lname" required="">
+              </div>
+              <div class="form-group">
+                <label for="email">Email*</label>
+                <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="psw">Password*</label>
+              <input type="password" class="form-control" placeholder="Enter your password" name="Password" id="psw" required="">
+            </div>
+            <div class="form-group">
+              <label for="psw-repeat">Repeat Password*</label>
+              <input type="password" class="form-control" placeholder="Repeat your password" name="Password" id="psw-repeat" required="">
+            </div>
+            <div class="form-group">
+              <label for="photo">Upload Photo</label>
+              <input type="file" class="form-control" name="photo" id="photo" required="">
+            </div>
+            <div class="form-group">
+              <label for="city">City*</label>
+              <input type="text" class="form-control" placeholder="Enter your city" name="city" id="city" required="">
+            </div>
+            <div class="form-group">
+              <label for="location">Location*</label>
+              <input type="text" class="form-control" placeholder="Enter your location" name="location" id="location" required="">
+            </div>
+            <div class="my-3">
+              <div class="loading">Loading</div>
+              <div class="error-message"></div>
+              <div class="sent-message">You have been signed up!</div>
+            </div>
+            <div class="text-center"><button type="submit" onclick="window.location.href='loginlearner.html'">Sign up</button></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+ <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-newsletter">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6">
+            <h4>Join Our Newsletter</h4>
+            <p>Be the first to receive exclusive news, offers, and exciting content directly to your inbox</p>
+            <form action="/forms/contact.php" method="post">
+              <input type="email" name="email"><input type="submit" value="Subscribe">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="Lingo logo" class="img-fluid"></a>
+            <p>
+              King Saud University <br>
+              Riyadh <br>
+              Saudi Arabia <br><br>
+              <strong>Email:</strong> lingo@project.com<br>
+            </p>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">How it works?</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Find a language partner</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Become a language partner</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom clearfix">
+      <div class="copyright">
+        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits"></div>
+    </div>
+  </footer>
+</body>
+</html>
