@@ -17,14 +17,17 @@
 }
 
 .session{
-	width:600px;
-	height: 100px;
+	width:1000px;
     background-color: rgb(235, 235, 235);
-    padding: 20px;
+    padding: 10px;
     margin: 15px;
     border-radius: 10px;
     position: relative;
+    overflow:hidden;
+    transition: max-height 0.3s ease-out;
 }
+.hidden {
+display: none;}
 
 .userBlue {
     width:55px;
@@ -45,6 +48,12 @@
     align-items: center;
     width:100%;
 }
+
+
+
+.noChange{
+color:inherit;
+text-decoration:none; }
 
 .button {
   width: 50px;

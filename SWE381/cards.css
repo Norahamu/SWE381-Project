@@ -1,0 +1,487 @@
+
+/*--------------------------------------------------------------
+# Card
+--------------------------------------------------------------*/
+.clear {
+    clear: both;
+  }
+  
+  #menu {
+    position: fixed;
+    right: 0;
+    top: 15%;
+    width: 8em;
+    margin-top: -2.5em;
+
+  }
+  
+  p {
+    font-size: 1em;
+    line-height: 1.4em;
+    margin-bottom: 20px;
+    color: #444;
+    transition: all 1s linear;
+    -o-transition: all 1s linear;
+    -moz-transition: all 1s linear;
+    -webkit-transition: all 1s linear;
+  }
+  
+  a {
+    color: inherit;
+  }
+  
+  .cv {
+   width: 80%;
+
+    background: #fff;
+    margin: 20px auto;
+
+  }
+  
+  .cv:hover {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+  }
+  
+  .cv:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }
+  
+  .mainDetails {
+    padding: 25px 35px;
+    border-bottom: 2px solid rgba(40, 58, 90, 0.9);;
+    background: #f3f3f3;
+  }
+  
+  #name h1 {
+    font-size: 2.5em;
+    //font-weight: 700;
+    font-family: "Gudea", Helvetica, arial, sans-serif;
+    //font-feature-settings: "caps", "sups" 1;
+    //margin-bottom: -6px;
+  }
+  
+  #name h2 {
+    font-size: 2em;
+   // margin-left: 2px;
+    font-family: "Gudea", Helvetica, arial, sans-serif;
+  }
+  
+  #mainArea {
+    padding: 0 40px;
+  }
+  
+  /* I deeply love breakfast burritos */
+  .wrap {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  
+  .wrap:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  }
+  
+  #headshot {
+    width: 12.5%;
+    float: left;
+    margin-right: 30px;
+  }
+  
+  #headshot img {
+    width: 100%;
+    height: auto;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+  }
+  
+  #name {
+    float: left;
+  }
+  
+  #contactDetails {
+    float: right;
+  }
+  
+  #contactDetails ul {
+    list-style-type: none;
+    font-size: 0.9em;
+    margin-top: 2px;
+  }
+  
+  #contactDetails ul li {
+    margin-bottom: 3px;
+    color: #444;
+    display: inline;
+  }
+  
+  #contactDetails ul li a,
+  a[href^="tel"] {
+    color: #444;
+    text-decoration: none;
+    -webkit-transition: all 0.3s ease-in;
+    -moz-transition: all 0.3s ease-in;
+    -o-transition: all 0.3s ease-in;
+    -ms-transition: all 0.3s ease-in;
+    transition: all 0.3s ease-in;
+  }
+  
+  #contactDetails ul li a:hover {
+    color: rgba(40, 58, 90, 0.9);
+  }
+  
+  section {
+    border-top: 1px solid #dedede;
+    padding: 20px 0 0;
+  }
+  
+  section:first-child {
+    border-top: 0;
+  }
+  
+  section:last-child {
+    padding: 20px 0 10px;
+  }
+  
+  .sectionTitle {
+    float: left;
+    width: 25%;
+  }
+  
+  .sectionContent {
+    float: right;
+    width: 72.5%;
+  }
+  
+  .sectionTitle h1 {
+    font-family: "Gudea", helvetica, arial, sans-serif;
+    font-size: 0.89em;
+    color: rgba(40, 58, 90, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .sectionContent h2 {
+    font-family: "Gudea", helvetica, arial, sans-serif;
+    font-size: 1.5em;
+    margin-bottom: -2px;
+  }
+  
+  .subDetails {
+    font-size: 80%;
+    //font-style: italic;
+    margin-bottom: 3px;
+  }
+  
+  .keySkills {
+    list-style-type: none;
+    -moz-column-count: 3;
+    -webkit-column-count: 3;
+    column-count: 3;
+    margin-bottom: 20px;
+    font-size: 1em;
+    color: #444;
+  }
+  
+  .keySkills ul li {
+    margin-bottom: 3px;
+  }
+  
+  
+  
+  
+  
+  
+  
+  @media all and (min-width: 602px) and (max-width: 800px) {
+    #headshot {
+      display: none;
+    }
+  
+    .keySkills {
+      -moz-column-count: 2;
+      -webkit-column-count: 2;
+      column-count: 2;
+    }
+  }
+  
+  
+  
+  
+  
+  @media all and (max-width: 54rem) {
+    .cv {
+      width: 95%;
+      margin: 10px auto;
+      min-width: 280px;
+      transition: all 0.25s linear;
+      -o-transition: all 0.25s linear;
+      -moz-transition: all 0.25s linear;
+      -webkit-transition: all 0.25s linear;
+    }
+  
+    #headshot {
+      display: none;
+    }
+  
+    #name,
+    #contactDetails {
+      float: none;
+      width: 100%;
+      text-align: center;
+    }
+  
+    .sectionTitle,
+    .sectionContent {
+      float: none;
+      width: 100%;
+    }
+  
+    .sectionTitle {
+      margin-left: -2px;
+      font-size: 1.25em;
+    }
+  
+    .keySkills {
+      -moz-column-count: 2;
+      -webkit-column-count: 2;
+      column-count: 2;
+    }
+  }
+  
+  @media all and (max-width: 480px) {
+    .mainDetails {
+      padding: 15px 15px;
+    }
+  
+    section {
+      padding: 15px 0 0;
+    }
+  
+    #mainArea {
+      padding: 0 25px;
+    }
+  
+    .keySkills {
+      -moz-column-count: 1;
+      -webkit-column-count: 1;
+      column-count: 1;
+    }
+  
+    #name h1 {
+      line-height: 0.8em;
+      margin-bottom: 4px;
+    }
+  }
+  
+  @media print {
+    .cv {
+      width: 100%;
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  @-webkit-keyframes reset {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  @-webkit-keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    40% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @-moz-keyframes reset {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  @-moz-keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    40% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes reset {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    40% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .instaFade {
+    -webkit-animation-name: reset, fade-in;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-timing-function: ease-in;
+  
+    -moz-animation-name: reset, fade-in;
+    -moz-animation-duration: 1.5s;
+    -moz-animation-timing-function: ease-in;
+  
+    animation-name: reset, fade-in;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in;
+  }
+  
+  .quickFade {
+    -webkit-animation-name: reset, fade-in;
+    -webkit-animation-duration: 2.5s;
+    -webkit-animation-timing-function: ease-in;
+  
+    -moz-animation-name: reset, fade-in;
+    -moz-animation-duration: 2.5s;
+    -moz-animation-timing-function: ease-in;
+  
+    animation-name: reset, fade-in;
+    animation-duration: 2.5s;
+    animation-timing-function: ease-in;
+  }
+  
+  .delayOne {
+    -webkit-animation-delay: 0, 0.5s;
+    -moz-animation-delay: 0, 0.5s;
+    animation-delay: 0, 0.5s;
+  }
+  
+  .delayTwo {
+    -webkit-animation-delay: 0, 1s;
+    -moz-animation-delay: 0, 1s;
+    animation-delay: 0, 1s;
+  }
+  
+  .delayThree {
+    -webkit-animation-delay: 0, 1.5s;
+    -moz-animation-delay: 0, 1.5s;
+    animation-delay: 0, 1.5s;
+  }
+  
+  .delayFour {
+    -webkit-animation-delay: 0, 2s;
+    -moz-animation-delay: 0, 2s;
+    animation-delay: 0, 2s;
+  }
+  
+  .delayFive {
+    -webkit-animation-delay: 0, 2.5s;
+    -moz-animation-delay: 0, 2.5s;
+    animation-delay: 0, 2.5s;
+  }
+
+
+.tooltip-container {
+  height: 10px;
+  width: 70px;
+  border-radius: 5px;
+
+  background-image: linear-gradient(
+    to left bottom,
+    #f2f5f8,
+    #ecf1f2,
+    #e7eceb,
+    #e3e7e4,
+    #e1e2de
+  );
+  border: 1px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.151);
+  position: absolute;
+  transition: transform 0.3s ease;
+padding:20px;
+margin-top:10px;
+
+}
+
+.tooltip-container::before {
+  position: absolute;
+  content: "";
+  top: -50%;
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  border-radius: 5px;
+
+  background-image: linear-gradient(
+    to left bottom,
+    #f2f5f8,
+    #e4eaec,
+    #d8dfde,
+    #cdd3cf,
+    #c5c7c1
+  );
+  width: 100%;
+  height: 50%;
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(-150deg) translateY(-110%);
+  transition: transform 0.3s ease;
+}
+
+.tooltip-container .text a {
+  color: rgb(32, 30, 30);
+  font-weight: bold;
+  font-size: 25px;
+text-decoration:none;
+}
+
+
+
+
+.tooltip-container:hover {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.tooltip-container:hover::before {
+  transform: rotateY(0);
+  background-image: none;
+  background-color: white;
+}
+
+.tooltip-container:hover .tooltip {
+  top: -90px;
+  opacity: 1;
+  transition-duration: 0.3s;
