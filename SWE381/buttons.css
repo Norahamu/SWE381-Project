@@ -3,21 +3,32 @@
     margin-left: 10px;
 }
 
-.button1 {
-    width: 80px;
-    height: 30px;
-    background-color: #a1d775;
-    color: white;
-    border: none;
-    cursor: pointer;
-    float: right;
-    margin-left: 10px;
-    border-radius: 20px;
-    background-size: 100% auto;
-    font-family: inherit;
-    font-size: 10px;
-    padding: 0.6em 1.5em
-   }
+.button1, .button2 {
+  position: absolute; 
+  width: 80px;
+  height: 30px;
+  background-color: #a1d775; /* button2 has a different color */
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  border-radius: 20px;
+  background-size: 100% auto;
+  font-family: inherit;
+  font-size: 10px;
+  padding: 0.6em 1.5em;
+  background-position: right;
+  background-size: 200% auto;
+  animation: pulse512 1.5s infinite;
+  float: right;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 100px;
+}
+.button2 {
+background-color: red;
+right: 10px; }
+
 button:hover {
     background-position: right center;
     background-size: 200% auto;
@@ -25,28 +36,12 @@ button:hover {
     animation: pulse512 1.5s infinite;
 }
 
- .button2{
-    width: 80px;
-    height: 30px;
-    background-color: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-    float: right;
-    margin-left: 10px;
-    border-radius: 20px;
-    background-size: 100% auto;
-    font-family: inherit;
-    font-size: 10px;
-    padding: 0.6em 1.5em;
-
-   }
+ 
    .text2{
     position: relative;
     right: -400px;
     top: -2.2em;
     font-weight: bold;
-    font-family: "Open Sans", sans-serif;
   }
 
 @keyframes pulse512 {
@@ -63,73 +58,6 @@ button:hover {
     }
 }
 
-/*--------------------------------------------------------------
-# Buttons  Language learning Requests
---------------------------------------------------------------*/
-.edit1 {
-    background: rgb(177, 225, 177);
-    margin-left: 10px;
-}
-
-.button1 {
-    width: 80px;
-    height: 30px;
-    background-color: #a1d775;
-    color: white;
-    border: none;
-    cursor: pointer;
-    float: right;
-    margin-left: 10px;
-    border-radius: 20px;
-    background-size: 100% auto;
-    font-family: inherit;
-    font-size: 10px;
-    padding: 0.6em 1.5em
-   }
-button:hover {
-    background-position: right center;
-    background-size: 200% auto;
-    -webkit-animation: pulse 2s infinite;
-    animation: pulse512 1.5s infinite;
-}
-
- .button2{
-    width: 80px;
-    height: 30px;
-    background-color: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-    float: right;
-    margin-left: 10px;
-    border-radius: 20px;
-    background-size: 100% auto;
-    font-family: inherit;
-    font-size: 10px;
-    padding: 0.6em 1.5em;
-
-   }
-   .text2{
-    position: relative;
-    right: -400px;
-    top: -2.2em;
-    font-weight: bold;
-    font-family: "Open Sans", sans-serif;
-  }
-
-@keyframes pulse512 {
-    0% {
-        box-shadow: 0 0 0 0 #05bada66;
-    }
-
-    70% {
-        box-shadow: 0 0 0 10px rgb(218 103 68 / 0%);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgb(218 103 68 / 0%);
-    }
-}
 
 .cards {
     flex-direction: column;
