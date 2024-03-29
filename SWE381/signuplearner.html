@@ -76,47 +76,43 @@
           </div>
         </div>
         <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-          <form action="forms/signuplearner.php" method="post" class="php-email-form">
+          <form method="post" class="php-email-form" action="contact.php">
             <div class="row">
               <div class="form-group col-md-6">
-                <label for="fname">First Name*</label>
-                <input type="text" placeholder="Enter your first name" name="First name" class="form-control" id="fname" required="">
+                <label class="required">First Name</label>
+                <input type="text" placeholder="Enter your first name" name="First name" class="form-control" id="fname" required>
               </div>
               <div class="form-group col-md-6">
-                <label for="lname">Last Name*</label>
-                <input type="text" placeholder="Enter your last name" name="Last name" class="form-control" id="lname" required="">
+                <label class="required">Last Name</label>
+                <input type="text" placeholder="Enter your last name" name="Last name" class="form-control" id="lname" required>
               </div>
               <div class="form-group">
-                <label for="email">Email*</label>
-                <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required="">
+                <label class="required">Email</label>
+                <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required>
               </div>
             </div>
             <div class="form-group">
-              <label for="psw">Password*</label>
-              <input type="password" class="form-control" placeholder="Enter your password" name="Password" id="psw" required="">
+              <label class="required">Password</label>
+              <input type="password" class="form-control" placeholder="Enter your password" name="Password" id="psw" required>
             </div>
             <div class="form-group">
-              <label for="psw-repeat">Repeat Password*</label>
-              <input type="password" class="form-control" placeholder="Repeat your password" name="Password" id="psw-repeat" required="">
+              <label>Upload Photo</label>
+              <input type="file" class="form-control" name="photo" id="photo">
             </div>
             <div class="form-group">
-              <label for="photo">Upload Photo</label>
-              <input type="file" class="form-control" name="photo" id="photo" required="">
+              <label class="required">City</label>
+              <input type="text" class="form-control" placeholder="Enter your city" name="city" id="city" required>
             </div>
             <div class="form-group">
-              <label for="city">City*</label>
-              <input type="text" class="form-control" placeholder="Enter your city" name="city" id="city" required="">
-            </div>
-            <div class="form-group">
-              <label for="location">Location*</label>
-              <input type="text" class="form-control" placeholder="Enter your location" name="location" id="location" required="">
+              <label class="required">Location</label>
+              <input type="text" class="form-control" placeholder="Enter your location" name="location" id="location" required>
             </div>
             <div class="my-3">
               <div class="loading">Loading</div>
               <div class="error-message"></div>
               <div class="sent-message">You have been signed up!</div>
             </div>
-            <div class="text-center"><button type="submit" onclick="window.location.href='loginlearner.html'">Sign up</button></div>
+            <div class="text-center"><button type="submit">Sign up</button></div>
           </form>
         </div>
       </div>

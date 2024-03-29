@@ -86,39 +86,35 @@
     <form action="forms/signuplearner.php" method="post" class="php-email-form">
      <div class="row">
       <div class="form-group col-md-6">
-       <label for="fname">First Name*</label>
-       <input type="text" placeholder="Enter your first name" name="First name" class="form-control" id="fname" required="">
+       <label class="required">First Name</label>
+       <input type="text" placeholder="Enter your first name" name="First name" class="form-control" id="fname" required>
       </div>
       <div class="form-group col-md-6">
-       <label for="lname">Last Name*</label>
-       <input type="text" placeholder="Enter your last name" name="Last name" class="form-control" id="lname" required="">
+       <label class="required">Last Name</label>
+       <input type="text" placeholder="Enter your last name" name="Last name" class="form-control" id="lname" required>
       </div>
       <div class="form-group col-md-6">
-       <label for="age">Age*</label>
-       <input type="number" class="form-control" placeholder="Enter your age" name="age" id="age" required="">
+       <label class="required">Age</label>
+       <input type="number" class="form-control" placeholder="Enter your age" name="age" id="age" required>
       </div>
 <div class="containergender">
-		<label>Gender: *</label>
+		<label class="required">Gender</label>
 		<input type='radio' id='female' name='radio'>
-		 <label for='female'>Female</label>
+		 <label for='female'> Female</label>
         <input type='radio' id='male' name='radio'>
-		  <label for='male'>Male</label>
+		  <label for='male'> Male</label>
       </div>
       <div class="form-group">
-       <label for="email">Email*</label>
-       <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required="">
+       <label class="required">Email</label>
+       <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required>
       </div>
       <div class="form-group">
-       <label for="psw">Password*</label>
-       <input type="password" class="form-control" placeholder="Enter your password" name="Password" id="psw" required="">
+       <label class="required">Password</label>
+       <input type="password" class="form-control" placeholder="Enter your password" name="Password" id="psw" required>
       </div>
       <div class="form-group">
-       <label for="psw-repeat">Repeat Password*</label>
-       <input type="password" class="form-control" placeholder="Repeat your password" name="Password" id="psw-repeat" required="">
-      </div>
-      <div class="form-group">
-       <label for="photo">Upload Photo</label>
-       <input type="file" class="form-control" name="photo" id="photo" required="">
+       <label>Upload Photo</label>
+       <input type="file" class="form-control" name="photo" id="photo">
       </div>
 
 <div class="checkbox-wrapper-46">
@@ -155,19 +151,19 @@
 
 	   </div>
       <div class="form-group">
-       <label for="location">Location*</label>
-       <input type="text" class="form-control" placeholder="Enter your location" name="location" id="location" required="">
+       <label class="required">Location</label>
+       <input type="text" class="form-control" placeholder="Enter your location" name="location" id="location" required>
       </div>
 	     
       <div class="form-group">
-       <label for="bio">Short bio*</label>
-       <textarea class="form-control" rows="4" placeholder="Include Languages Spoken and Cultural Knowledge" name="bio" id="bio" required=""></textarea>
+       <label class="required">Short bio*</label>
+       <textarea class="form-control" rows="4" placeholder="Include Languages Spoken and Cultural Knowledge" name="bio" id="bio" required></textarea>
       </div>
 	  
 	  <div class="checkbox-wrapper-46">
-  <label>When can you take lessons?</label>
+  <label class="required">When can you take lessons?</label>
   <br>
-  <div class="availability">
+  <div class="availability" required>
   <input class="inp-cbx" id="cbx-46-Sunday" type="checkbox" />
   <label class="cbx" for="cbx-46-Sunday"><span>
     <svg width="12px" height="10px" viewbox="0 0 12 10">
@@ -216,7 +212,7 @@
     </svg></span><span>Saturday</span>
   </label>
 </div>
-<div class="time-filter">
+<div class="time-filter" required>
   <input class="inp-cbx" id="cbx-46-9" type="checkbox" />
   <label class="cbx" for="cbx-46-9"><span>
     <svg width="12px" height="10px" viewbox="0 0 12 10">

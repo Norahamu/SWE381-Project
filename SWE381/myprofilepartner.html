@@ -60,68 +60,179 @@
     <form action="#" method="post" class="php-email-form">
      <div class="row">
       <div class="form-group col-md-6">
-       <label for="fname">First Name*</label>
-       <input type="text" placeholder="Norah" name="First name" class="form-control" id="fname" required="">
+       <label class="required">First Name</label>
+       <input type="text" placeholder="Norah" name="First name" class="form-control" id="fname" required>
       </div>
       <div class="form-group col-md-6">
-       <label for="lname">Last Name*</label>
-       <input type="text" placeholder="Abdullah" name="Last name" class="form-control" id="lname" required="">
+       <label class="required">Last Name</label>
+       <input type="text" placeholder="Abdullah" name="Last name" class="form-control" id="lname" required>
       </div>
       <div class="form-group col-md-6">
-       <label for="age">Age*</label>
-       <input type="number" class="form-control" placeholder="20" name="age" id="age" required="">
+       <label class="required">Age</label>
+       <input type="number" class="form-control" placeholder="20" name="age" id="age" required>
       </div>
       <div class="containergender">
-		<label>Gender: *</label>
+		<label class="required">Gender</label>
 		<input type='radio' id='female' checked='checked' name='radio'>
 		 <label for='female'>Female</label>
         <input type='radio' id='male' name='radio'>
 		  <label for='male'>Male</label>
       </div>
       <div class="form-group">
-       <label for="email">Email*</label>
-       <input type="email" class="form-control" placeholder="norah@gmail.com" name="email" id="email" required="">
+       <label class="required">Email*</label>
+       <input type="email" class="form-control" placeholder="norah@gmail.com" name="email" id="email" required>
       </div>
       <div class="form-group">
-       <label for="psw">Password*</label>
-       <input type="password" class="form-control" placeholder="**************" name="Password" id="psw" required="">
+       <label class="required">Password</label>
+       <input type="password" class="form-control" placeholder="**************" name="Password" id="psw" required>
       </div>
       <div class="form-group">
-       <label for="photo">Upload Photo</label>
-       <input type="file" class="form-control" name="photo" id="photo" required="">
+       <label>Upload Photo</label>
+       <input type="file" class="form-control" name="photo" id="photo">
+      </div>
+	  <div class="checkbox-wrapper-46">
+  <label>Choose the languages you want to teach:</label>
+  <br>
+  <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" checked />
+  <label class="cbx" for="cbx-46-arabic"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>العربية</span>
+  </label>
+
+  <input class="inp-cbx" id="cbx-46-english" type="checkbox" />
+  <label class="cbx" for="cbx-46-english"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>English</span>
+  </label>
+
+  <input class="inp-cbx" id="cbx-46-french" type="checkbox" />
+  <label class="cbx" for="cbx-46-french"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Français</span>
+  </label>
+
+  <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" checked />
+  <label class="cbx" for="cbx-46-spanish"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Español</span>
+  </label>
+</div>
+
+      <div class="form-group">
+       <label class="required">Location</label>
+       <input type="text" class="form-control" placeholder="Saudi Arabia- Riyadh" name="location" id="location" required>
       </div>
       <div class="form-group">
-       <label for="location">Location*</label>
-       <input type="text" class="form-control" placeholder="Saudi Arabia- Riyadh" name="location" id="location" required="">
+       <label class="required">Short bio</label>
+       <textarea class="form-control" rows="4" placeholder="Languages Spoken: English, Arabic, Cultural Knowledge:jkebjhdgksahja" name="bio" id="bio" required></textarea>
       </div>
-      <div class="form-group">
-       <label for="bio">Short bio*</label>
-       <textarea class="form-control" rows="4" placeholder="Languages Spoken: English, Arabic, Cultural Knowledge:jkebjhdgksahja" name="bio" id="bio" required=""></textarea>
-      </div>
-      <div class="form-group">
-       <label>When can you take lessons?</label>
-      </div>
-      <div class="availability">
-       <div class="day-filter">
-        <label for="sun"><input type="checkbox" name="days[]" value="sun" id="sun" checked> Sun</label>
-        <label for="mon"><input type="checkbox" name="days[]" value="mon" id="mon"> Mon</label>
-        <label for="tue"><input type="checkbox" name="days[]" value="tue" id="tue"> Tue</label>
-        <label for="wed"><input type="checkbox" name="days[]" value="wed" id="wed"> Wed</label>
-        <label for="thu"><input type="checkbox" name="days[]" value="thu" id="thu"> Thu</label>
-        <label for="fri"><input type="checkbox" name="days[]" value="fri" id="fri"> Fri</label>
-        <label for="sat"><input type="checkbox" name="days[]" value="sat" id="sat"> Sat</label>
-       </div>
-       <div class="time-filter">
-        <label for="day9"><input type="checkbox" name="times[]" value="day9" id="day9" checked> 9-12</label>
-        <label for="day12"><input type="checkbox" name="times[]" value="day12" id="day12"> 12-15</label>
-        <label for="day18"><input type="checkbox" name="times[]" value="day18" id="day18"> 15-18</label>
-        <label for="eve18"><input type="checkbox" name="times[]" value="eve18" id="eve18"> 18-21</label>
-        <label for="eve21"><input type="checkbox" name="times[]" value="eve21" id="eve21"> 21-24</label>
-        <label for="eve0"><input type="checkbox" name="times[]" value="eve0" id="eve0"> 0-3</label>
-        <label for="mor3"><input type="checkbox" name="times[]" value="mor3" id="mor3"> 3-6</label>
-        <label for="mor6"><input type="checkbox" name="times[]" value="mor6" id="mor6"> 6-9</label>
-       </div>
-      </div>
+     <div class="checkbox-wrapper-46">
+  <label class="required">When can you take lessons?*</label>
+  <br>
+  <div class="availability"required>
+  <input class="inp-cbx" id="cbx-46-Sunday" type="checkbox" />
+  <label class="cbx" for="cbx-46-Sunday"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Sunday</span>
+  </label>
+
+  <input class="inp-cbx" id="cbx-46-Monday" type="checkbox" />
+  <label class="cbx" for="cbx-46-Monday"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Monday</span>
+  </label>
+
+  <input class="inp-cbx" id="cbx-46-Tuesday" type="checkbox" checked />
+  <label class="cbx" for="cbx-46-Tuesday"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Tuesday</span>
+  </label>
+
+  <input class="inp-cbx" id="cbx-46-Wednesday" type="checkbox" />
+  <label class="cbx" for="cbx-46-Wednesday"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Wednesday</span>
+  </label>
+  
+  <input class="inp-cbx" id="cbx-46-Thursday" type="checkbox" />
+  <label class="cbx" for="cbx-46-Thursday"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Thursday</span>
+  </label>
+  
+  <input class="inp-cbx" id="cbx-46-Friday" type="checkbox" checked />
+  <label class="cbx" for="cbx-46-Friday"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Friday</span>
+  </label>
+  <input class="inp-cbx" id="cbx-46-Saturday" type="checkbox" />
+  <label class="cbx" for="cbx-46-Saturday"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>Saturday</span>
+  </label>
+</div>
+<div class="time-filter" required>
+  <input class="inp-cbx" id="cbx-46-9" type="checkbox" />
+  <label class="cbx" for="cbx-46-9"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>9-12</span>
+  </label>
+    <input class="inp-cbx" id="cbx-46-12" type="checkbox" />
+  <label class="cbx" for="cbx-46-12"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>12-15</span>
+  </label>
+    <input class="inp-cbx" id="cbx-46-15" type="checkbox" checked />
+  <label class="cbx" for="cbx-46-15"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>15-18</span>
+  </label>
+    <input class="inp-cbx" id="cbx-46-18" type="checkbox" />
+  <label class="cbx" for="cbx-46-18"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>18-21</span>
+  </label>
+    <input class="inp-cbx" id="cbx-46-21" type="checkbox" checked />
+  <label class="cbx" for="cbx-46-21"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>21-24</span>
+  </label>
+    <input class="inp-cbx" id="cbx-46-0" type="checkbox" />
+  <label class="cbx" for="cbx-46-0"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>0-3</span>
+  </label>
+    <input class="inp-cbx" id="cbx-46-3" type="checkbox" />
+  <label class="cbx" for="cbx-46-3"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>3-6</span>
+  </label>
+    <input class="inp-cbx" id="cbx-46-6" type="checkbox" />
+  <label class="cbx" for="cbx-46-6"><span>
+    <svg width="12px" height="10px" viewbox="0 0 12 10">
+      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+    </svg></span><span>6-9</span>
+  </label>
+</div>
+</div>
 <div class="text-center" style="display: flex; justify-content: space-between;">
     <button type="submit" style="margin-right: auto;">Edit</button>
     <button type="submit" style="background-color: red;">Delete my account</button>

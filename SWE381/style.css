@@ -24,7 +24,11 @@ h5,
 h6 {
   font-family: "Jost", sans-serif;
 }
-
+.required::after{
+	content: "*";
+	color: red;
+	font-size: 20px;
+}
 
 /*--------------------------------------------------------------
 # Back to top button
@@ -472,6 +476,7 @@ h6 {
   width: 100%;
   box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.1);
 }
+.error {color: #FF0000;}
 
 .signuppartner .info i {
   font-size: 20px;
