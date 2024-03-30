@@ -18,6 +18,8 @@
  <!-- Main CSS File -->
  <link href="style.css" rel="stylesheet">
   <link href="radio.css" rel="stylesheet">
+  <!-- JS main File-->
+  <script src="validate.js"></script>
 </head>
 <body>
  
@@ -168,7 +170,21 @@
        <label>Experience</label>
        <textarea class="form-control" rows="4" placeholder="Include all of your past experiences" name="bio" id="bio" required></textarea>
       </div>
-	  
+	  <div class="slidecontainer"> <label> Select the price for 1 hour session:</label>
+  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  <p>Price: <span id="pricehr"></span> SAR</p>
+</div>
+
+<script> 
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("pricehr");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+</script>
 	  <div class="checkbox-wrapper-46">
   <label class="required">When can you take lessons?</label>
   <br>
@@ -272,6 +288,7 @@
   </label>
 </div>
 </div>
+
       <div class="my-3">
        <div class="loading">Loading</div>
        <div class="error-message"></div>
