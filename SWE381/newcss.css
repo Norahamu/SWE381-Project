@@ -17,26 +17,16 @@ a:hover {
   text-decoration: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Jost", sans-serif;
-}
 .navigation {
     position: absolute;
     width: 100%;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -35%);
     text-align: center;
+    padding-top: 50px;
 }
 
 .navigation ul {
     list-style: none;
-    padding: 0;
+    margin: 100px;
 }
 
 .navigation ul li {
@@ -112,17 +102,6 @@ background:  white;
   border: 4px solid #F5F6FA;  
 }
 
-
-
-.star{
-    position: relative;
-    left:140px;
-    bottom: 100px;
-    float: right ;
-    
-    height:30px; 
-    width:30px;
-}
 
 .personal{
     
@@ -263,54 +242,3 @@ margin-bottom: 40px;
    width: 1px;
 }
 
-
-.container {
-	  position: relative;
-}
-
-
-
-.container .save-regular {
-  position: absolute;
-  right:10em;
-  animation: keyframes-fill .5s;
-  display: none;
-  transform-origin: top;
-}
-
-.container .save-solid {
-  position: absolute;
-  right:10em;
-  animation: keyframes-fill .5s;
-  transform-origin: top;
-}
-
-/* ------ On check event ------ */
-.container input:checked ~ .save-regular {
-  display: block;
-}
-
-.container input:checked ~ .save-solid {
-  display: none;
-}
-
-/* ------ Hide the default checkbox ------ */
-.container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-/* ------ Animation ------ */
-@keyframes keyframes-fill {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-
-  50% {
-    transform: scaleY(1.2);
-  }
-}
