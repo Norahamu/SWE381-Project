@@ -1,8 +1,11 @@
 <html lang="en">
 <head>
+
  <meta charset="UTF-8"> <!-- character encoding-->
  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings-->
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <title>My Profile Learner</title>
    <!-- icon -->
   <link href="assets/img/Lingoblue.png" rel="icon" >
@@ -83,7 +86,8 @@
             </div>
            
 <div class="text-center" style="display: flex; justify-content: space-between;">
-    <button type="submit" style="margin-right: auto;">Edit</button>
+   <button type="submit" id="save-changes-btn" style="margin-right: auto; display: none;">Save Changes</button>
+
     <button type="submit" style="background-color: red;">Delete my account</button>
 </div>
           </form>
@@ -133,5 +137,27 @@
       <div class="credits"></div>
     </div>
   </footer>
+<script>
+  $(document).ready(function() {
+   
+    var saveChangesBtn = $('#save-changes-btn');
+
+    
+    $('form input').on('input', function() {
+    
+      saveChangesBtn.stop(true, true).fadeIn(300);     });
+
+   
+    saveChangesBtn.on('click', function(e) {
+      e.preventDefault(); 
+
+      
+      console.log('Changes saved!');
+
+      
+      saveChangesBtn.stop(true, true).fadeOut(300); 
+    });
+  });
+</script>
+
 </body>
-</html>
