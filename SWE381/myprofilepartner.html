@@ -4,6 +4,7 @@
  <meta charset="UTF-8"> <!-- character encoding-->
  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings-->
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <title>My Profile Partner</title>
    <!-- icon -->
   <link href="assets/img/Lingoblue.png" rel="icon" >
@@ -150,7 +151,7 @@ slider.oninput = function() {
 </script>
 
 <div class="text-center" style="display: flex; justify-content: space-between;">
-    <button type="submit" style="margin-right: auto;">Edit</button>
+ <button type="submit" id="save-changes-btn" style="margin-right: auto; display: none;">Save Changes</button>
     <button type="submit" style="background-color: red;">Delete my account</button>
 </div>
      </div>
@@ -200,5 +201,30 @@ slider.oninput = function() {
       <div class="credits"></div>
     </div>
   </footer>
+
+<script>
+  $(document).ready(function() {
+    // Select the "Save Changes" button by its ID
+    var saveChangesBtn = $('#save-changes-btn');
+
+    // Attach an input event handler to all input elements in the form
+    $('form input').on('input', function() {
+      // When any input field value changes, smoothly fade in the "Save Changes" button
+      saveChangesBtn.stop(true, true).fadeIn(300); // Fade in with a duration of 300 milliseconds
+    });
+
+    // Handle click on the "Save Changes" button
+    saveChangesBtn.on('click', function(e) {
+      e.preventDefault(); // Prevent the default form submission
+
+      // Here you can add your code to save the changes
+      console.log('Changes saved!');
+
+      // Optionally, you can hide the button again after saving changes
+      saveChangesBtn.stop(true, true).fadeOut(300); // Fade out with a duration of 300 milliseconds
+    });
+  });
+</script>
+
 </body>
 </html>
