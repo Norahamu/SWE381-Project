@@ -21,7 +21,7 @@ input[type="radio"] + label {
   margin: 0 10px 10px 0;
   position: relative;
   color: #ced4d;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+
   font-weight: bold;
   background-color: #ffffff;
   border: 2px solid #47b2e4;
@@ -29,13 +29,6 @@ input[type="radio"] + label {
   transition: all 200ms ease;
 }
 
-#female:checked + label {
-    background-color: #ffb6c1; 
-}
-
-#male:checked + label {
-    background-color: #add8e6; 
-}
 
 input[type="radio"] + label{
   padding: 5px 20px;

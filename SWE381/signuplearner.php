@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $city = $_POST['city'];
     $location = $_POST['location'];
-    $photo = '';  \
+    $photo = '';  
 
     if(empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($city) || empty($location)) {
         echo "<div class='error-message'>Error: All fields are required.</div>";
