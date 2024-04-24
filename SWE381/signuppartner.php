@@ -6,13 +6,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $gender = $_POST['gender'];
     $location = $_POST['location'];
-    $cultural_knowledge = $_POST['cultural_knowledge'];  // Corrected variable name typo
+    $cultural_knowledge = $_POST['cultural_knowledge']; 
     $education = $_POST['education'];
     $experience = $_POST['experience'];
     $pricePerSession = $_POST['price_per_session'];
     $age = $_POST['age'];
-    $languages = $_POST['languages']; // Assume this is an array of languages
-    $proficiencyLevels = $_POST['proficiency_levels']; // This should be an array of proficiency levels
+    $languages = $_POST['languages']; 
+    $proficiencyLevels = $_POST['proficiency_levels']; 
 
     if(empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty(gender) || empty($location) || empty($cultural_knowledge) || empty($education) || empty($experience) || empty($pricePerSession) || empty($age)) {
         echo "<div class='error-message'>Error: All fields are required.</div>";

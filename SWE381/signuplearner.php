@@ -1,3 +1,66 @@
+<?php 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $firstName = $_POST['first_name'];
+    $lastName = $_POST['last_name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $city = $_POST['city'];
+    $location = $_POST['location'];
+    $photo = '';  \
+
+    if(empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($city) || empty($location)) {
+        echo "<div class='error-message'>Error: All fields are required.</div>";
+        exit;
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<div class='error-message'>Error: Invalid email format.</div>";
+        exit;
+    }
+
+    if (strlen($password) < 8 || strlen($password) > 15) {
+        echo "<div class='error-message'>Error: Password must be between 8 and 15 characters long.</div>";
+        exit;
+    }
+
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+        $allowed_ext = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
+        $file_ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+
+        if (!array_key_exists($file_ext, $allowed_ext)) {
+            echo "<div class='error-message'>Error: Please select a valid file format for the photo.</div>";
+            exit;
+        }
+
+        $photo = 'uploads/' . time() . $_FILES['photo']['name']; 
+        if (!move_uploaded_file($_FILES['photo']['tmp_name'], $photo)) {
+            echo "<div class='error-message'>Error: There was an issue uploading your photo.</div>";
+            exit;
+        }
+    } else {
+        echo "<div class='error-message'>Error: Photo is required.</div>";
+        exit;
+    }
+
+    $conn = mysqli_connect("localhost", "root", "root", "lingo");
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $stmt = $conn->prepare("INSERT INTO learners (first_name, last_name, email, password, photo, city, location) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssss", $firstName, $lastName, $email, $password, $photo, $city, $location);
+
+    if ($stmt->execute()) {
+        echo "<div class='success-message'>Learner registered successfully!</div>";
+    } else {
+        echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
