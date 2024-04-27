@@ -1,67 +1,88 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $firstName = $_POST['first_name'];
-    $lastName = $_POST['last_name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $gender = $_POST['gender'];
-    $location = $_POST['location'];
-    $cultural_knowledge = $_POST['cultural_knowledge']; 
-    $education = $_POST['education'];
-    $experience = $_POST['experience'];
-    $pricePerSession = $_POST['price_per_session'];
-    $age = $_POST['age'];
-    $languages = $_POST['languages']; 
-    $proficiencyLevels = $_POST['proficiency_levels']; 
+    // Collect and sanitize input
+    $formData = sanitizeInputData();
 
-    if(empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty(gender) || empty($location) || empty($cultural_knowledge) || empty($education) || empty($experience) || empty($pricePerSession) || empty($age)) {
-        echo "<div class='error-message'>Error: All fields are required.</div>";
+    // Validate input
+    if (!validateInput($formData)) {
         exit;
     }
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    // Hash the password
+    $formData['password'] = password_hash($formData['password'], PASSWORD_DEFAULT);
+
+    // Establish database connection
+    $conn = getDatabaseConnection();
+
+    // Insert the partner record
+    if (insertPartner($conn, $formData)) {
+        echo "<div class='sent-message'>You have been signed up!</div>";
+    } else {
+        echo "<div class='error-message'>Error: Unable to register partner.</div>";
+    }
+
+    // Close the database connection
+    $conn->close();
+}
+
+function sanitizeInputData() {
+    return [
+        'first_name' => filter_input(INPUT_POST, 'first_name', FILTER_SANITIZE_STRING),
+        'last_name' => filter_input(INPUT_POST, 'last_name', FILTER_SANITIZE_STRING),
+        'email' => filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL),
+        'password' => $_POST['password'], // Consider sanitizing if password rules allow
+        'gender' => filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING),
+        'location' => filter_input(INPUT_POST, 'location', FILTER_SANITIZE_STRING),
+        'cultural_knowledge' => filter_input(INPUT_POST, 'cultural_knowledge', FILTER_SANITIZE_STRING),
+        'education' => filter_input(INPUT_POST, 'education', FILTER_SANITIZE_STRING),
+        'experience' => filter_input(INPUT_POST, 'experience', FILTER_SANITIZE_STRING),
+        'price_per_session' => filter_input(INPUT_POST, 'price_per_session', FILTER_SANITIZE_NUMBER_INT),
+        'age' => filter_input(INPUT_POST, 'age', FILTER_SANITIZE_NUMBER_INT)
+    ];
+}
+
+function validateInput($data) {
+    foreach ($data as $key => $value) {
+        if (empty($value)) {
+            echo "<div class='error-message'>Error: All fields are required. Missing: $key</div>";
+            return false;
+        }
+    }
+
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
         echo "<div class='error-message'>Error: Invalid email format.</div>";
-        exit;
+        return false;
     }
 
     $passwordRegex = '/^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/';
-    if (!preg_match($passwordRegex, $password)) {
-        echo "<div class='error-message'>Error: Password must be at least 8 characters long and contain at least one special character (!@#$%^&*)</div>";
-        exit;
+    if (!preg_match($passwordRegex, $data['password'])) {
+        echo "<div class='error-message'>Error: Password must be at least 8 characters long and contain at least one special character (!@#$%^&*).</div>";
+        return false;
     }
 
-    if ($age < 18) {
+    if ($data['age'] < 18) {
         echo "<div class='error-message'>Error: Your age must be greater than or equal to 18.</div>";
-        exit;
+        return false;
     }
 
+    return true;
+}
+
+function getDatabaseConnection() {
     $conn = mysqli_connect("localhost", "root", "root", "lingo");
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
+    return $conn;
+}
 
-    $stmtPartner = $conn->prepare("INSERT INTO partner (first_name, last_name, email, password, gender, location, cultural_knowledge, education, experience, price_per_session, age) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmtPartner->bind_param("ssssssssiii", $firstName, $lastName, $email, $password, $gender, $location, $cultural_knowledge, $education, $experience, $pricePerSession, $age);
-
-    if ($stmtPartner->execute()) {
-        $partnerId = $stmtPartner->insert_id;
-
-        $stmtLanguage = $conn->prepare("INSERT INTO partner_languages (partner_id, language, proficiency_level) VALUES (?, ?, ?)");
-
-        foreach ($languages as $index => $language) {
-            $proficiencyLevel = $proficiencyLevels[$index];
-            $stmtLanguage->bind_param("iss", $partnerId, $language, $proficiencyLevel);
-            $stmtLanguage->execute();
-        }
-
-        echo "<div class='sent-message'>You have been signed up!</div>";
-    } else {
-        echo "<div class='error-message'>Error: " . $stmtPartner->error . "</div>";
-    }
-
-    $stmtPartner->close();
-    $stmtLanguage->close();
-    $conn->close();
+function insertPartner($conn, $data) {
+    $stmt = $conn->prepare("INSERT INTO partner (first_name, last_name, email, password, gender, location, cultural_knowledge, education, experience, price_per_session, age) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssssiii", $data['first_name'], $data['last_name'], $data['email'], $data['password'], $data['gender'], $data['location'], $data['cultural_knowledge'], $data['education'], $data['experience'], $data['price_per_session'], $data['age']);
+    
+    $result = $stmt->execute();
+    $stmt->close();
+    return $result;
 }
 ?>
 <!DOCTYPE html>
@@ -146,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
       </div>
       <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-        <form action="forms/signuplearner.php" method="post" class="php-email-form">
+        <form action="signuppartner.php" method="post" class="php-email-form">
           <div class="row">
             <div class="form-group col-md-6">
               <label class="required">First Name</label>
@@ -255,6 +276,10 @@ document.getElementById('language-form').addEventListener('change', function(eve
         <div class="form-group">
           <label class="required">Experience</label>
           <textarea class="form-control" placeholder="Enter your experience" name="experience" id="experience" rows="5" required></textarea>
+        </div>
+        <div class="form-group col-md-6"">
+<label class="required">Price per session</label>
+<input type="number" class="form-control" placeholder="Enter price in SAR" name="price" id="price" min="50" step="1" required>
         </div>
         <div class="text-center">
           <button type="submit" class="btn-sign">Sign up</button>

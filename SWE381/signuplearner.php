@@ -136,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </div>
         </div>
         <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-          <form method="post" class="php-email-form" action="contact.php">
+          <form method="post" class="php-email-form" action="signuplearner.php">
             <div class="row">
               <div class="form-group col-md-6">
                 <label class="required">First Name</label>
