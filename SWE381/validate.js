@@ -1,73 +1,74 @@
+
+document.getElementById('language-form').addEventListener('change', function(event) {
+  let target = event.target;
+  if (target.type === 'checkbox') {
+    let selectElement = target.parentNode.nextElementSibling;
+    selectElement.disabled = !target.checked;
+    if (!target.checked) {
+      selectElement.value = ''; 
+    }
+  }
+});
+
 $(document).ready(function () {
+  let firstNameError = lastNameError = ageError = genderError = emailError = passwordError = languageError = culturalKnowledgeError = educationError = experienceError = priceError = false;
+
   // Validate First Name
-  $("#firstName").blur(function() {
-    if ($(this).val() == "") {
+  $("#fname").blur(function() {
+      if ($(this).val() == "") {
+          $(this).addClass("is-invalid");
+          firstNameError = false;
+      } else {
+          $(this).removeClass("is-invalid");
+          firstNameError = true;
+      }
+  });
+
+  // Validate Last Name
+  $("#lname").blur(function() {
+      if ($(this).val() == "") {
+          $(this).addClass("is-invalid");
+          lastNameError = false;
+      } else {
+          $(this).removeClass("is-invalid");
+          lastNameError = true;
+      }
+  });
+
+  // Validate Age
+  $("#age").blur(function() {
+    let ageValue = parseInt($(this).val());
+    if (!ageValue || ageValue < 18) {
         $(this).addClass("is-invalid");
-        firstNameError = false;
+        $("#ageError").show().text("**You must be at least 18 years old");
+        ageError = false;
     } else {
         $(this).removeClass("is-invalid");
-        firstNameError = true;
+        $("#ageError").hide();
+        ageError = true;
     }
-});
+  });
 
-// Validate Last Name
-$("#lastName").blur(function() {
-    if ($(this).val() == "") {
-        $(this).addClass("is-invalid");
-        lastNameError = false;
-    } else {
-        $(this).removeClass("is-invalid");
-        lastNameError = true;
-    }
-});
-
-// Validate Age
-$("#age").blur(function() {
-  let ageValue = parseInt($(this).val());
-  if (!ageValue || ageValue < 18) {
-      $(this).addClass("is-invalid");
-      $("#ageError").show().text("**You must be at least 18 years old");
-      ageError = false;
-  } else {
-      $(this).removeClass("is-invalid");
-      $("#ageError").hide();
-      ageError = true;
-  }
-});
-
- // Validate Gender
- $("input[name='gender']").change(function() {
-  if ($("input[name='gender']:checked").val()) {
-      $("#genderError").hide();
-      genderError = true;
-  } else {
-      $("#genderError").show().text("**Please select a gender");
-      genderError = false;
-  }
-});
-
-    // Validate Email
-    const email = document.getElementById("email");
-    email.addEventListener("blur", () => {
-        let regex = /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
-        let s = email.value;
-        if (regex.test(s)) {
-            email.classList.remove("is-invalid");
-            emailError = true;
-        } else {
-            email.classList.add("is-invalid");
-            emailError = false;
-        }
-    });
+  // Validate Email
+  $("#email").blur(function () {
+      let regex = /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
+      if (regex.test($(this).val())) {
+          $(this).removeClass("is-invalid");
+          emailError = true;
+      } else {
+          $(this).addClass("is-invalid");
+          emailError = false;
+      }
+  });
 
     // Validate Password
     $("#passcheck").hide();
     let passwordError = true;
-    $("#password").keyup(function () {
+    $("#psw").keyup(function () {
         validatePassword();
     });
     function validatePassword() {
-        let passwordValue = $("#password").val();
+        let passwordValue = $("#psw").val();
         if (passwordValue.length == "") {
             $("#passcheck").show();
             $("#passcheck").html("**Password cannot be empty");
@@ -86,7 +87,7 @@ $("#age").blur(function() {
     }
 
       // Validate Language and Proficiency
-      $("#languageSelect").change(function() {
+      $("#language-form").change(function() {
         if ($(this).val()) {
             $("#languageError").hide();
             $("#proficiency").prop('disabled', false);
@@ -115,7 +116,7 @@ $("#age").blur(function() {
     });
 
     // Validate Cultural Knowledge
-    $("#culturalKnowledge").blur(function() {
+    $("#cultural-knowledge").blur(function() {
         if ($(this).val() == "") {
             $(this).addClass("is-invalid");
             culturalKnowledgeError = false;
@@ -146,23 +147,24 @@ $("#age").blur(function() {
             experienceError = true;
         }
     });
+    $("#price").blur(function() {
+      let price = parseFloat($(this).val());
+      if (isNaN(price) || price < 50) {
+          $(this).addClass("is-invalid");
+          priceError = false;
+      } else {
+          $(this).removeClass("is-invalid");
+          priceError = true;
+      }
+  });
 
-    // Update the submit button validation check
-    $("#submitbtn").click(function (e) {
-      validateFirstName();
-      validateLastName();
-      validatePassword();
-      validateAge();
-      validateEmail();
-      validateGender();
-      validateLanguage();
-      validateCulturalKnowledge();
-      validateEducation();
-      validateExperience();
-      if (firstNameError && lastNameError && passwordError && ageError && emailError && genderError && languageError && culturalKnowledgeError && educationError && experienceError) {
+  // Submit Button Validation
+  $("#submitbtn").click(function (e) {
+      if (firstNameError && lastNameError && passwordError && ageError && emailError && genderError && languageError && culturalKnowledgeError && educationError && experienceError && priceError) {
           return true;
       } else {
           e.preventDefault();
           return false;
       }
-  })
+  });
+});

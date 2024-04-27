@@ -94,8 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <li class="dropdown">
               <a href="#"><span>Sign Up</span> <i class="bi bi-chevron-right"></i></a>
               <ul>
-                <li><a href="signuppartner.html">Sign Up as a language partner</a></li>
-                <li><a href="signuplearner.html">Sign Up as a learner</a></li>
+                <li><a href="signuppartner.php">Sign Up as a language partner</a></li>
+                <li><a href="signuplearner.php">Sign Up as a learner</a></li>
               </ul>
             </li>
            <li class="dropdown">

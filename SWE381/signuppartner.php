@@ -65,6 +65,11 @@ function validateInput($data) {
         return false;
     }
 
+    if ($data['price_per_session'] < 50) {  
+      echo "<div class='error-message'>Error: Price per session must be at least 50.</div>";
+      return false;
+  }
+
     return true;
 }
 
@@ -126,8 +131,8 @@ function insertPartner($conn, $data) {
     <li class="dropdown">
      <a href="#"><span>Sign Up</span> <i class="bi bi-chevron-right"></i></a>
      <ul>
-      <li><a href="signuppartner.html">Sign Up as a language partner </a></li>
-      <li><a href="signuplearner.html"> Sign Up as a learner</a></li>
+      <li><a href="signuppartner.php">Sign Up as a language partner </a></li>
+      <li><a href="signuplearner.php"> Sign Up as a learner</a></li>
      </ul>
     </li>
            <li class="dropdown">
@@ -181,7 +186,7 @@ function insertPartner($conn, $data) {
               <label class="required">Age</label>
               <input type="number" class="form-control" placeholder="Enter your age" name="age" id="age" required>
             </div>
-            <div class="containergender">
+            <div class="form-group col-md-6">
     <label class="required">Gender</label>
     <select name="gender" class="form-control">
         <option value="">Select Gender</option>
@@ -253,8 +258,7 @@ function insertPartner($conn, $data) {
     </select>
   </div>
 </div>
-<script>
-document.getElementById('language-form').addEventListener('change', function(event) {
+<script> document.getElementById('language-form').addEventListener('change', function(event) {
   let target = event.target;
   if (target.type === 'checkbox') {
     let selectElement = target.parentNode.nextElementSibling;
@@ -263,21 +267,19 @@ document.getElementById('language-form').addEventListener('change', function(eve
       selectElement.value = ''; 
     }
   }
-});
-</script>
-        <div class="form-group">
+});</script>
           <label class="required">Cultural Knowledge</label>
           <textarea class="form-control" placeholder="Enter your cultural knowledge" name="cultural-knowledge" id="cultural-knowledge" rows="5" required></textarea>
         </div>
         <div class="form-group">
           <label class="required">Education</label>
-          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="experience" rows="5" required></textarea>
+          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="eduaction" rows="5" required></textarea>
         </div>
         <div class="form-group">
           <label class="required">Experience</label>
           <textarea class="form-control" placeholder="Enter your experience" name="experience" id="experience" rows="5" required></textarea>
         </div>
-        <div class="form-group col-md-6"">
+        <div class="form-group col-md-6">
 <label class="required">Price per session</label>
 <input type="number" class="form-control" placeholder="Enter price in SAR" name="price" id="price" min="50" step="1" required>
         </div>
