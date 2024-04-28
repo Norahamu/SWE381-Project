@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $firstName = $connection->real_escape_string($_POST['fname']);
     $lastName = $connection->real_escape_string($_POST['lname']);
     $email = $connection->real_escape_string($_POST['email']);
-    $password = $_POST['psw']; // Storing password as plain text
+    $password = $_POST['psw']; 
     $city = $connection->real_escape_string($_POST['city']);
     $location = $connection->real_escape_string($_POST['location']);
 
@@ -34,19 +34,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $target_file = null;
-   // Check if email already exists
-   $checkEmailQuery = "SELECT email FROM learners WHERE email = ?";
-   $stmt = $connection->prepare($checkEmailQuery);
-   $stmt->bind_param("s", $email);
-   $stmt->execute();
-   $result = $stmt->get_result();
-
-   if ($result->num_rows > 0) {
-       echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signupLearner.html';</script>";
-       $stmt->close();
-       $connection->close();
-       exit;
-   }
+    // Check if file is uploaded
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['photo']['tmp_name'];
+        $fileName = $_FILES['photo']['name'];
+        $target_dir = "assets/img/";
+        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+        $newFileName = $firstName . $lastName . "." . $fileExt;
+        $target_file = $target_dir . $newFileName;
+    
+        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+            echo "Sorry, there was an error uploading your file.";
+            exit;
+        }
+    }
 
     // Insert new user into database
     $insertQuery = "INSERT INTO learners (first_name, last_name, email, password, photo, city, location) VALUES (?, ?, ?, ?, ?, ?, ?)";
