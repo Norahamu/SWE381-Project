@@ -186,16 +186,20 @@ $(document).ready(function() {
     </select>
   </div>
 </div>
-<script> document.getElementById('language-form').addEventListener('change', function(event) {
-  let target = event.target;
-  if (target.type === 'checkbox') {
-    let selectElement = target.parentNode.nextElementSibling;
-    selectElement.disabled = !target.checked;
-    if (!target.checked) {
-      selectElement.value = ''; 
-    }
-  }
-});</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.inp-cbx').forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+        let selectElement = checkbox.closest('.language-selection').querySelector('.form-control');
+        selectElement.disabled = !checkbox.checked;
+        if (!checkbox.checked) {
+          selectElement.value = '';
+        }
+      });
+    });
+  });
+</script>
+        <div class="form-group"></div>
           <label class="required">Cultural Knowledge</label>
           <textarea class="form-control" placeholder="Enter your cultural knowledge" name="cultural-knowledge" id="cultural-knowledge" rows="5" required></textarea>
         </div>
@@ -206,6 +210,10 @@ $(document).ready(function() {
         <div class="form-group">
           <label class="required">Experience</label>
           <textarea class="form-control" placeholder="Enter your experience" name="experience" id="experience" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="required">Location</label>
+          <textarea class="form-control" placeholder="Enter your location" name="location" id="location" rows="2" required></textarea>
         </div>
         <div class="form-group col-md-6">
 <label class="required">Price per session</label>
