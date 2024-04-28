@@ -1,31 +1,60 @@
 <?php
 session_start();
 
-include 'databaseConnection.php';
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "lingo";
 
-if($error != null){
-    echo '<p> cant connect to DB';
-}             
-else{ 
-    if(isset($_POST['email']) && isset($_POST['pass']) && isset($_POST['type'])){
-        $select = "SELECT * FROM `".$_POST['type']."` WHERE `emailAddress` = ?";
-        $stmt = $connection->prepare($select);
-        $stmt->bind_param("s", $_POST['email']);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-                if(password_verify($_POST['pass'], $row['password'])){
-                    $_SESSION["userID"]=$row['id'];
-                    $_SESSION["userType"]=$_POST['type'];
-                    header('Location:'.$_POST['type'].'HomePage.html'); //change when code is ready
-                    exit();
-                }
-            }
-        
-        echo '<script> alert("email or password incorrect, please try again"); window.location.href="loginlearner.html"; </script>';
-        exit();
-        
-    }
+$connection = new mysqli($servername, $username, $password, $database);
+
+if ($connection->connect_error) {
+    die("Connection failed: " . $connection->connect_error);
 }
+
+
+if (isset($_POST['email']) && isset($_POST['password'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $stmt = $connection->prepare("SELECT learner_id, email, password FROM learners WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        if (password_verify($password, $row['password'])) {
+            $_SESSION['learner_id'] = $row['learner_id'];
+            $_SESSION['email'] = $row['email'];
+
+            header('Location: HomePage.html'); 
+            exit;
+        }  else {
+            // Invalid password
+            echo '<script>alert("Invalid email or password."); window.location.href="loginlearner.html";</script>';
+            exit; 
+        }
+    } else {
+        // No user found
+        echo '<script>alert("Invalid email or password."); window.location.href="loginlearner.html";</script>';
+        exit; 
+    }
+    $stmt->close();
+} else {
+    // Error in the SQL statement
+    echo '<script>alert("Database error."); window.location.href="loginlearner.html";</script>';
+    exit; 
+}
+$connection->close();
+} else {
+// Not a POST request
+header('Location: loginlearner.html'); 
+exit; 
+}
+
+$stmt->close();
+$connection->close();
+?>
