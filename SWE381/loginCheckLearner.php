@@ -15,7 +15,7 @@ if ($connection->connect_error) {
 
 if (isset($_POST['email']) && isset($_POST['password'])) {
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = $_POST['psw'];
 
     $stmt = $connection->prepare("SELECT learner_id, email, password FROM learners WHERE email = ?");
     $stmt->bind_param("s", $email);

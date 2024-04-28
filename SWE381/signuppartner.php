@@ -99,7 +99,7 @@ function insertPartner($conn, $data) {
 
  <!-- icon -->
  <link rel="icon" href="assets/img/Lingoblue.png">
-  
+ <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
  <!-- Google Fonts -->
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
  
@@ -110,8 +110,9 @@ function insertPartner($conn, $data) {
  <!-- Main CSS File -->
  <link href="style.css" rel="stylesheet">
   <link href="radio.css" rel="stylesheet">
-  <!-- JS main File-->
-  <script src="validate.js"></script>
+<!-- JS Files -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 </head>
 <body>
  
@@ -155,6 +156,18 @@ function insertPartner($conn, $data) {
 <!-- .navbar -->
 </header>
 <!-- End Header -->
+<script>
+$(document).ready(function() {
+    $("#togglePassword").click(function() {
+        var password = $("#psw");
+        var type = password.attr("type") === "password" ? "text" : "password";
+        password.attr("type", type);
+        
+        // toggle the eye / eye-slash icon
+        $(this).toggleClass("fa-eye fa-eye-slash");
+    });
+});
+</script>
 <!-- ======= Sign up as a language partner Section ======= -->
 <section id="signuppartner" class="signuppartner section-bg">
   <div class="container aos-init aos-animate" data-aos="fade-up">
@@ -199,9 +212,16 @@ function insertPartner($conn, $data) {
               <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required>
             </div>
             <div class="form-group">
-              <label class="required">Password</label>
-              <input type="password" class="form-control" placeholder="Enter your password" name="Password" id="psw" required>
-            </div>
+              <label for="psw" class="required">Password</label>
+              <div class="input-group">
+                  <input type="password" class="form-control" id="psw" name="psw" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character.">
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                          <i class="fas fa-eye"></i>
+                      </button>
+                  </div>
+              </div>
+          </div>  
             <div class="form-group">
               <label>Upload Photo</label>
               <input type="file" class="form-control" name="photo" id="photo">

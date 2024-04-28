@@ -13,7 +13,7 @@ if ($connection->connect_error) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password']; 
+    $password = $_POST['psw']; 
 
     $sql = "SELECT partner_id, email, password FROM partners WHERE email = ?";
     if ($stmt = $connection->prepare($sql)) {

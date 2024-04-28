@@ -19,10 +19,13 @@
 
   <!-- Main CSS File -->
   <link href="style.css" rel="stylesheet">
-
+<!-- JS main File-->
+<script src="validate.js"></script>
+<!-- JS Files -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 </head>
 <body>
- 
 <!-- ======= Header ======= -->
     <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
@@ -60,9 +63,20 @@
   <i class="bi bi-list mobile-nav-toggle"></i>
 </nav>
 <!-- .navbar -->
-
 </header> 
 <!-- End Header -->
+<script>
+  $(document).ready(function() {
+      $("#togglePassword").click(function() {
+          var password = $("#psw");
+          var type = password.attr("type") === "password" ? "text" : "password";
+          password.attr("type", type);
+          
+          // toggle the eye / eye-slash icon
+          $(this).toggleClass("fa-eye fa-eye-slash");
+      });
+  });
+  </script>
 <!-- ======= Log in Section ======= -->
  <section id="login" class="login section-bg">
       <div class="container aos-init aos-animate" data-aos="fade-up">
@@ -88,13 +102,20 @@
             <form action="loginCheckPartner.php" method="post" class="php-email-form">
               <div class="row">
                 <div class="form-group">
-                  <label for="email">Email</label>
+                  <label for="email">Email:</label>
                   <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required="">
                 </div>
-              <div class="form-group">
-                <label for="psw">Password</label>
-                <input type="password" class="form-control" placeholder="Enter your password" name="password" id="psw" required="">
-              </div>
+                <div class="form-group">
+                <label for="psw">Password:</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="psw" name="psw" placeholder="Enter your password" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>  
 			  </div>
 			 <div class="text-center"><button type="submit">Log in</button></div>
             </form>
