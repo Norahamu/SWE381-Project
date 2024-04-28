@@ -15,15 +15,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $firstName = $connection->real_escape_string($_POST['fname']);
     $lastName = $connection->real_escape_string($_POST['lname']);
     $email = $connection->real_escape_string($_POST['email']);
-    $password = $_POST['psw'];
+    $password = $connection->real_escape_string($_POST['psw']); 
     $age = (int)$_POST['age'];
     $gender = $connection->real_escape_string($_POST['gender']);
     $education = isset($_POST['education']) ? $connection->real_escape_string($_POST['education']) : '';
     $experience = $connection->real_escape_string($_POST['experience']);
+    $location = $connection->real_escape_string($_POST['location']);
     $pricePerSession = (int)$_POST['price'];
     $languages = isset($_POST['languages']) ? $_POST['languages'] : array(); 
     $proficiencies = isset($_POST['proficiencies']) ? $_POST['proficiencies'] : array(); 
-    $location = $connection->real_escape_string($_POST['location']);
+    $cultural_knowledge = isset($_POST['cultural_knowledge']) ? $connection->real_escape_string($_POST['cultural_knowledge']) : '';
 
     // Validate age
     if ($age < 18) {
@@ -49,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // File upload handling
+    $target_file = null;
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['photo']['tmp_name'];
         $fileName = $_FILES['photo']['name'];
@@ -61,42 +63,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Sorry, there was an error uploading your file.";
             exit;
         }
-    } else {
-        $target_file = null; 
     }
 
     // Inserting data into partners table
-    $insertQuery = "INSERT INTO partners (first_name, last_name, email, password, photo, age, gender, education, experience, location, PricePerSession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $insertQuery = "INSERT INTO partners (first_name, last_name, email, password, photo, age, gender, Education, Experience, location, PricePerSession, cultural_knowledge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $connection->prepare($insertQuery);
     if (!$stmt) {
         die("MySQL prepare error: " . $connection->error);
     }
-    $stmt->bind_param("ssssisissss", $firstName, $lastName, $email, $password, $target_file, $age, $gender, $education, $experience, $location, $pricePerSession);
+    // Bind parameters correctly, notice that cultural_knowledge typo is corrected based on your schema
+    $stmt->bind_param("sssssisssdis", $firstName, $lastName, $email, $password, $target_file, $age, $gender, $education, $experience, $location, $pricePerSession, $cultural_knowledge);
 
     if ($stmt->execute()) {
-        $partnerId = $connection->insert_id;  // Get the last inserted ID
+        $partnerId = $connection->insert_id;
 
-        // Prepare the statement for inserting languages
-        $stmtLang = $connection->prepare("INSERT INTO partner_languages (partner_id, language, proficiency_level) VALUES (?, ?, ?)");
-        if (!$stmtLang) {
-            die("MySQL prepare error: " . $connection->error);
-        }
+        $stmtLang = $connection->prepare("INSERT INTO partner_languages (partner_id, language, ProficiencyLevel) VALUES (?, ?, ?)");
+if (!$stmtLang) {
+    die("MySQL prepare error: " . $connection->error);
+}   
 
         // Insert each language and proficiency
         foreach ($languages as $index => $language) {
             $proficiency = $proficiencies[$index];
-            $stmtLang->bind_param("iss", $partnerId, $language, $proficiency);
-            $stmtLang->execute();
+            if (!$stmtLang->bind_param("iss", $partnerId, $language, $proficiency)) {
+                echo "Bind failed: " . $stmtLang->error;
+            }
+            if (!$stmtLang->execute()) {
+                echo "Execute failed: " . $stmtLang->error;
+            }
         }
-        $stmtLang->close();
-        
-        echo "<script>alert('Registration successful! Welcome to Lingo.');window.location.href='login.html';</script>";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
+
+    // Close statement and connection
     $stmt->close();
     $connection->close();
-} else {
-   echo "Invalid request method.";
+}
 }
 ?>
