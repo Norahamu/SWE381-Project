@@ -212,7 +212,6 @@ background:  white;
 .bio{
 display: block;
   font-size: 15px;
-  padding-bottom: 10px;
   position: relative;
   font-weight: 500;
 }
@@ -223,7 +222,7 @@ font-weight: 700;
   color: #37517e;
 margin-left: 15px;
 line-height: 18px;
-margin-bottom: 40px;
+margin-bottom: 20px;
  
 }
 
