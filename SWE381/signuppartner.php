@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -12,104 +14,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $connection->connect_error);
     }
 
-    $firstName = $connection->real_escape_string($_POST['fname']);
-    $lastName = $connection->real_escape_string($_POST['lname']);
-    $email = $connection->real_escape_string($_POST['email']);
-    $password = $connection->real_escape_string($_POST['psw']); 
-    $age = (int)$_POST['age'];
-    $gender = $connection->real_escape_string($_POST['gender']);
-    $education = isset($_POST['education']) ? $connection->real_escape_string($_POST['education']) : '';
-    $experience = $connection->real_escape_string($_POST['experience']);
-    $location = $connection->real_escape_string($_POST['location']);  // Ensure this matches the expected data type in DB
-    $pricePerSession = (int)$_POST['price'];
-    $languages = isset($_POST['languages']) ? $_POST['languages'] : array(); 
-    $proficiencies = isset($_POST['proficiencies']) ? $_POST['proficiencies'] : array(); 
-    $cultural_knowledge = isset($_POST['cultural_knowledge']) ? $connection->real_escape_string($_POST['cultural_knowledge']) : '';
-
-    // Validate age
-    if ($age < 18) {
-        echo "You must be at least 18 years old to register.";
-        exit;
-    }
-
-    // Check if email already exists
-    $checkEmailQuery = "SELECT email FROM partners WHERE email = ?";
-    $stmt = $connection->prepare($checkEmailQuery);
-    if (!$stmt) {
-        die("MySQL prepare error: " . $connection->error);
-    }
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signupPartner.html';</script>";
-        $stmt->close();
-        $connection->close();
-        exit;
-    }
-
-    // File upload handling
-    $target_file = null;
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['photo']['tmp_name'];
-        $fileName = $_FILES['photo']['name'];
-        $target_dir = "assets/img/";
-        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-        $newFileName = $firstName . $lastName . "." . $fileExt;
-        $target_file = $target_dir . $newFileName;
-
-        if (!move_uploaded_file($fileTmpPath, $target_file)) {
-            echo "Sorry, there was an error uploading your file.";
+    $requiredFields = ['fname', 'lname', 'email', 'psw', 'age', 'gender', 'education', 'experience', 'price', 'location', 'cultural-knowledge'];
+    foreach ($requiredFields as $field) {
+        if (empty($_POST[$field])) {
+            echo "Error: Missing $field";
             exit;
         }
     }
+if (empty($_POST['languages']) || !is_array($_POST['languages']) || empty($_POST['proficiency_levels']) || !is_array($_POST['proficiency_levels'])) {
+    echo "Error: Missing or invalid language and proficiency data";
+    exit;
+}
 
-    // Inserting data into partners table
-    $insertQuery = "INSERT INTO partners (first_name, last_name, email, password, photo, age, gender, education, experience, location, pricePerSession, cultural_knowledge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $connection->prepare($insertQuery);
-    if (!$stmt) {
+
+    $firstName = $connection->real_escape_string($_POST['fname']);
+    $lastName = $connection->real_escape_string($_POST['lname']);
+    $email = $connection->real_escape_string($_POST['email']);
+    $password = $_POST['psw'];
+    $age = (int)$_POST['age'];
+    $gender = $connection->real_escape_string($_POST['gender']);
+    $education = $connection->real_escape_string($_POST['education']);
+    $experience = $connection->real_escape_string($_POST['experience']);
+    $pricePerSession = (int)$_POST['price'];
+    $location = $connection->real_escape_string($_POST['location']);
+    $cultural_knowledge = $connection->real_escape_string($_POST['cultural-knowledge']);
+
+    // Validate email 
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Invalid email format";
+        exit;
+    }
+
+    // Validate email 
+    $checkEmailQuery = "SELECT email FROM partners WHERE email = ?";
+    if ($stmt = $connection->prepare($checkEmailQuery)) {
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        if ($result->num_rows > 0) {
+            echo "The email address is already registered. Please use another email.";
+            exit;
+        }
+    }
+    // Validate age
+if ($age < 18) {
+    echo "You must be at least 18 years old to register.";
+    exit;
+}
+
+    // Insert to partners 
+    $insertQuery = "INSERT INTO partners (first_name, last_name, email, password, photo, location, cultural_knowledge, age, gender, Education, Experience, PricePerSession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    if ($stmt = $connection->prepare($insertQuery)) {
+        $stmt->bind_param("sssssssisdis", $firstName, $lastName, $email, $password, $target_file, $location, $cultural_knowledge, $age, $gender, $education, $experience, $pricePerSession);
+        $stmt->execute();
+        $partner_id = $stmt->insert_id; 
+        $stmt->close();
+        
+        // Insert to partner_languages
+$insertLanguageQuery = "INSERT INTO partner_languages (partner_id, language, proficiency_level) VALUES (?, ?, ?)";
+foreach ($_POST['languages'] as $index => $language) {
+    $proficiency = $_POST['proficiency_levels'][$index];
+    if ($stmt = $connection->prepare($insertLanguageQuery)) {
+        $stmt->bind_param("iss", $partner_id, $language, $proficiency);
+        $stmt->execute();
+        $stmt->close();
+    } else {
         die("MySQL prepare error: " . $connection->error);
     }
-    $stmt->bind_param("sssssisssdis", $firstName, $lastName, $email, $password, $target_file, $age, $gender, $education, $experience, $location, $pricePerSession, $cultural_knowledge);
+}
 
-    if ($stmt->execute()) {
-        $partnerId = $connection->insert_id;
-    
-        // Handle languages and proficiencies
-        if (!empty($languages) && !empty($proficiencies) && count($languages) == count($proficiencies)) {
-            $stmtLang = $connection->prepare("INSERT INTO partner_languages (partner_id, language, proficiencyLevel) VALUES (?, ?, ?)");
-            if (!$stmtLang) {
-                die("MySQL prepare error: " . $connection->error);
-            }
-
-            foreach ($languages as $index => $language) {
-                $proficiency = isset($proficiencies[$index]) ? $proficiencies[$index] : null;
-                if ($proficiency === null) {
-                    echo "Proficiencylevel missing for language: $language";
-                    continue; 
-                }
-                if (!$stmtLang->bind_param("iss", $partnerId, $language, $proficiency)) {
-                    echo "Binding parameters failed: " . $stmtLang->error;
-                    continue;
-                }
-                if (!$stmtLang->execute()) {
-                    echo "Error inserting language data: " . $stmtLang->error;
-                }
-            }
-            $stmtLang->close();
-        } else {
-            echo "Number of languages and proficiencies do not match or are empty.";
-        }
-
-        echo "<script> window.location.href='AllReq.html';</script>";
+     echo "<script>alert('Registration successful!'); window.location.href='loginpartner.html';</script>";
     } else {
-        echo "Error inserting data: " . $stmt->error;
+        die("MySQL prepare error: " . $connection->error);
     }
 
-    $stmt->close();
     $connection->close();
-} else {
-    echo "Invalid request method.";
 }
 ?>

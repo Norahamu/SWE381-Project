@@ -19,19 +19,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $city = $connection->real_escape_string($_POST['city']);
     $location = $connection->real_escape_string($_POST['location']);
 
-    // if email already exists
-    $checkEmailQuery = "SELECT email FROM learners WHERE email = ?";
-    $stmt = $connection->prepare($checkEmailQuery);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        echo "The email address is already registered. Please use another email.";
+        // If email already exists
+        $checkEmailQuery = "SELECT email FROM learners WHERE email = ?";
+        $stmt = $connection->prepare($checkEmailQuery);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
         $stmt->close();
-        $connection->close();
-        exit;
-    }
+        if ($result->num_rows > 0) {
+            echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuplearner.html';</script>";
+            exit;
+        }
+    
 
     $target_file = null;
     // Check if file is uploaded
@@ -49,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Insert new user into database
+    // Insert new user
     $insertQuery = "INSERT INTO learners (first_name, last_name, email, password, photo, city, location) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $connection->prepare($insertQuery);
     if ($stmt === false) {
@@ -59,7 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sssssss", $firstName, $lastName, $email, $password, $target_file, $city, $location);
     if ($stmt->execute()) {
         $_SESSION['user_id'] = $stmt->insert_id;
-        header("Location: PartnersList.html");
         exit(); 
     } else {
         echo "Error: " . $stmt->error;
@@ -67,5 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
     $connection->close();
+    echo "<script>alert('Registration successful!'); window.location.href='loginlearner.html';</script>";
 }
 ?>
