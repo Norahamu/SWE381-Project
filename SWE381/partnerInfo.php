@@ -34,7 +34,7 @@
             </div>
             <nav id="navbar" class="navbar">
                 <ul> 
-                    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
+                    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
                     <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
                     <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
                     <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
@@ -58,7 +58,7 @@
                 <?php
                 $partnerID = $_GET['partnerID'];
 
-                $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
+                $connection = mysqli_connect('localhost', 'root', '', 'lingo');
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }

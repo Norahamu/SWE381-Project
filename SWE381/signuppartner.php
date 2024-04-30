@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = $connection->real_escape_string($_POST['gender']);
     $education = isset($_POST['education']) ? $connection->real_escape_string($_POST['education']) : '';
     $experience = $connection->real_escape_string($_POST['experience']);
-    $location = $connection->real_escape_string($_POST['location']);
+    $location = $connection->real_escape_string($_POST['location']);  // Ensure this matches the expected data type in DB
     $pricePerSession = (int)$_POST['price'];
     $languages = isset($_POST['languages']) ? $_POST['languages'] : array(); 
     $proficiencies = isset($_POST['proficiencies']) ? $_POST['proficiencies'] : array(); 
@@ -66,36 +66,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Inserting data into partners table
-    $insertQuery = "INSERT INTO partners (first_name, last_name, email, password, photo, age, gender, Education, Experience, location, PricePerSession, cultural_knowledge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $insertQuery = "INSERT INTO partners (first_name, last_name, email, password, photo, age, gender, education, experience, location, pricePerSession, cultural_knowledge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $connection->prepare($insertQuery);
     if (!$stmt) {
         die("MySQL prepare error: " . $connection->error);
     }
-    // Bind parameters correctly, notice that cultural_knowledge typo is corrected based on your schema
     $stmt->bind_param("sssssisssdis", $firstName, $lastName, $email, $password, $target_file, $age, $gender, $education, $experience, $location, $pricePerSession, $cultural_knowledge);
 
     if ($stmt->execute()) {
         $partnerId = $connection->insert_id;
-
-        $stmtLang = $connection->prepare("INSERT INTO partner_languages (partner_id, language, ProficiencyLevel) VALUES (?, ?, ?)");
-if (!$stmtLang) {
-    die("MySQL prepare error: " . $connection->error);
-}   
-
-        // Insert each language and proficiency
-        foreach ($languages as $index => $language) {
-            $proficiency = $proficiencies[$index];
-            if (!$stmtLang->bind_param("iss", $partnerId, $language, $proficiency)) {
-                echo "Bind failed: " . $stmtLang->error;
+    
+        // Handle languages and proficiencies
+        if (!empty($languages) && !empty($proficiencies) && count($languages) == count($proficiencies)) {
+            $stmtLang = $connection->prepare("INSERT INTO partner_languages (partner_id, language, proficiencyLevel) VALUES (?, ?, ?)");
+            if (!$stmtLang) {
+                die("MySQL prepare error: " . $connection->error);
             }
-            if (!$stmtLang->execute()) {
-                echo "Execute failed: " . $stmtLang->error;
+
+            foreach ($languages as $index => $language) {
+                $proficiency = isset($proficiencies[$index]) ? $proficiencies[$index] : null;
+                if ($proficiency === null) {
+                    echo "Proficiencylevel missing for language: $language";
+                    continue; 
+                }
+                if (!$stmtLang->bind_param("iss", $partnerId, $language, $proficiency)) {
+                    echo "Binding parameters failed: " . $stmtLang->error;
+                    continue;
+                }
+                if (!$stmtLang->execute()) {
+                    echo "Error inserting language data: " . $stmtLang->error;
+                }
             }
+            $stmtLang->close();
+        } else {
+            echo "Number of languages and proficiencies do not match or are empty.";
         }
 
-    // Close statement and connection
+        echo "<script> window.location.href='AllReq.html';</script>";
+    } else {
+        echo "Error inserting data: " . $stmt->error;
+    }
+
     $stmt->close();
     $connection->close();
-}
+} else {
+    echo "Invalid request method.";
 }
 ?>
