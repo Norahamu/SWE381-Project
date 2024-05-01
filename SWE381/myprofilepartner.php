@@ -18,6 +18,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $_POST['password']; // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
+  $age = $connection->real_escape_string($_POST['age']); 
+  $gender = $connection->real_escape_string($_POST['gender']); 
+  $culturalKnowledge = $connection->real_escape_string($_POST['culturalKnowledge']); 
+  $education = $connection->real_escape_string($_POST['education']); 
+  $experience = $connection->real_escape_string($_POST['experience']); 
+ $pricePerSession = $connection->real_escape_string($_POST['pricePerSession']); 
+ 
+
+   
  
   // If email already exists 
   $checkEmailQuery = "SELECT email FROM learners WHERE email = ?"; 
@@ -27,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $result = $stmt->get_result(); 
   $stmt->close(); 
   if ($result->num_rows > 0) { 
-    echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuplearner.html';</script>"; 
+    echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuppartner.html';</script>"; 
     exit; 
   } 
  
@@ -47,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
  
-  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
+  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE partner_id=?"); 
   $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['user_id']); 
  
   if ($stmt->execute()) { 
