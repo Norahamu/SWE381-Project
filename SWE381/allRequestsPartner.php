@@ -11,25 +11,29 @@ if (!$conn) {
 }
 
 $partner_id = $_GET['partnerID'];
-
-
-
-
-
 $query1 = "SELECT L.first_name AS learner_first_name, 
-                 L.last_name AS learner_last_name, 
-                 L.photo AS learner_photo,
-                 L.learner_id AS learnerID, 
-                 PR.Status AS RStatus,
-                 PR.SessionDuration AS REQsession_Duration,
-                 PR.preferred_schedule AS REQSchedule,
-                 PR.RequestID AS REQID
-          FROM requests_partner AS PR
-          JOIN learners AS L ON PR.learnerID = L.learner_ID
-          WHERE PR.partnerID = $partner_id";
+                  L.last_name AS learner_last_name, 
+                  L.photo AS learner_photo,
+                  L.learner_id AS learnerID, 
+                  PR.Status AS RStatus,
+                  PR.SessionDuration AS REQsession_Duration,
+                  PR.preferred_schedule AS REQSchedule,
+                  PR.RequestID AS REQID
+           FROM requests_partner AS PR
+           JOIN learners AS L ON PR.learnerID = L.learner_ID
+           WHERE PR.partnerID = ?";
 
+$stmt = $conn->prepare($query1);
+if ($stmt === false) {
+    die("Prepare failed: " . $conn->error);
+}
 
-$result = mysqli_query($conn, $query1);
+$stmt->bind_param("i", $partner_id);
+if (!$stmt->execute()) {
+    die("Query failed: " . $stmt->error);
+}
+
+$result = $stmt->get_result();
 
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
@@ -62,6 +66,11 @@ if (!$result) {
   <link href="style.css" rel="stylesheet">
   <link href="sessionsStyle.css" rel="stylesheet">
   <link href="buttons.css" rel="stylesheet">
+<!-- jQuery File -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Main JS File -->
+<script src="updaterequest.js"></script>
+
 </head>
 <body>
 
@@ -96,7 +105,6 @@ if (!$result) {
 </div>
 <div id="site">
           <?php
-          // Fetch and display session details
          while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
