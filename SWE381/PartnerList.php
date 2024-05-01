@@ -166,7 +166,7 @@
     }
             ?>
         </div><!-- big div -->
-<h2 id ="FrenshLanguage" class =" LanguageTitle">Français </h2>
+<h2 id ="FrenshLanguage" class =" LanguageTitle">French </h2>
         <div class ="superlanguage">
   <?php
          $connection = mysqli_connect('localhost', 'root', '', 'lingo');
@@ -216,7 +216,7 @@
             ?>
 
 </div><!-- big div -->
-        <h2 id ="EspanishLanguage" class =" LanguageTitle" >Español </h2>
+        <h2 id ="EspanishLanguage" class =" LanguageTitle" >Spanish </h2>
         <div class ="superlanguage">
 
             <?php
