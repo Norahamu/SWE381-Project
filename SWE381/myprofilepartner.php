@@ -41,13 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
-  // Check if email already exists
-  $checkEmailQuery = "SELECT email FROM learners WHERE email = '$email'";
-  $result = $connection->query($checkEmailQuery);
-  if ($result->num_rows > 0) { 
-    echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuppartner.html';</script>"; 
-    exit; 
-  } 
+ 
 
   // Handle photo upload
   $target_file = null;
