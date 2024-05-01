@@ -91,9 +91,16 @@ if ($resultFetch->num_rows > 0) {
   $lastName = $userData['last_name']; 
   $email = $userData['email']; 
   $password = $userData['password']; // Assuming the password is stored in the database 
-  $city = $userData['city']; 
   $location = $userData['location']; 
   $photo = $userData['photo']; 
+  $age = $userData['age']; 
+   $gender = $userData['gender']; 
+   $culturalKnowledge = $userData['culturalKnowledge']; 
+    $education = $userData['education'];
+    $photo = $userData['photo'];
+    $experience = $userData['experience'];
+ $pricePerSession = $userData['pricePerSession'];
+ 
 } else { 
   // User not found, handle the error (e.g., redirect to an error page) 
   // die("User not found."); 
