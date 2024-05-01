@@ -47,6 +47,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
+        document.querySelector('.php-email-form').addEventListener('submit', function(event) {
+            const checkboxes = document.querySelectorAll('.inp-cbx');
+            const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+          
+            if (!isChecked) {
+              alert('Please select at least one language.');
+              event.preventDefault(); 
+            }
+          });
         $sql = "INSERT INTO partners (first_name, last_name, email, password, photo, location, cultural_knowledge, Education, Experience, PricePerSession, age, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender]);

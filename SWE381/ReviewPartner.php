@@ -33,10 +33,10 @@
     <nav id="navbar" class="navbar">
       <ul> 
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilepartner.html">My profile</a></li>
+    <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.html">Sessions</a></li>
     <li><a class="nav-link scrollto" href="AllReq.html">Language Learning Requests</a></li>
-    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.html">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
       </ul>
 
     </nav>
