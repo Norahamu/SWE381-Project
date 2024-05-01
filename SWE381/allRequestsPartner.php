@@ -64,7 +64,7 @@ if (!$result) {
 
     function generateSessionID() {
         // Generate a random 9-digit number
-        return Math.floor(Math.random() * 900000000) + 100000000;
+        return Math.floor(Math.random() * 999999999) + 100000000;
     }
     
     
@@ -74,9 +74,16 @@ $(document).ready(function(){
         console.log("Button clicked");
         var partnerId = $(this).data('partner-id');
         var requestID = $(this).data('req-ID');
-        $.getJSON("declineRequest.php?PID="+partnerId+"&REQID="+requestID, function(status){
-            console.log("after query");
-            window.location.reload();
+        $.ajax({
+            url: "declineRequest.php",
+            method: "POST", 
+            data: { PID: partnerId, REQID: requestID },
+            success: function(status){
+                console.log("successful que");
+            },
+            error: function(xhr, status, error) {
+                console.error("failure");
+            }
         });
         console.log("out of the query");
     });
@@ -85,7 +92,7 @@ $(document).ready(function(){
         console.log("Button1 clicked");
         var partnerId = $(this).data('partner-id');
         var requestID = $(this).data('req-ID');
-        var learnerID = $(this).data('learner-ID');
+        var learnerID = $(this).data('learner-id');
         var RSch = $(this).data('req-sch');
         var RDur = $(this).data('req-dur');
         var sessionID= generateSessionID(); // Assuming generateSessionID() is defined elsewhere
@@ -127,6 +134,40 @@ $(document).ready(function(){
         });
     });
     
+        $("#all").click(function(){
+                    var partnerId = $(this).data('partner-id');
+                    var txt="";
+                    $.getJSON("QueryAllRequest.php?PID="+partnerId, function(response, status){
+                    
+                    	txt += "<table border='1'><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Age</th><th>Hometown</th><th>Job</th></tr>";
+                        	for (x in response) {
+                              	txt += "<div class='session'> <img src='" + response[x].learner_photo + "' alt= '"+response[x].FirstName+" photo'  class='image--cover'> echo "<a href='#' class='TPName' id='partnerName' data-learner-id='"+response[x].learnerID+">"+ response[x].learner_first_name+response[x].learner_last_name"</a><br>" ;
+                              	txt+= "<h6 class='text2'>"response[x].RStatus"</h6>";
+                              	if ( response[x].RStatus == "Pending" ){
+                              		txt+="<div class='button-container'>";
+                              		txt+="<button type='button' class='button1' id='button1' data-partner-id='"+$partner_id+"' data-learner-id='"+response[x].learnerID+"' data-req-ID='" +response[x].REQID +"' data-req-sch='" +  response[x].REQSchedule+ "' data-req-dur='"+ response[x].REQsession_Duration + "' >Accept</button>";
+                              		txt+="<button type='button' class='button2' id='button2'  data-partner-id='"+ $partner_id+"' data-req-ID='"+response[x].REQID+"' >Decline</button> </div>";
+                              	}
+                        	}
+                    window.location.reload();
+                    });
+                });
+                
+                
+          $("#accepted").click(function(){
+                    var partnerId = $(this).data('partner-id');
+                    var txt="";
+                    $.getJSON("QueryAllRequest.php?PID="+partnerId, function(response, status){
+                    
+                    	txt += "<table border='1'><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Age</th><th>Hometown</th><th>Job</th></tr>";
+                        	for (x in response) {
+                              	txt += "<div class='session'> <img src='" + response[x].learner_photo + "' alt= '"+response[x].FirstName+" photo'  class='image--cover'> echo "<a href='#' class='TPName' id='partnerName' data-learner-id='"+response[x].learnerID+">"+ response[x].learner_first_name+response[x].learner_last_name"</a><br>" ;
+                              	txt+= "<h6 class='text2'>"response[x].RStatus"</h6>";
+                        	}
+                    window.location.reload();
+                    });
+                });
+    
     
 });
 </script>
@@ -158,18 +199,18 @@ $(document).ready(function(){
  <div class="section-title">
 <h2>Language Learning Requests</h2> </div>
 <br>
-<div class="menu">
-  <a href="AllReq.html" class="menu-item" data-target="all">All</a>
-  <a href="accepted.html" class="menu-item" data-target="accepted">Accepted</a>
-  <a href="pending.html" class="menu-item" data-target="pending">Pending</a>
-  <a href="declined.html" class="menu-item" data-target="declined">Declined</a>
 
-  
+<div class="menu">
+  <a href="allRequestsPartner.php" class="menu-item" id="all" data-learner-id='<?php echo $row['learnerID']; ?>'>All</a>
+  <a href="allRequestsPartner.php" class="menu-item" id="accepted" data-learner-id='<?php echo $row['learnerID']; ?>'>Accepted</a>
+  <a href="allRequestsPartner.php" class="menu-item" id="pending" data-learner-id='<?php echo $row['learnerID']; ?>'>Pending</a>
+  <a href="allRequestsPartner.php" class="menu-item" id="declined" data-learner-id='<?php echo $row['learnerID']; ?>'>Declined</a>
 </div>
+
 <div id="site">
-          <?php
-          // Fetch and display session details
-         while ($row = mysqli_fetch_assoc($result)) {
+  <?php        
+          
+    while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
     echo "<a href='#' class='TPName' id='partnerName' data-learner-id='{$row['learnerID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
@@ -177,7 +218,7 @@ $(document).ready(function(){
               
     if ($row['RStatus'] == 'Pending') {
     echo '<div class="button-container">';
-	echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='$learnerID'  data-req-ID='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
+	echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-ID='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
 	echo "<button type='button' class='button2' id='button2'  data-partner-id='$partner_id' data-req-ID='{$row['REQID']}' >Decline</button>";
 
     echo '</div>';
