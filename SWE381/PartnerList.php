@@ -92,7 +92,7 @@
          
          $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
             $result3 = mysqli_query($connection, $sql3);
-            echo  " I speak:";
+            echo  " Languages I teach:";
             while ($row2 = mysqli_fetch_assoc($result3)){
                 $lang=$row2['language'];
                  echo  " ".$lang.",";
@@ -151,7 +151,7 @@
          
          $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
             $result3 = mysqli_query($connection, $sql3);
-            echo  " I speak:";
+            echo  "Languages I teach:";
             while ($row2 = mysqli_fetch_assoc($result3)){
                 $lang=$row2['language'];
                  echo  " ".$lang.",";
@@ -173,7 +173,7 @@
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
-     $sql = "SELECT partner_id FROM partner_languages WHERE language = 'Français'";
+     $sql = "SELECT partner_id FROM partner_languages WHERE language = 'French'";
     $result = mysqli_query($connection, $sql);
     while ($row = mysqli_fetch_assoc($result)){
         	$pID= $row['partner_id'];
@@ -201,7 +201,7 @@
          
          $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
             $result3 = mysqli_query($connection, $sql3);
-            echo  " I speak:";
+            echo  "Languages I teach:";
             while ($row2 = mysqli_fetch_assoc($result3)){
                 $lang=$row2['language'];
                  echo  " ".$lang.",";
@@ -224,7 +224,7 @@
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
-    $sql = "SELECT partner_id FROM partner_languages WHERE language = 'Español'";
+    $sql = "SELECT partner_id FROM partner_languages WHERE language = 'Spanish'";
     $result = mysqli_query($connection, $sql);
     while ($row = mysqli_fetch_assoc($result)){
         	$pID= $row['partner_id'];
@@ -251,7 +251,7 @@
          
          $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
             $result3 = mysqli_query($connection, $sql3);
-            echo  " I speak:";
+            echo  "Languages I teach:";
             while ($row2 = mysqli_fetch_assoc($result3)){
                 $lang=$row2['language'];
                  echo  " ".$lang.",";
