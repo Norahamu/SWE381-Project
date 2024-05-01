@@ -19,17 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
  
-  // If email already exists 
-  $checkEmailQuery = "SELECT email FROM learners WHERE email = ?"; 
-  $stmt = $connection->prepare($checkEmailQuery); 
-  $stmt->bind_param("s", $email); 
-  $stmt->execute(); 
-  $result = $stmt->get_result(); 
-  $stmt->close(); 
-  if ($result->num_rows > 0) { 
-    echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuplearner.html';</script>"; 
-    exit; 
-  } 
+ 
  
   $target_file = null; 
   // Check if file is uploaded 
