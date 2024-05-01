@@ -54,90 +54,58 @@
     <form action="#" method="post" class="php-email-form">
      <div class="row">
       <div class="form-group col-md-6">
-       <label class="required">First Name</label>
-       <input type="text" placeholder="Norah" name="First name" class="form-control" id="fname" required>
-      </div>
-      <div class="form-group col-md-6">
-       <label class="required">Last Name</label>
-       <input type="text" placeholder="Abdullah" name="Last name" class="form-control" id="lname" required>
-      </div>
-      <div class="form-group col-md-6">
-       <label class="required">Age</label>
-       <input type="number" class="form-control" placeholder="20" name="age" id="age" required>
-      </div>
-      <div class="containergender">
-		<label class="required">Gender</label>
-		<input type='radio' id='female' checked='checked' name='radio'>
-		 <label for='female'>Female</label>
-        <input type='radio' id='male' name='radio'>
-		  <label for='male'>Male</label>
-      </div>
-      <div class="form-group">
-       <label class="required">Email*</label>
-       <input type="email" class="form-control" placeholder="norah@gmail.com" name="email" id="email" required>
-      </div>
-      <div class="form-group">
-       <label class="required">Password</label>
-       <input type="password" class="form-control" placeholder="**************" name="Password" id="psw" required>
-      </div>
-      <div class="form-group">
-       <label>Upload Photo</label>
-       <input type="file" class="form-control" name="photo" id="photo">
-      </div>
-	  <div class="checkbox-wrapper-46">
-  <label>Choose the languages you want to teach:</label>
-  <br>
-  <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" checked />
-  <label class="cbx" for="cbx-46-arabic"><span>
-    <svg width="12px" height="10px" viewbox="0 0 12 10">
-      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-    </svg></span><span>العربية</span>
-  </label>
-
-  <input class="inp-cbx" id="cbx-46-english" type="checkbox" />
-  <label class="cbx" for="cbx-46-english"><span>
-    <svg width="12px" height="10px" viewbox="0 0 12 10">
-      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-    </svg></span><span>English</span>
-  </label>
-
-  <input class="inp-cbx" id="cbx-46-french" type="checkbox" />
-  <label class="cbx" for="cbx-46-french"><span>
-    <svg width="12px" height="10px" viewbox="0 0 12 10">
-      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-    </svg></span><span>Français</span>
-  </label>
-
-  <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" checked />
-  <label class="cbx" for="cbx-46-spanish"><span>
-    <svg width="12px" height="10px" viewbox="0 0 12 10">
-      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-    </svg></span><span>Español</span>
-  </label>
-</div>
-
-      <div class="form-group">
-       <label class="required">Location</label>
-       <input type="text" class="form-control" placeholder="Saudi Arabia- Riyadh" name="location" id="location" required>
-      </div>
-      <div class="form-group">
-       <label class="required">Short bio</label>
-       <textarea class="form-control" rows="4" placeholder="Languages Spoken: English, Arabic, Cultural Knowledge:jkebjhdgksahja" name="bio" id="bio" required></textarea>
-      </div>
-	  <div class="form-group">
-       <label>Education</label>
-       <textarea class="form-control" rows="4" placeholder="French literature degree" name="bio" id="bio" required></textarea>
-      </div>
-	  <div class="form-group">
-       <label>Experience</label>
-       <textarea class="form-control" rows="4" placeholder="Teaching french at high school" name="bio" id="bio" required></textarea>
-      </div>
-	  
-
-<div class="slidecontainer"> <label> Select the price for 1 hour session:</label>
-  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-  <p>Price: <span id="pricehr"></span> SAR</p>
-</div>
+       <label>First Name</label>
+            <input type="text" name="fname" class="form-control" id="fname" value="<?php echo isset($firstName) ? htmlspecialchars($firstName) : ''; ?>">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Last Name</label>
+            <input type="text" name="lname" class="form-control" id="lname" value="<?php echo isset($lastName) ? htmlspecialchars($lastName) : ''; ?>">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Age</label>
+            <input type="number" class="form-control" id="age" name="age" min="18" title="You must be at least 18 years old to register." value="<?php echo isset($age) ? htmlspecialchars($age) : ''; ?>">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Gender</label>
+            <select name="gender" class="form-control">
+                <option value="">Select Gender</option>
+                <option value="female" <?php if (isset($gender) && $gender === 'female') echo 'selected'; ?>>Female</option>
+                <option value="male" <?php if (isset($gender) && $gender === 'male') echo 'selected'; ?>>Male</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" name="email" id="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" id="psw" name="psw">
+        </div>
+        <div class="form-group">
+            <label>Upload Photo</label>
+            <input type="file" class="form-control" name="photo" id="photo">
+        </div>
+        <!-- Add more form fields with PHP values if needed -->
+    </div>
+    <div class="form-group">
+        <label>Cultural Knowledge</label>
+        <textarea class="form-control" name="cultural_knowledge" id="cultural_knowledge" rows="5"><?php echo isset($culturalKnowledge) ? htmlspecialchars($culturalKnowledge) : ''; ?></textarea>
+    </div>
+    <div class="form-group">
+        <label>Education</label>
+        <textarea class="form-control" name="education" id="education" rows="5"><?php echo isset($education) ? htmlspecialchars($education) : ''; ?></textarea>
+    </div>
+    <div class="form-group">
+        <label>Experience</label>
+        <textarea class="form-control" name="experience" id="experience" rows="5"><?php echo isset($experience) ? htmlspecialchars($experience) : ''; ?></textarea>
+    </div>
+    <div class="form-group">
+        <label>Location</label>
+        <input type="text" name="location" class="form-control" id="location" value="<?php echo isset($location) ? htmlspecialchars($location) : ''; ?>">
+    </div>
+    <div class="form-group col-md-6">
+        <label>Price per session</label>
+        <input type="number" class="form-control" name="price" id="price" min="50" step="1" value="<?php echo isset($price) ? htmlspecialchars($price) : ''; ?>">
 
 <script> 
 
@@ -150,10 +118,12 @@ slider.oninput = function() {
 }
 </script>
 
-<div class="text-center" style="display: flex; justify-content: space-between;">
- <button type="submit" id="save-changes-btn" style="margin-right: auto; display: none;">Save Changes</button>
-    <button type="submit" style="background-color: red;">Delete my account</button>
-</div>
+    </div>
+    <div class="text-center" style="display: flex; justify-content: space-between;">
+        <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
+        <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button>
+    </div>
+</form>
      </div>
     </form>
    </div>
