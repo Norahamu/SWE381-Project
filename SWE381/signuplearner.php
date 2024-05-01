@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     
 
-    $target_file = null;
+    $target_file = "assets/img/OIP.jpg";
     // Check if file is uploaded
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['photo']['tmp_name'];
@@ -58,6 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sssssss", $firstName, $lastName, $email, $password, $target_file, $city, $location);
     if ($stmt->execute()) {
         $_SESSION['user_id'] = $stmt->insert_id;
+        $stmt->close();
+        $connection->close();
+        echo "<script>alert('Registration successful!'); window.location.href='loginlearner.html';</script>";
         exit(); 
     } else {
         echo "Error: " . $stmt->error;
@@ -65,6 +68,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
     $connection->close();
-    echo "<script>alert('Registration successful!'); window.location.href='loginlearner.html';</script>";
 }
 ?>
