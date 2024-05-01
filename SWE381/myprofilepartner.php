@@ -1,17 +1,18 @@
 <?php 
 session_start(); 
- 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") { 
   $servername = "localhost"; 
   $username = "root"; 
   $dbPassword = ""; 
   $database = "lingo"; 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
- 
+
   if ($connection->connect_error) { 
     die("Connection failed: " . $connection->connect_error); 
   } 
- 
+
+  // Retrieve and sanitize form data
   $firstName = $connection->real_escape_string($_POST['first_name']); 
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
@@ -23,25 +24,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $culturalKnowledge = $connection->real_escape_string($_POST['culturalKnowledge']); 
   $education = $connection->real_escape_string($_POST['education']); 
   $experience = $connection->real_escape_string($_POST['experience']); 
- $pricePerSession = $connection->real_escape_string($_POST['pricePerSession']); 
- 
+  $pricePerSession = $connection->real_escape_string($_POST['pricePerSession']); 
 
-   
- 
-  // If email already exists 
-  $checkEmailQuery = "SELECT email FROM learners WHERE email = ?"; 
-  $stmt = $connection->prepare($checkEmailQuery); 
-  $stmt->bind_param("s", $email); 
-  $stmt->execute(); 
-  $result = $stmt->get_result(); 
-  $stmt->close(); 
+  // Process proficiency levels for languages
+  if (isset($_POST['languages']) && isset($_POST['proficiency_levels'])) {
+    $languages = $_POST['languages'];
+    $proficiencyLevels = $_POST['proficiency_levels'];
+
+    // Update proficiency levels in the database
+    foreach ($languages as $index => $language) {
+      $proficiencyLevel = $connection->real_escape_string($proficiencyLevels[$index]);
+      
+      // Perform SQL update for each language's proficiency level
+      $updateProficiencyQuery = "UPDATE learner_languages SET proficiency_level = '$proficiencyLevel' WHERE learner_id = '{$_SESSION['learner_id']}' AND language = '$language'";
+      $connection->query($updateProficiencyQuery);
+    }
+  }
+
+  // Check if email already exists
+  $checkEmailQuery = "SELECT email FROM learners WHERE email = '$email'";
+  $result = $connection->query($checkEmailQuery);
   if ($result->num_rows > 0) { 
     echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuppartner.html';</script>"; 
     exit; 
   } 
- 
-  $target_file = null; 
-  // Check if file is uploaded 
+
+  // Handle photo upload
+  $target_file = null;
   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) { 
     $fileTmpPath = $_FILES['photo']['tmp_name']; 
     $fileName = $_FILES['photo']['name']; 
@@ -49,76 +58,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fileExt = pathinfo($fileName, PATHINFO_EXTENSION); 
     $newFileName = $firstName . $lastName . "." . $fileExt; 
     $target_file = $target_dir . $newFileName; 
- 
+
     if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) { 
       echo "Sorry, there was an error uploading your file."; 
       exit; 
     } 
   } 
 
- 
-  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, cultural_knowledge=?, cultural_knowledge=?, education=?, experience=?, pricePerSession=?,age=?,gender=?  WHERE partner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['user_id']); 
- 
-  if ($stmt->execute()) { 
+  // Update learner profile
+  $updateQuery = "UPDATE learners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', pricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['user_id']}'";
+  if ($connection->query($updateQuery) === TRUE) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
   } else { 
-    echo "<div class='error-message'>Error: " . $stmt->error . "</div>"; 
+    echo "<div class='error-message'>Error: " . $connection->error . "</div>"; 
   } 
- 
-  $stmt->close(); 
+
+  $connection->close(); 
 } 
- 
+
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
 $username = "root"; 
 $dbPassword = ""; 
 $database = "lingo"; 
 $connection = new mysqli($servername, $username, $dbPassword, $database); 
- 
-$stmtFetch = $connection->prepare("SELECT * FROM learners WHERE learner_id = ?"); 
+
+$stmtFetch = $connection->prepare("SELECT * FROM learners WHERE learner_id = ?");
 $stmtFetch->bind_param("i", $_SESSION['learner_id']); 
 $stmtFetch->execute(); 
 $resultFetch = $stmtFetch->get_result(); 
- 
-// Check if user exists 
+
+// Fetch user data
 if ($resultFetch->num_rows > 0) { 
-  // Fetch user data 
   $userData = $resultFetch->fetch_assoc(); 
- 
+
   // Assign user data to variables for pre-filling the form 
   $firstName = $userData['first_name']; 
   $lastName = $userData['last_name']; 
   $email = $userData['email']; 
-  $password = $userData['password']; // Assuming the password is stored in the database 
+  $password = $userData['password']; 
   $location = $userData['location']; 
   $photo = $userData['photo']; 
   $age = $userData['age']; 
-   $gender = $userData['gender']; 
-   $culturalKnowledge = $userData['culturalKnowledge']; 
-    $education = $userData['education'];
-    $photo = $userData['photo'];
-    $experience = $userData['experience'];
- $pricePerSession = $userData['pricePerSession'];
- 
+  $gender = $userData['gender']; 
+  $culturalKnowledge = $userData['culturalKnowledge']; 
+  $education = $userData['education']; 
+  $experience = $userData['experience']; 
+  $pricePerSession = $userData['pricePerSession']; 
 } else { 
-  // User not found, handle the error (e.g., redirect to an error page) 
-  // die("User not found."); 
+  // User not found, handle the error
 } 
- 
-// Close the prepared statement and database connection 
+
 $stmtFetch->close(); 
 $connection->close(); 
- 
+
 // Handle form submission (delete profile) 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
-  // Delete user from database 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?"); 
+  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?");
   $stmtDelete->bind_param("i", $_SESSION['user_id']); 
   if ($stmtDelete->execute()) { 
-    // User deleted successfully, redirect to sign out or any other page 
-    // For example: 
     header("Location: signuplearner.php"); 
     exit(); 
   } else { 
@@ -128,9 +127,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   $stmtDelete->close(); 
   $connection->close(); 
 } 
- 
+
 ?> 
- 
+
 <!DOCTYPE html> 
 <html lang="en"> 
  
@@ -191,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <div class="row"> 
  
         <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
-          <form action="#" method="post" class="php-email-form"> 
+      
 
 
 
@@ -199,11 +198,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
-              <input type="text" value="<?php echo htmlspecialchars($irstname); ?>" name="fname" class="form-control" id="fname">
+              <input type="text" value="<?php echo htmlspecialchars($firstName); ?>" name="fname" class="form-control" id="fname">
             </div>
             <div class="form-group col-md-6">
               <label class="required">Last Name</label>
-              <input type="text" value="<?php echo htmlspecialchars($lastname); ?>" name="lname" class="form-control" id="lname" >
+              <input type="text" value="<?php echo htmlspecialchars($lastName); ?>" name="lname" class="form-control" id="lname" >
             </div>
             <div class="form-group col-md-6">
               <label class="required">Age</label>
@@ -224,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             <div class="form-group">
               <label for="psw" class="required">Password</label>
               <div class="input-group">
-                  <input type="password" class="form-control" id="psw" name="psw" value="<?php echo htmlspecialchars($password); ?>"minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" >
+                  <input type="password" class="form-control" id="psw" value="<?php echo htmlspecialchars($password); ?>"minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" >
                   <div class="input-group-append">
                       <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                           <i class="fas fa-eye"></i>
@@ -267,7 +266,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 </script>
         <div class="form-group"></div>
           <label class="required">Cultural Knowledge</label>
-          <textarea class="form-control"value="<?php echo htmlspecialchars($cultural_knowledge); ?>" name="culturalknowledge" id="cultural_knowledge" rows="5"></textarea>       </div>
+          <textarea class="form-control"value="<?php echo htmlspecialchars($culturalKnowledge); ?>" name="culturalknowledge" id="cultural_knowledge" rows="5"></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
           <textarea class="form-control"value="<?php echo htmlspecialchars($education); ?>"name="experience" id="eduaction" rows="5" ></textarea>
