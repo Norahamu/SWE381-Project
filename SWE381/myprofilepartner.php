@@ -198,77 +198,98 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <form action="signupPartner.php" method="post" class="php-email-form">
           <div class="row">
             <div class="form-group col-md-6">
-             <label>First Name</label>
-            <input type="text" name="fname" class="form-control" id="fname" value="<?php echo isset($firstName) ? htmlspecialchars($firstName) : ''; ?>">
-        </div>
-        <div class="form-group col-md-6">
-            <label>Last Name</label>
-            <input type="text" name="lname" class="form-control" id="lname" value="<?php echo isset($lastName) ? htmlspecialchars($lastName) : ''; ?>">
-        </div>
-        <div class="form-group col-md-6">
-            <label>Age</label>
-            <input type="number" class="form-control" id="age" name="age" min="18" value="<?php echo isset($age) ? htmlspecialchars($age) : ''; ?>">
-        </div>
-        <div class="form-group col-md-6">
-            <label>Gender</label>
-            <select name="gender" class="form-control">
-                <option value="">Select Gender</option>
-                <option value="female" <?php if (isset($gender) && $gender === 'female') echo 'selected'; ?>>Female</option>
-                <option value="male" <?php if (isset($gender) && $gender === 'male') echo 'selected'; ?>>Male</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" name="email" id="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>">
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" class="form-control" id="psw" name="psw">
-        </div>
-        <div class="form-group">
-            <label>Upload Photo</label>
-            <input type="file" class="form-control" name="photo" id="photo">
-        </div>
-        
+                   <label class="required">First Name</label>
+              <input type="text" value="<?php echo htmlspecialchars($age); ?>" name="fname" class="form-control" id="fname">
+            </div>
+            <div class="form-group col-md-6">
+              <label class="required">Last Name</label>
+              <input type="text" value="<?php echo htmlspecialchars($age); ?>" name="lname" class="form-control" id="lname" >
+            </div>
+            <div class="form-group col-md-6">
+              <label class="required">Age</label>
+              <input type="number" class="form-control" id="age" name="age" value="<?php echo htmlspecialchars($age); ?>">
+            </div>
+            <div class="form-group col-md-6">
+  <label class="required">Gender</label>
+  <select name="gender" class="form-control">
+    <option value="">Select Gender</option>
+    <option value="female" <?php if ($gender === 'female') echo 'selected'; ?>>Female</option>
+    <option value="male" <?php if ($gender === 'male') echo 'selected'; ?>>Male</option>
+  </select>
+</div>
+            <div class="form-group">
+              <label class="required">Email</label>
+              <input type="email" class="form-control"value="<?php echo htmlspecialchars($age); ?>" name="email" id="email" >
+            </div>
+            <div class="form-group">
+              <label for="psw" class="required">Password</label>
+              <div class="input-group">
+                  <input type="password" class="form-control" id="psw" name="psw" value="<?php echo htmlspecialchars($age); ?>"minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" >
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                          <i class="fas fa-eye"></i>
+                      </button>
+                  </div>
+              </div>
+          </div>  
+            <div class="form-group">
+              <label>Upload Photo</label>
+              <input type="file" class="form-control" name="photo" id="photo">
+            </div>
+ <div class="checkbox-wrapper-46">
+  <div class="checkbox-wrapper-46" id="language-form">
+    <label class="required">Click on the languages you want to teach and select your proficiency:</label>
+    <div class="language-selection">
+      <label class="cbx" for="cbx-46-arabic">
+        <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (in_array('Arabic', $languages)) echo 'checked'; ?>/>
+        <span>Arabic</span>
+      </label>
+      <select name="proficiency_levels[]" class="form-control" <?php if (!in_array('Arabic', $languages)) echo 'disabled'; ?>>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if ($proficiency_levels['Arabic'] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($proficiency_levels['Arabic'] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($proficiency_levels['Arabic'] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+      </select>
     </div>
-    <div class="form-group">
-        <label>Cultural Knowledge</label>
-        <textarea class="form-control" name="cultural_knowledge" id="cultural_knowledge" rows="5"><?php echo isset($culturalKnowledge) ? htmlspecialchars($culturalKnowledge) : ''; ?></textarea>
-    </div>
-    <div class="form-group">
-        <label>Education</label>
-        <textarea class="form-control" name="education" id="education" rows="5"><?php echo isset($education) ? htmlspecialchars($education) : ''; ?></textarea>
-    </div>
-    <div class="form-group">
-        <label>Experience</label>
-        <textarea class="form-control" name="experience" id="experience" rows="5"><?php echo isset($experience) ? htmlspecialchars($experience) : ''; ?></textarea>
-    </div>
-    <div class="form-group">
-        <label>Location</label>
-        <input type="text" name="location" class="form-control" id="location" value="<?php echo isset($location) ? htmlspecialchars($location) : ''; ?>">
-    </div>
-    <div class="form-group col-md-6">
-        <label>Price per session</label>
-        <input type="number" class="form-control" name="price" id="price" min="50" step="1" value="<?php echo isset($price) ? htmlspecialchars($price) : ''; ?>">
-
-<script> 
-
-var slider = document.getElementById("myRange");
-var output = document.getElementById("pricehr");
-output.innerHTML = slider.value;
-
-slider.oninput = function() {
-  output.innerHTML = this.value;
-}
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.inp-cbx').forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+        let selectElement = checkbox.closest('.language-selection').querySelector('.form-control');
+        selectElement.disabled = !checkbox.checked;
+        if (!checkbox.checked) {
+          selectElement.value = '';
+        }
+      });
+    });
+  });
 </script>
-
+        <div class="form-group"></div>
+          <label class="required">Cultural Knowledge</label>
+          <textarea class="form-control"value="<?php echo htmlspecialchars($age); ?>" name="cultural_knowledge" id="cultural_knowledge" rows="5"></textarea>       </div>
+        <div class="form-group">
+          <label class="required">Education</label>
+          <textarea class="form-control"value="<?php echo htmlspecialchars($age); ?>"name="experience" id="eduaction" rows="5" ></textarea>
+        </div>
+        <div class="form-group">
+          <label class="required">Experience</label>
+          <textarea class="form-control"value="<?php echo htmlspecialchars($age); ?>"name="experience" id="experience" rows="5" ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="location" class="required">Location</label>
+          <input type="text" name="location" class="form-control" id="location" value="<?php echo htmlspecialchars($age); ?>">
+        </div>
+        <div class="form-group col-md-6">
+<label class="required">Price per session</label>
+<input type="number" class="form-control" value="<?php echo htmlspecialchars($age); ?>" name="price" id="price" min="50" step="1" >
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn-sign">Sign up</button>
+        </div>
+      </div>
     </div>
-    <div class="text-center" style="display: flex; justify-content: space-between;">
-        <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
-        <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button>
-    </div>
-</form>
-   
+    </form>
         </div> 
       </div> 
     </div> 
