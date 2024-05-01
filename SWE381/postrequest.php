@@ -144,7 +144,7 @@ mysqli_close($conn);
                     <p>Preferred Schedule</p>
                     <input type="datetime-local" name="preferredSchedule">
                     <div class="text-center">
-                        <button id="submitButton" type="button">Post</button>
+                        <button id="submitButton" class="btn-sign" type="submit">Post</button>
                     </div>
                 </form>
             </div>

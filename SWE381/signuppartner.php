@@ -45,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
         }
     }
-
     try {
         document.querySelector('.php-email-form').addEventListener('submit', function(event) {
             const checkboxes = document.querySelectorAll('.inp-cbx');

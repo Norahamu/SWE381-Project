@@ -35,11 +35,11 @@
             <nav id="navbar" class="navbar">
                 <ul> 
                     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-                    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
-                    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+                    <li><a class="nav-link scrollto" href="PartnersList.php">Partners List</a></li>
+                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
                 </ul>
 
             </nav>
