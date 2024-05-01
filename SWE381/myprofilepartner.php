@@ -192,7 +192,158 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
         <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
           <form action="#" method="post" class="php-email-form"> 
-            <div class="row"> 
+
+
+
+  <form action="signupPartner.php" method="post" class="php-email-form">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="required">First Name</label>
+              <input type="text" placeholder="Enter your first name" name="fname" class="form-control" id="fname" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="required">Last Name</label>
+              <input type="text" placeholder="Enter your last name" name="lname" class="form-control" id="lname" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="required">Age</label>
+              <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" required min="18" title="You must be at least 18 years old to register.">
+            </div>
+            <div class="form-group col-md-6">
+    <label class="required">Gender</label>
+    <select name="gender" class="form-control">
+        <option value="">Select Gender</option>
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+    </select>
+</div>
+            <div class="form-group">
+              <label class="required">Email</label>
+              <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required>
+            </div>
+            <div class="form-group">
+              <label for="psw" class="required">Password</label>
+              <div class="input-group">
+                  <input type="password" class="form-control" id="psw" name="psw" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character.">
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                          <i class="fas fa-eye"></i>
+                      </button>
+                  </div>
+              </div>
+          </div>  
+            <div class="form-group">
+              <label>Upload Photo</label>
+              <input type="file" class="form-control" name="photo" id="photo">
+            </div>
+            <div class="checkbox-wrapper-46">
+            <div class="checkbox-wrapper-46" id="language-form">
+  <label class="required">Click on the languages you want to teach and select your proficiency:</label>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-arabic">
+      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" />
+      <span>Arabic</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-english">
+      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" />
+      <span>English</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-french">
+      <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" />
+      <span>French</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-spanish">
+      <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" />
+      <span>Spanish</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.inp-cbx').forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+        let selectElement = checkbox.closest('.language-selection').querySelector('.form-control');
+        selectElement.disabled = !checkbox.checked;
+        if (!checkbox.checked) {
+          selectElement.value = '';
+        }
+      });
+    });
+  });
+</script>
+        <div class="form-group"></div>
+          <label class="required">Cultural Knowledge</label>
+          <textarea class="form-control" placeholder="Enter your cultural knowledge" name="cultural_knowledge" id="cultural_knowledge" rows="5" required></textarea>       </div>
+        <div class="form-group">
+          <label class="required">Education</label>
+          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="eduaction" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="required">Experience</label>
+          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="experience" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="location" class="required">Location</label>
+          <input type="text" name="location" class="form-control" id="location" placeholder="Enter your location" required>
+        </div>
+        <div class="form-group col-md-6">
+<label class="required">Price per session</label>
+<input type="number" class="form-control" placeholder="Enter price in SAR" name="price" id="price" min="50" step="1" required>
+        </div>
+          <div class="text-center" style="display: flex; justify-content: space-between;"> 
+          <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button> 
+ 
+              <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button> 
+ 
+        </div>
+      </div>
+    </div>
+    </form>
+
+
+
+
+
+
+
+           
+
+
+
+
+
+/*
+           <div class="row"> 
               <div class="form-group col-md-6"> 
  
                 <label class="required">First Name</label> 
@@ -241,6 +392,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
             </div> 
           </form> 
+         */
         </div> 
       </div> 
     </div> 
