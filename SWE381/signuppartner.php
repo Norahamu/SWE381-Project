@@ -1,94 +1,75 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 session_start();
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $servername = "localhost";
     $username = "root";
     $dbPassword = "";
     $database = "lingo";
-    $connection = new mysqli($servername, $username, $dbPassword, $database);
+    
+      $dsn = "mysql:host=$servername;dbname=$database;charset=utf8mb4";
+      $options = [
+          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+          PDO::ATTR_EMULATE_PREPARES => false,
+      ];
+      try {
+          $pdo = new PDO($dsn, $username, $dbPassword, $options);
+      } catch (PDOException $e) {
+          die("Connection failed: " . $e->getMessage());
+      }
+    $firstName = filter_input(INPUT_POST, 'fname', FILTER_SANITIZE_STRING);
+    $lastName = filter_input(INPUT_POST, 'lname', FILTER_SANITIZE_STRING);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $password = filter_input(INPUT_POST, 'psw', FILTER_SANITIZE_STRING);
+    $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_NUMBER_INT);
+    $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING);
+    $location = filter_input(INPUT_POST, 'location', FILTER_SANITIZE_STRING);
+    $culturalKnowledge = filter_input(INPUT_POST, 'cultural_knowledge', FILTER_SANITIZE_STRING);
+    $education = filter_input(INPUT_POST, 'experience', FILTER_SANITIZE_STRING);
+    $experience = filter_input(INPUT_POST, 'experience', FILTER_SANITIZE_STRING);
+    $pricePerSession = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_INT);
 
-    if ($connection->connect_error) {
-        die("Connection failed: " . $connection->connect_error);
-    }
-
-    $requiredFields = ['fname', 'lname', 'email', 'psw', 'age', 'gender', 'education', 'experience', 'price', 'location', 'cultural-knowledge'];
-    foreach ($requiredFields as $field) {
-        if (empty($_POST[$field])) {
-            echo "Error: Missing $field";
+   
+    $target_file = "assets/img/OIP.jpg";
+    // Check if file is uploaded
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['photo']['tmp_name'];
+        $fileName = $_FILES['photo']['name'];
+        $target_dir = "assets/img/";
+        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+        $newFileName = $firstName . $lastName . "." . $fileExt;
+        $target_file = $target_dir . $newFileName;
+    
+        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+            echo "Sorry, there was an error uploading your file.";
             exit;
         }
     }
-if (empty($_POST['languages']) || !is_array($_POST['languages']) || empty($_POST['proficiency_levels']) || !is_array($_POST['proficiency_levels'])) {
-    echo "Error: Missing or invalid language and proficiency data";
-    exit;
-}
 
+    try {
+        $sql = "INSERT INTO partners (first_name, last_name, email, password, photo, location, cultural_knowledge, Education, Experience, PricePerSession, age, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender]);
 
-    $firstName = $connection->real_escape_string($_POST['fname']);
-    $lastName = $connection->real_escape_string($_POST['lname']);
-    $email = $connection->real_escape_string($_POST['email']);
-    $password = $_POST['psw'];
-    $age = (int)$_POST['age'];
-    $gender = $connection->real_escape_string($_POST['gender']);
-    $education = $connection->real_escape_string($_POST['education']);
-    $experience = $connection->real_escape_string($_POST['experience']);
-    $pricePerSession = (int)$_POST['price'];
-    $location = $connection->real_escape_string($_POST['location']);
-    $cultural_knowledge = $connection->real_escape_string($_POST['cultural-knowledge']);
+        if (!empty($_POST['languages']) && !empty($_POST['proficiency_levels'])) {
+            $languages = $_POST['languages'];
+            $proficiencyLevels = $_POST['proficiency_levels'];
 
-    // Validate email 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Invalid email format";
-        exit;
-    }
+            $sqlLang = "INSERT INTO partner_languages (partner_id, language, ProficiencyLevel) VALUES (?, ?, ?)";
+            $stmtLang = $pdo->prepare($sqlLang);
 
-    // Validate email 
-    $checkEmailQuery = "SELECT email FROM partners WHERE email = ?";
-    if ($stmt = $connection->prepare($checkEmailQuery)) {
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $stmt->close();
-        if ($result->num_rows > 0) {
-            echo "The email address is already registered. Please use another email.";
-            exit;
+            foreach ($languages as $index => $language) {
+                if (isset($proficiencyLevels[$index]) && !empty($proficiencyLevels[$index])) {
+                    $stmtLang->execute([$pdo->lastInsertId(), $language, $proficiencyLevels[$index]]);
+                }
+            }
         }
-    }
-    // Validate age
-if ($age < 18) {
-    echo "You must be at least 18 years old to register.";
-    exit;
-}
 
-    // Insert to partners 
-    $insertQuery = "INSERT INTO partners (first_name, last_name, email, password, photo, location, cultural_knowledge, age, gender, Education, Experience, PricePerSession) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    if ($stmt = $connection->prepare($insertQuery)) {
-        $stmt->bind_param("sssssssisdis", $firstName, $lastName, $email, $password, $target_file, $location, $cultural_knowledge, $age, $gender, $education, $experience, $pricePerSession);
-        $stmt->execute();
-        $partner_id = $stmt->insert_id; 
-        $stmt->close();
-        
-        // Insert to partner_languages
-$insertLanguageQuery = "INSERT INTO partner_languages (partner_id, language, proficiency_level) VALUES (?, ?, ?)";
-foreach ($_POST['languages'] as $index => $language) {
-    $proficiency = $_POST['proficiency_levels'][$index];
-    if ($stmt = $connection->prepare($insertLanguageQuery)) {
-        $stmt->bind_param("iss", $partner_id, $language, $proficiency);
-        $stmt->execute();
-        $stmt->close();
-    } else {
-        die("MySQL prepare error: " . $connection->error);
+        echo "<script>alert('Registration successful!'); window.location.href='loginpartner.html';</script>";
+    } catch (PDOException $e) {
+        die("Could not connect to the database :" . $e->getMessage());
     }
-}
-
-     echo "<script>alert('Registration successful!'); window.location.href='loginpartner.html';</script>";
-    } else {
-        die("MySQL prepare error: " . $connection->error);
-    }
-
-    $connection->close();
+} else {
+    echo "Invalid request method.";
 }
 ?>
