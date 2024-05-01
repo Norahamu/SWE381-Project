@@ -10,11 +10,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id = $_GET['partnerID'];
-
-
-
-
+$partner_id = 123456790;
 
 $query1 = "SELECT L.first_name AS learner_first_name, 
                  L.last_name AS learner_last_name, 
@@ -47,7 +43,6 @@ if (!$result) {
   <link href="assets/img/Lingoblue.png" rel="icon" >
 
   <!-- Google Fonts -->
- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
  
 
   <!-- Vendor CSS Files -->
@@ -62,6 +57,82 @@ if (!$result) {
   <link href="style.css" rel="stylesheet">
   <link href="sessionsStyle.css" rel="stylesheet">
   <link href="buttons.css" rel="stylesheet">
+  
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    function generateSessionID() {
+        // Generate a random 9-digit number
+        return Math.floor(Math.random() * 900000000) + 100000000;
+    }
+    
+    
+$(document).ready(function(){
+
+    $("#button2").click(function(){
+        console.log("Button clicked");
+        var partnerId = $(this).data('partner-id');
+        var requestID = $(this).data('req-ID');
+        $.getJSON("declineRequest.php?PID="+partnerId+"&REQID="+requestID, function(status){
+            console.log("after query");
+            window.location.reload();
+        });
+        console.log("out of the query");
+    });
+
+    $("#button1").click(function(){
+        console.log("Button1 clicked");
+        var partnerId = $(this).data('partner-id');
+        var requestID = $(this).data('req-ID');
+        var learnerID = $(this).data('learner-ID');
+        var RSch = $(this).data('req-sch');
+        var RDur = $(this).data('req-dur');
+        var sessionID= generateSessionID(); // Assuming generateSessionID() is defined elsewhere
+
+        // Check for overlapping sessions before accepting the request
+        $.getJSON("partnerSessions.php?PID=" + partnerId, function(response) {
+            console.log("Button1 after partnerSessions");
+            response.forEach(function(session) {
+                var session_start = new Date(session.session_date + ' ' + session.session_time).getTime();
+                var session_end = session_start + (session.session_duration * 60 * 60 * 1000); // Convert duration to milliseconds
+
+                // Convert requested schedule to timestamp
+                var requested_start = new Date(RSch).getTime();
+                var requested_end = requested_start + (RDur * 60 * 60 * 1000); // Convert duration to milliseconds
+
+                // Check for overlap
+                if ((requested_start >= session_start && requested_start < session_end) ||
+                    (requested_end > session_start && requested_end <= session_end) ||
+                    (requested_start < session_start && requested_end > session_end)) {
+                    // There is an overlap, display an error message
+                    alert("This request can't be accepted! You have an existing session that overlaps this request preferred time.");
+                    return;
+                }
+            });
+
+            // If no overlap, proceed to accept the request
+            $.ajax({
+                url: "acceptRequest.php",
+                method: "POST",
+                data: { PID: partnerId, REQID: requestID, LID: learnerID, RSchedule: RSch, RDuration: RDur, SESID: sessionID },
+                success: function(status) {
+                    console.log("Response from server: " + status);
+                    window.location.reload(); // Reload the page after receiving the response
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+    });
+    
+    
+});
+</script>
+
+
+  
 </head>
 <body>
 
@@ -88,11 +159,12 @@ if (!$result) {
 <h2>Language Learning Requests</h2> </div>
 <br>
 <div class="menu">
+  <a href="AllReq.html" class="menu-item" data-target="all">All</a>
+  <a href="accepted.html" class="menu-item" data-target="accepted">Accepted</a>
+  <a href="pending.html" class="menu-item" data-target="pending">Pending</a>
+  <a href="declined.html" class="menu-item" data-target="declined">Declined</a>
 
-  <a href="AllReq.html" class="selected">All</a>
-  <a href="accepted.html">Accepted</a>
-  <a href="pending.html">Pending</a>
-  <a href="declined.html">Declined</a>
+  
 </div>
 <div id="site">
           <?php
@@ -105,7 +177,7 @@ if (!$result) {
               
     if ($row['RStatus'] == 'Pending') {
     echo '<div class="button-container">';
-	echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'    data-req-ID='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
+	echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='$learnerID'  data-req-ID='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
 	echo "<button type='button' class='button2' id='button2'  data-partner-id='$partner_id' data-req-ID='{$row['REQID']}' >Decline</button>";
 
     echo '</div>';
@@ -164,17 +236,8 @@ if (!$result) {
       <div class="credits"></div>
     </div>
   </footer>
-  <script>
-  
-  
-    
-    const accButton = document.getElementById('button1');
-    accButton.addEventListener("click", AcceptRequest);
-    
-    const decButton = document.getElementById('button2');
-    decButton.addEventListener("click", declineRequest);
-    
-    const partnerNameElement = document.getElementById('partnerName');
+  <script>    
+  	const partnerNameElement = document.getElementById('partnerName');
     partnerNameElement.addEventListener("click", redirectToLearnerPage);
 
 
@@ -186,102 +249,9 @@ if (!$result) {
         const url = `learnerCard.php?id=${learnerId}`;
         window.location.href = url;
     }
-    
-    
-    
-    
-    
-    
-function generateSessionID() {
-    // Generate a random 9-digit number
-    return rand(100000000, 999999999);
-}
+   </script> 
 
-function AcceptRequest() {
-    global $conn;
-    const button = event.target;
-    const partner_id = button.getAttribute('data-partner-id');
-    const req_ID = button.getAttribute('data-req-ID');
-    const req_sch = button.getAttribute('data-req-sch');
-    const req_dur = button.getAttribute('data-req-dur');
-    
-    // Check for overlapping sessions before accepting the request
-    $query = "SELECT * FROM sessions WHERE partner_id = $partner_id";
-    $result = mysqli_query($conn, $query);
-
-    if (!$result) {
-        die("Query failed: " . mysqli_error($conn));
-    }
-
-    while ($row = mysqli_fetch_assoc($result)) {
-        // Get the session date, time, and duration
-        $session_start = strtotime($row['session_date'] . ' ' . $row['session_time']);
-        $session_end = $session_start + $row['session_duration'] * 3600; // Convert duration to seconds
-
-        // Convert requested schedule to timestamp
-        $requested_start = strtotime($req_sch);
-        $requested_end = $requested_start + $req_dur * 3600; // Convert duration to seconds
-
-        // Check for overlap
-        if (($requested_start >= $session_start && $requested_start < $session_end) ||
-            ($requested_end > $session_start && $requested_end <= $session_end) ||
-            ($requested_start < $session_start && $requested_end > $session_end)) {
-            // There is an overlap, display an error message
-            echo "<script>alert('This request can't be accepted! You have an existing session that overlaps this request preferred time.');</script>";
-            return; // Exit the function to prevent accepting the request
-        }
-    }
-
-    // No overlap found, proceed with accepting the request
-    mysqli_begin_transaction($conn);
-    $acceptQuery = "UPDATE requests_partner SET Status = 'Accepted' WHERE partnerID = $partner_id AND REQ_ID = $req_ID";
-    
-    // Generate a random session ID
-    $sessionID = generateSessionID();
-    
-    // Insert the new session
-    $insertQuery = "INSERT INTO sessions (session_ID, partner_id, learner_id, session_date, session_time) VALUES ('$sessionID', $partner_id, '2024-05-23', '08:00')";
-
-    // Execute the queries
-    $acceptingResult = mysqli_query($conn, $acceptQuery);
-    $insertResult = mysqli_query($conn, $insertQuery);
-
-    // Check if any query failed
-    if (!$acceptingResult || !$insertResult) {
-        mysqli_rollback($conn);
-        die("Query failed: " . mysqli_error($conn));
-        echo "<script>alert('This request cant be accepted! You have an existing session that overlaps this request preferred time.');</script>";
-        return; // Exit the function to prevent further execution
-    }
-
-    // If all queries executed successfully, commit the transaction
-    mysqli_commit($conn);
-    echo "<script>alert('Accepted successfully!');</script>";
-}
-
-
-
-
-
-
-
-
-function declineRequest( ) {
-    global $conn;
-    const button = event.target;
-    const partner_id = button.getAttribute('data-partner-id');
-    // Update the status of the request to "Declined"
-    $declineQuery = "UPDATE requests_partner SET Status = 'Declined' WHERE partnerID = $partner_id";
-    $decliningResult = mysqli_query($conn, $declineQuery);
-
-    if (!$decliningResult) {
-        die("Query failed: " . mysqli_error($conn));
-    } else {
-        echo "<script>alert('The request declined successfully!');</script>";
-    }
-}
-</script>
-<php?
+<?php
           // Free result set
           mysqli_free_result($result);
 
