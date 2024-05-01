@@ -205,12 +205,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
-              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($city); ?>"name="city" id="city" required>
+              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($city); ?>"name="city" id="city" >
               </div> 
             <div class="form-group"> 
               <label class="required">Location</label> 
-              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($location); ?>" name="location" id="location" 
-                required=""> 
+              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($location); ?>" name="location" id="location"> 
+  
             </div> 
  
             <div class="text-center" style="display: flex; justify-content: space-between;"> 
