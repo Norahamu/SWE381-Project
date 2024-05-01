@@ -32,12 +32,12 @@
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
-    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-    <li><a class="nav-link scrollto" href="PartnersList.php">Partners List</a></li>
-    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
+    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
+    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
       </ul>
 
     </nav>
@@ -50,8 +50,8 @@
             <ul>
                 <li><a href="#ArabicLanguage"> Arabic</a></li>
                 <li><a href="#EnglishLanguage"> English</a></li>
-                <li><a href="#FrenshLanguage"> français</a></li>
-                <li><a href="#EspanishLanguage"> Español</a></li>
+                <li><a href="#FrenshLanguage"> French</a></li>
+                <li><a href="#EspanishLanguage"> Spanish</a></li>
 
             </ul>
         </div>
@@ -62,7 +62,7 @@
        
         <div class ="superlanguage">
         <?php
-         $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+         $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -92,7 +92,7 @@
          
          $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
             $result3 = mysqli_query($connection, $sql3);
-            echo  " Languages I teach:";
+            echo  " I speak:";
             while ($row2 = mysqli_fetch_assoc($result3)){
                 $lang=$row2['language'];
                  echo  " ".$lang.",";
@@ -119,7 +119,7 @@
         <div class ="superlanguage">
 
              <?php
-         $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+         $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -151,7 +151,7 @@
          
          $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
             $result3 = mysqli_query($connection, $sql3);
-            echo  "Languages I teach:";
+            echo  " I speak:";
             while ($row2 = mysqli_fetch_assoc($result3)){
                 $lang=$row2['language'];
                  echo  " ".$lang.",";
@@ -169,7 +169,7 @@
 <h2 id ="FrenshLanguage" class =" LanguageTitle">French </h2>
         <div class ="superlanguage">
   <?php
-         $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+         $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -201,7 +201,7 @@
          
          $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
             $result3 = mysqli_query($connection, $sql3);
-            echo  "Languages I teach:";
+            echo  " I speak:";
             while ($row2 = mysqli_fetch_assoc($result3)){
                 $lang=$row2['language'];
                  echo  " ".$lang.",";
@@ -220,7 +220,7 @@
         <div class ="superlanguage">
 
             <?php
-         $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+         $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -251,7 +251,7 @@
          
          $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
             $result3 = mysqli_query($connection, $sql3);
-            echo  "Languages I teach:";
+            echo  " I speak:";
             while ($row2 = mysqli_fetch_assoc($result3)){
                 $lang=$row2['language'];
                  echo  " ".$lang.",";
