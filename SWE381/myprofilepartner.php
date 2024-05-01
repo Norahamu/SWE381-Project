@@ -199,11 +199,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
-              <input type="text" value="<?php echo htmlspecialchars($age); ?>" name="fname" class="form-control" id="fname">
+              <input type="text" value="<?php echo htmlspecialchars($irstname); ?>" name="fname" class="form-control" id="fname">
             </div>
             <div class="form-group col-md-6">
               <label class="required">Last Name</label>
-              <input type="text" value="<?php echo htmlspecialchars($age); ?>" name="lname" class="form-control" id="lname" >
+              <input type="text" value="<?php echo htmlspecialchars($lastname); ?>" name="lname" class="form-control" id="lname" >
             </div>
             <div class="form-group col-md-6">
               <label class="required">Age</label>
@@ -219,12 +219,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 </div>
             <div class="form-group">
               <label class="required">Email</label>
-              <input type="email" class="form-control"value="<?php echo htmlspecialchars($age); ?>" name="email" id="email" >
+              <input type="email" class="form-control"value="<?php echo htmlspecialchars($email); ?>" name="email" id="email" >
             </div>
             <div class="form-group">
               <label for="psw" class="required">Password</label>
               <div class="input-group">
-                  <input type="password" class="form-control" id="psw" name="psw" value="<?php echo htmlspecialchars($age); ?>"minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" >
+                  <input type="password" class="form-control" id="psw" name="psw" value="<?php echo htmlspecialchars($password); ?>"minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" >
                   <div class="input-group-append">
                       <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                           <i class="fas fa-eye"></i>
@@ -267,26 +267,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 </script>
         <div class="form-group"></div>
           <label class="required">Cultural Knowledge</label>
-          <textarea class="form-control"value="<?php echo htmlspecialchars($age); ?>" name="cultural_knowledge" id="cultural_knowledge" rows="5"></textarea>       </div>
+          <textarea class="form-control"value="<?php echo htmlspecialchars($cultural_knowledge); ?>" name="cultural_knowledge" id="cultural_knowledge" rows="5"></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
-          <textarea class="form-control"value="<?php echo htmlspecialchars($age); ?>"name="experience" id="eduaction" rows="5" ></textarea>
+          <textarea class="form-control"value="<?php echo htmlspecialchars($education); ?>"name="experience" id="eduaction" rows="5" ></textarea>
         </div>
         <div class="form-group">
           <label class="required">Experience</label>
-          <textarea class="form-control"value="<?php echo htmlspecialchars($age); ?>"name="experience" id="experience" rows="5" ></textarea>
+          <textarea class="form-control"value="<?php echo htmlspecialchars($experience); ?>"name="experience" id="experience" rows="5" ></textarea>
         </div>
         <div class="form-group">
           <label for="location" class="required">Location</label>
-          <input type="text" name="location" class="form-control" id="location" value="<?php echo htmlspecialchars($age); ?>">
+          <input type="text" name="location" class="form-control" id="location" value="<?php echo htmlspecialchars($location); ?>">
         </div>
         <div class="form-group col-md-6">
 <label class="required">Price per session</label>
-<input type="number" class="form-control" value="<?php echo htmlspecialchars($age); ?>" name="price" id="price" min="50" step="1" >
+<input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="price" id="price" min="50" step="1" >
         </div>
-        <div class="text-center">
-          <button type="submit" class="btn-sign">Sign up</button>
-        </div>
+       <div class="text-center" style="display: flex; justify-content: space-between;">
+        <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
+        <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button>
+    </div>
       </div>
     </div>
     </form>
