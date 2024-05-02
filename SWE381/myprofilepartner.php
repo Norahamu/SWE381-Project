@@ -21,10 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $age = $connection->real_escape_string($_POST['age']); 
   $gender = $connection->real_escape_string($_POST['gender']); 
-  $culturalKnowledge = $connection->real_escape_string($_POST['culturalKnowledge']); 
-  $education = $connection->real_escape_string($_POST['education']); 
-  $experience = $connection->real_escape_string($_POST['experience']); 
-  $pricePerSession = $connection->real_escape_string($_POST['pricePerSession']); 
+  $culturalKnowledge = $connection->real_escape_string($_POST['cultural_Knowledge']); 
+  $education = $connection->real_escape_string($_POST['Education']); 
+  $experience = $connection->real_escape_string($_POST['Experience']); 
+  $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']); 
 
   // Process proficiency levels for languages
   if (isset($_POST['languages']) && isset($_POST['proficiency_levels'])) {
