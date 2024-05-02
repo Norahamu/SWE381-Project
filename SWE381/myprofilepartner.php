@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $proficiencyLevel = $connection->real_escape_string($proficiencyLevels[$index]);
       
       // Perform SQL update for each language's proficiency level
-      $updateProficiencyQuery = "UPDATE learner_languages SET proficiency_level = '$proficiencyLevel' WHERE learner_id = '{$_SESSION['learner_id']}' AND language = '$language'";
+      $updateProficiencyQuery = "UPDATE learner_languages SET proficiency_level = '$proficiencyLevel' WHER partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
       $connection->query($updateProficiencyQuery);
     }
   }
@@ -59,8 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
 
-  // Update learner profile
-  $updateQuery = "UPDATE learners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', pricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['user_id']}'";
+  // Update partner profile
+  $updateQuery = "UPDATE partners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', pricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['user_id']}'";
   if ($connection->query($updateQuery) === TRUE) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
   } else { 
@@ -77,7 +77,7 @@ $dbPassword = "";
 $database = "lingo"; 
 $connection = new mysqli($servername, $username, $dbPassword, $database); 
 
-$stmtFetch = $connection->prepare("SELECT * FROM learners WHERE learner_id = ?");
+$stmtFetch = $connection->prepare("SELECT * FROM partners WHERE partner_id = ?");
 $stmtFetch->bind_param("i", $_SESSION['learner_id']); 
 $stmtFetch->execute(); 
 $resultFetch = $stmtFetch->get_result(); 
@@ -109,7 +109,7 @@ $connection->close();
 // Handle form submission (delete profile) 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?");
+  $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
   $stmtDelete->bind_param("i", $_SESSION['user_id']); 
   if ($stmtDelete->execute()) { 
     header("Location: signuplearner.php"); 
