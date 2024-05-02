@@ -470,6 +470,12 @@ h2 {
 /*--------------------------------------------------------------
 # Sign up as a language partner Section
 --------------------------------------------------------------*/
+
+
+.form-control:disabled {
+  background-color: #f0f0f0;
+  color: #ccc;
+}
 .signuppartner .info {
   border-top: 3px solid #47b2e4;
   border-bottom: 3px solid #47b2e4;
