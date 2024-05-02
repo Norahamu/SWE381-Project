@@ -71,6 +71,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $stmt->close(); 
 
 
+ 
+  $connection->close(); 
+} 
+
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
 $username = "root"; 
