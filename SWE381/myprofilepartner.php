@@ -323,14 +323,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
         <div class="form-group"></div>
           <label class="required">Cultural Knowledge</label>
-          <textarea class="form-control"value="<?php echo htmlspecialchars($culturalKnowledge); ?>" name="cultural_Knowledge" id="cultural_Knowledge" rows="5"></textarea>       </div>
+          <textarea class="form-control"  name="cultural_Knowledge" id="cultural_Knowledge" rows="5"><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
-          <textarea class="form-control"value="<?php echo htmlspecialchars($education); ?>"name="Experience" id="Education" rows="5" ></textarea>
+          <textarea class="form-control"name="Experience" id="Education" rows="5" ><?php echo htmlspecialchars($education); ?></textarea>
         </div>
         <div class="form-group">
           <label class="required">Experience</label>
-          <textarea class="form-control"value="<?php echo htmlspecialchars($experience); ?>"name="Experience" id="Experience" rows="5" ></textarea>
+          <textarea class="form-control"name="Experience" id="Experience" rows="5" ><?php echo htmlspecialchars($experience); ?></textarea>
         </div>
         <div class="form-group">
           <label for="location" class="required">Location</label>
