@@ -111,7 +111,7 @@ if ($resultFetch->num_rows > 0) {
   $photo = $userData['photo']; 
   $age = $userData['age']; 
   $gender = $userData['gender']; 
-  $culturalKnowledge = $userData['cultural_Knowledge']; 
+  $culturalKnowledge = $userData['cultural_knowledge']; 
   $education = $userData['Education']; 
   $experience = $userData['Experience']; 
   $pricePerSession = $userData['PricePerSession']; 
