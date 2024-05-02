@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   if ($stmtDelete->execute()) { 
     // User deleted successfully, redirect to sign out or any other page 
     // For example: 
-    header("Location: signuplearner.php"); 
+    header("Location: signuplearner.html"); 
     exit(); 
   } else { 
     echo "<div class='error-message'>Error: " .
