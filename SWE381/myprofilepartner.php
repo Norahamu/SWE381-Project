@@ -256,52 +256,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
       <span>Arabic</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" disabled>
-      
-      <option value="">Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel["Arabic"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel["Arabic"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel["Arabic"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
-  </div>
-  <div class="language-selection">
+</div>
+
+<div class="language-selection">
     <label class="cbx" for="cbx-46-english">
       <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
       <span>English</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" disabled>
-    <option value="">Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel["English"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel["English"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel["English"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
-  </div>
-  <div class="language-selection">
+</div>
+
+<div class="language-selection">
     <label class="cbx" for="cbx-46-french">
-      <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" <?php if (isLanguageSelected("French", $languages)) echo "checked"; ?> />
-      <span>French</span>
+        <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" <?php if (isLanguageSelected("French", $languages)) echo "checked"; ?> />
+        <span>French</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" disabled>
-     
-      <option value="">Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel["French"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel["French"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel["French"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
-  </div>
+</div>
+
   <div class="language-selection">
     <label class="cbx" for="cbx-46-spanish">
-      <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" <?php if (isLanguageSelected("Spanish", $languages)) echo "checked"; ?> />
-      <span>Spanish</span>
+        <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" <?php if (isLanguageSelected("Spanish", $languages)) echo "checked"; ?> />
+        <span>Spanish</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" disabled>
-     
-      <option value="">Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel["Spanish"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel["Spanish"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel["Spanish"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
-  </div>
+</div>
+
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
