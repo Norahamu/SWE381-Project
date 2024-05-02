@@ -59,16 +59,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
  
-  // Update partner profile
-  $updateQuery = "UPDATE partners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', PricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['[partner_id']}'";
-  if ($connection->query($updateQuery) === TRUE) { 
+  $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=? cultural_knowledge=?, education=?, experience=?, PricePerSession=?, age=?, gender=?  WHERE partner_id=?"); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $location, $culturalKnowledge, $education, $experience, $PricePerSession, $age, $gender, $_SESSION['partner_id']); 
+ 
+  if ($stmt->execute()) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
   } else { 
-    echo "<div class='error-message'>Error: " . $connection->error . "</div>"; 
+    echo "<div class='error-message'>Error: " . $stmt->error . "</div>"; 
   } 
+ 
+  $stmt->close(); 
 
-  $connection->close(); 
-} 
 
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
