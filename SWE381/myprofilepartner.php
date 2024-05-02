@@ -258,9 +258,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
         <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel["Arabic"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel["Arabic"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel["Arabic"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 
@@ -271,9 +271,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
         <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel["English"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel["English"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel["English"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 
@@ -284,9 +284,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
         <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel["French"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel["French"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel["French"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 
@@ -297,9 +297,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
         <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel["Spanish"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel["Spanish"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel["Spanish"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 
