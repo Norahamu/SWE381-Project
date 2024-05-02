@@ -27,16 +27,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']); 
 
  // Process proficiency levels for languages
- if (isset($_POST['languages']) && isset($_POST['proficiency_levels'])) {
+ if (isset($_POST['languages']) && isset($_POST['Proficiency_level'])) {
   $languages = $_POST['languages'];
-  $proficiencyLevels = $_POST['proficiency_levels'];
+  $proficiencyLevel = $_POST['Proficiency_level'];
 
   // Update proficiency levels in the database
   foreach ($languages as $index => $language) {
-    $proficiencyLevel = $connection->real_escape_string($proficiencyLevels[$index]);
+    $proficiencyLevel = $connection->real_escape_string($proficiencyLevel[$index]);
     
     // Perform SQL update for each language's proficiency level
-    $updateProficiencyQuery = "UPDATE partner_languages SET proficiency_level = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+    $updateProficiencyQuery = "UPDATE partner_languages SET Proficiency_level = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
     $connection->query($updateProficiencyQuery);
     }
   }
@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } 
 
   // Update partner profile
-  $updateQuery = "UPDATE partners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', pricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['[partner_id']}'";
+  $updateQuery = "UPDATE partners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', PricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['[partner_id']}'";
   if ($connection->query($updateQuery) === TRUE) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
   } else { 
@@ -88,18 +88,18 @@ if ($resultFetch->num_rows > 0) {
 
   
   // Fetch languages and proficiency levels for the partner
-  $stmtLanguages = $connection->prepare("SELECT language, proficiency_level FROM partner_languages WHERE partner_id = ?");
+  $stmtLanguages = $connection->prepare("SELECT language, Proficiency_level FROM partner_languages WHERE partner_id = ?");
   $stmtLanguages->bind_param("i", $_SESSION['partner_id']); 
   $stmtLanguages->execute(); 
   $resultLanguages = $stmtLanguages->get_result(); 
 
   $languages = array();
-  $proficiencyLevels = array();
+  $proficiencyLevel= array();
 
   // Fetch languages and proficiency levels
   while ($row = $resultLanguages->fetch_assoc()) {
     $languages[] = $row['language'];
-    $proficiencyLevels[] = $row['proficiency_level'];
+    $proficiencyLevel[] = $row['Proficiency_level'];
   }
 
   // Assign user data to variables for pre-filling the form 
@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
   $stmtDelete->bind_param("i", $_SESSION['partner_id']); 
   if ($stmtDelete->execute()) { 
-    header("Location: signuplearner.php"); 
+    header("Location: signuppartner.html"); 
     exit(); 
   } else { 
     echo "<div class='error-message'>Error: " .
