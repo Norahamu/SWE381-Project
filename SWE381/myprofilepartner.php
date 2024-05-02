@@ -27,16 +27,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']); 
 
  // Process proficiency levels for languages
- if (isset($_POST['languages']) && isset($_POST['Proficiency_level'])) {
+ if (isset($_POST['languages']) && isset($_POST['ProficiencyLevel'])) {
   $languages = $_POST['languages'];
-  $proficiencyLevel = $_POST['Proficiency_level'];
+  $ProficiencyLevel = $_POST['ProficiencyLevel'];
 
   // Update proficiency levels in the database
   foreach ($languages as $index => $language) {
-    $proficiencyLevel = $connection->real_escape_string($proficiencyLevel[$index]);
+    $ProficiencyLevel = $connection->real_escape_string($ProficiencyLevel[$index]);
     
     // Perform SQL update for each language's proficiency level
-    $updateProficiencyQuery = "UPDATE partner_languages SET Proficiency_level = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+    $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$ProficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
     $connection->query($updateProficiencyQuery);
     }
   }
@@ -88,18 +88,18 @@ if ($resultFetch->num_rows > 0) {
 
   
   // Fetch languages and proficiency levels for the partner
-  $stmtLanguages = $connection->prepare("SELECT language, Proficiency_level FROM partner_languages WHERE partner_id = ?");
+  $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
   $stmtLanguages->bind_param("i", $_SESSION['partner_id']); 
   $stmtLanguages->execute(); 
   $resultLanguages = $stmtLanguages->get_result(); 
 
   $languages = array();
-  $proficiencyLevel= array();
+  $ProficiencyLevel= array();
 
   // Fetch languages and proficiency levels
   while ($row = $resultLanguages->fetch_assoc()) {
     $languages[] = $row['language'];
-    $proficiencyLevel[] = $row['Proficiency_level'];
+    $ProficiencyLevel[] = $row['ProficiencyLevel'];
   }
 
   // Assign user data to variables for pre-filling the form 
