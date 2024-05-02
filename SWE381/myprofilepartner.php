@@ -245,21 +245,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               <label>Upload Photo</label>
               <input type="file" class="form-control" name="photo" id="photo">
             </div>
- <div class="checkbox-wrapper-46">
-  <div class="checkbox-wrapper-46" id="language-form">
-    <label class="required">Click on the languages you want to teach and select your proficiency:</label>
-    <div class="language-selection">
-      <label class="cbx" for="cbx-46-arabic">
-        <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (in_array('Arabic', $languages)) echo 'checked'; ?>/>
-        <span>Arabic</span>
-      </label>
-      <select name="proficiency_levels[]" class="form-control" <?php if (!in_array('Arabic', $languages)) echo 'disabled'; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($proficiency_levels['Arabic'] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($proficiency_levels['Arabic'] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($proficiency_levels['Arabic'] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-      </select>
-    </div>
+            <div class="checkbox-wrapper-46">
+            <div class="checkbox-wrapper-46" id="language-form">
+  <label class="required">Click on the languages you want to teach and select your proficiency:</label>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-arabic">
+      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" />
+      <span>Arabic</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-english">
+      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" />
+      <span>English</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-french">
+      <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" />
+      <span>French</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-spanish">
+      <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" />
+      <span>Spanish</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
