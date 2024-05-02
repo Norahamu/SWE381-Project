@@ -21,6 +21,7 @@
 <!-- JS Files -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+
 </head>
 <body>
  
@@ -40,8 +41,8 @@
     <li class="dropdown">
      <a href="#"><span>Sign Up</span> <i class="bi bi-chevron-right"></i></a>
      <ul>
-      <li><a href="signuppartner.php">Sign Up as a language partner </a></li>
-      <li><a href="signuplearner.php"> Sign Up as a learner</a></li>
+      <li><a href="signuppartner.html">Sign Up as a language partner </a></li>
+      <li><a href="signuplearner.html"> Sign Up as a learner</a></li>
      </ul>
     </li>
            <li class="dropdown">
@@ -53,7 +54,6 @@
 		</li>
    </ul>
  </li>
- <li><a class="nav-link scrollto " href="HomePage.html">Home</a></li>
  <li><a class="nav-link scrollto" href="HomePage.html">About</a></li>
  <li><a class="nav-link scrollto" href="HomePage.html"> How it works? </a></li>
  <li><a class="nav-link scrollto" href="HomePage.html"> Find a language partner</a></li>
@@ -93,7 +93,7 @@ $(document).ready(function() {
         </div>
       </div>
       <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-        <form action="signupPartner.php" method="post" class="php-email-form">
+        <form action="signupPartner.php"  method="post" enctype="multipart/form-data" class="php-email-form">
           <div class="row">
             <div class="form-group col-md-6">
               <label class="required">First Name</label>
@@ -204,7 +204,7 @@ $(document).ready(function() {
           <textarea class="form-control" placeholder="Enter your cultural knowledge" name="cultural_knowledge" id="cultural_knowledge" rows="5" required></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
-          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="eduaction" rows="5" required></textarea>
+          <textarea class="form-control" placeholder="Enter your experience" name="education" id="eduaction" rows="5" required></textarea>
         </div>
         <div class="form-group">
           <label class="required">Experience</label>
@@ -245,7 +245,6 @@ $(document).ready(function() {
      <div class="col-lg-3 col-md-6 footer-links">
       <h4>Useful Links</h4>
       <ul>
-       <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Home</a></li>
        <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">About us</a></li>
        <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">How it works?</a></li>
        <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Find a language partner</a></li>
