@@ -277,7 +277,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   </div>
   <div class="language-selection">
     <label class="cbx" for="cbx-46-french">
-      <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" />
+      <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" <?php if (isLanguageSelected("French", $languages)) echo "checked"; ?> />
       <span>French</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" disabled>
@@ -289,7 +289,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   </div>
   <div class="language-selection">
     <label class="cbx" for="cbx-46-spanish">
-      <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" />
+      <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" <?php if (isLanguageSelected("Spanish", $languages)) echo "checked"; ?> />
       <span>Spanish</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" disabled>
