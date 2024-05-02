@@ -101,7 +101,7 @@ if ($resultFetch->num_rows > 0) {
     $languages[] = $row['language'];
     $ProficiencyLevel[] = $row['ProficiencyLevel'];
   }
-  
+
 // Check if a language is selected for the user
 function isLanguageSelected($language, $userLanguages) {
   return in_array($language, $userLanguages);
@@ -253,7 +253,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
   <div class="language-selection">
     <label class="cbx" for="cbx-46-arabic">
-      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" />
+      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
       <span>Arabic</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" disabled>
@@ -265,7 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   </div>
   <div class="language-selection">
     <label class="cbx" for="cbx-46-english">
-      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $userLanguages)) echo "checked"; ?> />
+      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
       <span>English</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" disabled>
