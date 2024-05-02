@@ -101,7 +101,11 @@ if ($resultFetch->num_rows > 0) {
     $languages[] = $row['language'];
     $ProficiencyLevel[] = $row['ProficiencyLevel'];
   }
-
+  
+// Check if a language is selected for the user
+function isLanguageSelected($language, $userLanguages) {
+  return in_array($language, $userLanguages);
+}
   // Assign user data to variables for pre-filling the form 
   $firstName = $userData['first_name']; 
   $lastName = $userData['last_name']; 
@@ -190,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     </nav>
   </header>
   <!-- End Header --> 
-  \ 
+  
   <section id="signuplearner" class="signuplearner section-bg"> 
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
@@ -207,11 +211,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
-              <input type="text" value="<?php echo htmlspecialchars($firstName); ?>" name="fname" class="form-control" id="fname">
+              <input type="text" value="<?php echo htmlspecialchars($firstName); ?>" name="first_name" class="form-control" id="fname">
             </div>
             <div class="form-group col-md-6">
               <label class="required">Last Name</label>
-              <input type="text" value="<?php echo htmlspecialchars($lastName); ?>" name="lname" class="form-control" id="lname" >
+              <input type="text" value="<?php echo htmlspecialchars($lastName); ?>" name="last_name" class="form-control" id="lname" >
             </div>
             <div class="form-group col-md-6">
               <label class="required">Age</label>
@@ -261,7 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   </div>
   <div class="language-selection">
     <label class="cbx" for="cbx-46-english">
-      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" />
+      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $userLanguages)) echo "checked"; ?> />
       <span>English</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" disabled>
