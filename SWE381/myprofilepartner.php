@@ -257,7 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <span>Arabic</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" disabled>
-      <option value="">Select proficiency</option>
+      
       <option value="">Select proficiency</option>
     <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
     <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
@@ -282,7 +282,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <span>French</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" disabled>
-      <option value="">Select proficiency</option>
+     
       <option value="">Select proficiency</option>
     <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
     <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
@@ -295,7 +295,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <span>Spanish</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" disabled>
-      <option value="">Select proficiency</option>
+     
       <option value="">Select proficiency</option>
     <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
     <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
