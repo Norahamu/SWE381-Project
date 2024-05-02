@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   // Delete user from database 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
   $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?"); 
-  $stmtDelete->bind_param("i", $_SESSION['user_id']); 
+  $stmtDelete->bind_param("i", $_SESSION['learner_id']); 
   if ($stmtDelete->execute()) { 
     // User deleted successfully, redirect to sign out or any other page 
     // For example: 
