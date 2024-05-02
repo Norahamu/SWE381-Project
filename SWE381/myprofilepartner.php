@@ -26,18 +26,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $experience = $connection->real_escape_string($_POST['Experience']); 
   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']); 
 
-  // Process proficiency levels for languages
-  if (isset($_POST['languages']) && isset($_POST['proficiency_levels'])) {
-    $languages = $_POST['languages'];
-    $proficiencyLevels = $_POST['proficiency_levels'];
+ // Process proficiency levels for languages
+ if (isset($_POST['languages']) && isset($_POST['proficiency_levels'])) {
+  $languages = $_POST['languages'];
+  $proficiencyLevels = $_POST['proficiency_levels'];
 
-    // Update proficiency levels in the database
-    foreach ($languages as $index => $language) {
-      $proficiencyLevel = $connection->real_escape_string($proficiencyLevels[$index]);
-      
-      // Perform SQL update for each language's proficiency level
-      $updateProficiencyQuery = "UPDATE learner_languages SET proficiency_level = '$proficiencyLevel' WHER partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
-      $connection->query($updateProficiencyQuery);
+  // Update proficiency levels in the database
+  foreach ($languages as $index => $language) {
+    $proficiencyLevel = $connection->real_escape_string($proficiencyLevels[$index]);
+    
+    // Perform SQL update for each language's proficiency level
+    $updateProficiencyQuery = "UPDATE partner_languages SET proficiency_level = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+    $connection->query($updateProficiencyQuery);
     }
   }
 
@@ -86,6 +86,22 @@ $resultFetch = $stmtFetch->get_result();
 if ($resultFetch->num_rows > 0) { 
   $userData = $resultFetch->fetch_assoc(); 
 
+  
+  // Fetch languages and proficiency levels for the partner
+  $stmtLanguages = $connection->prepare("SELECT language, proficiency_level FROM partner_languages WHERE partner_id = ?");
+  $stmtLanguages->bind_param("i", $_SESSION['partner_id']); 
+  $stmtLanguages->execute(); 
+  $resultLanguages = $stmtLanguages->get_result(); 
+
+  $languages = array();
+  $proficiencyLevels = array();
+
+  // Fetch languages and proficiency levels
+  while ($row = $resultLanguages->fetch_assoc()) {
+    $languages[] = $row['language'];
+    $proficiencyLevels[] = $row['proficiency_level'];
+  }
+
   // Assign user data to variables for pre-filling the form 
   $firstName = $userData['first_name']; 
   $lastName = $userData['last_name']; 
@@ -95,10 +111,10 @@ if ($resultFetch->num_rows > 0) {
   $photo = $userData['photo']; 
   $age = $userData['age']; 
   $gender = $userData['gender']; 
-  $culturalKnowledge = $userData['culturalKnowledge']; 
-  $education = $userData['education']; 
-  $experience = $userData['experience']; 
-  $pricePerSession = $userData['pricePerSession']; 
+  $culturalKnowledge = $userData['cultural_Knowledge']; 
+  $education = $userData['Education']; 
+  $experience = $userData['Experience']; 
+  $pricePerSession = $userData['PricePerSession']; 
 } else { 
   // User not found, handle the error
 } 
