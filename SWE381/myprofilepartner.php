@@ -21,23 +21,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $age = $connection->real_escape_string($_POST['age']); 
   $gender = $connection->real_escape_string($_POST['gender']); 
-  $culturalKnowledge = $connection->real_escape_string($_POST['culturalKnowledge']); 
-  $education = $connection->real_escape_string($_POST['education']); 
-  $experience = $connection->real_escape_string($_POST['experience']); 
-  $pricePerSession = $connection->real_escape_string($_POST['pricePerSession']); 
+  $culturalKnowledge = $connection->real_escape_string($_POST['cultural_Knowledge']); 
+  $education = $connection->real_escape_string($_POST['Education']); 
+  $experience = $connection->real_escape_string($_POST['Experience']); 
+  $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']); 
 
-  // Process proficiency levels for languages
-  if (isset($_POST['languages']) && isset($_POST['proficiency_levels'])) {
-    $languages = $_POST['languages'];
-    $proficiencyLevels = $_POST['proficiency_levels'];
+ // Process proficiency levels for languages
+ if (isset($_POST['languages']) && isset($_POST['ProficiencyLevel'])) {
+  $languages = $_POST['languages'];
+  $ProficiencyLevel = $_POST['ProficiencyLevel'];
 
-    // Update proficiency levels in the database
-    foreach ($languages as $index => $language) {
-      $proficiencyLevel = $connection->real_escape_string($proficiencyLevels[$index]);
-      
-      // Perform SQL update for each language's proficiency level
-      $updateProficiencyQuery = "UPDATE learner_languages SET proficiency_level = '$proficiencyLevel' WHERE learner_id = '{$_SESSION['learner_id']}' AND language = '$language'";
-      $connection->query($updateProficiencyQuery);
+  // Update proficiency levels in the database
+  foreach ($languages as $index => $language) {
+    $ProficiencyLevel = $connection->real_escape_string($ProficiencyLevel[$index]);
+    
+    // Perform SQL update for each language's proficiency level
+    $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$ProficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+    $connection->query($updateProficiencyQuery);
     }
   }
 
@@ -59,8 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
 
-  // Update learner profile
-  $updateQuery = "UPDATE learners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', pricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['user_id']}'";
+  // Update partner profile
+  $updateQuery = "UPDATE partners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', PricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['[partner_id']}'";
   if ($connection->query($updateQuery) === TRUE) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
   } else { 
@@ -77,14 +77,30 @@ $dbPassword = "";
 $database = "lingo"; 
 $connection = new mysqli($servername, $username, $dbPassword, $database); 
 
-$stmtFetch = $connection->prepare("SELECT * FROM learners WHERE learner_id = ?");
-$stmtFetch->bind_param("i", $_SESSION['learner_id']); 
+$stmtFetch = $connection->prepare("SELECT * FROM partners WHERE partner_id = ?");
+$stmtFetch->bind_param("i", $_SESSION['partner_id']); 
 $stmtFetch->execute(); 
 $resultFetch = $stmtFetch->get_result(); 
 
 // Fetch user data
 if ($resultFetch->num_rows > 0) { 
   $userData = $resultFetch->fetch_assoc(); 
+
+  
+  // Fetch languages and proficiency levels for the partner
+  $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
+  $stmtLanguages->bind_param("i", $_SESSION['partner_id']); 
+  $stmtLanguages->execute(); 
+  $resultLanguages = $stmtLanguages->get_result(); 
+
+  $languages = array();
+  $ProficiencyLevel= array();
+
+  // Fetch languages and proficiency levels
+  while ($row = $resultLanguages->fetch_assoc()) {
+    $languages[] = $row['language'];
+    $ProficiencyLevel[] = $row['ProficiencyLevel'];
+  }
 
   // Assign user data to variables for pre-filling the form 
   $firstName = $userData['first_name']; 
@@ -95,10 +111,10 @@ if ($resultFetch->num_rows > 0) {
   $photo = $userData['photo']; 
   $age = $userData['age']; 
   $gender = $userData['gender']; 
-  $culturalKnowledge = $userData['culturalKnowledge']; 
-  $education = $userData['education']; 
-  $experience = $userData['experience']; 
-  $pricePerSession = $userData['pricePerSession']; 
+  $culturalKnowledge = $userData['cultural_knowledge']; 
+  $education = $userData['Education']; 
+  $experience = $userData['Experience']; 
+  $pricePerSession = $userData['PricePerSession']; 
 } else { 
   // User not found, handle the error
 } 
@@ -109,10 +125,10 @@ $connection->close();
 // Handle form submission (delete profile) 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?");
-  $stmtDelete->bind_param("i", $_SESSION['user_id']); 
+  $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
+  $stmtDelete->bind_param("i", $_SESSION['partner_id']); 
   if ($stmtDelete->execute()) { 
-    header("Location: signuplearner.php"); 
+    header("Location: signuppartner.html"); 
     exit(); 
   } else { 
     echo "<div class='error-message'>Error: " .
@@ -229,21 +245,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               <label>Upload Photo</label>
               <input type="file" class="form-control" name="photo" id="photo">
             </div>
- <div class="checkbox-wrapper-46">
-  <div class="checkbox-wrapper-46" id="language-form">
-    <label class="required">Click on the languages you want to teach and select your proficiency:</label>
-    <div class="language-selection">
-      <label class="cbx" for="cbx-46-arabic">
-        <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (in_array('Arabic', $languages)) echo 'checked'; ?>/>
-        <span>Arabic</span>
-      </label>
-      <select name="proficiency_levels[]" class="form-control" <?php if (!in_array('Arabic', $languages)) echo 'disabled'; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($proficiency_levels['Arabic'] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($proficiency_levels['Arabic'] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($proficiency_levels['Arabic'] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-      </select>
-    </div>
+            <div class="checkbox-wrapper-46">
+            <div class="checkbox-wrapper-46" id="language-form">
+  <label class="required">Click on the languages you want to teach and select your proficiency:</label>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-arabic">
+      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" />
+      <span>Arabic</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-english">
+      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" />
+      <span>English</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-french">
+      <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" />
+      <span>French</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
+  <div class="language-selection">
+    <label class="cbx" for="cbx-46-spanish">
+      <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" />
+      <span>Spanish</span>
+    </label>
+    <select name="proficiency_levels[]" class="form-control" disabled>
+      <option value="">Select proficiency</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+  </div>
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {

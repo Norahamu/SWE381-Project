@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } 
  
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['user_id']); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
  
   if ($stmt->execute()) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
@@ -88,11 +88,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   // Delete user from database 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
   $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?"); 
-  $stmtDelete->bind_param("i", $_SESSION['user_id']); 
+  $stmtDelete->bind_param("i", $_SESSION['learner_id']); 
   if ($stmtDelete->execute()) { 
     // User deleted successfully, redirect to sign out or any other page 
     // For example: 
-    header("Location: signuplearner.php"); 
+    header("Location: signuplearner.html"); 
     exit(); 
   } else { 
     echo "<div class='error-message'>Error: " .
