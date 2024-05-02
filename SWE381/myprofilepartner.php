@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <link rel="stylesheet" type="text/css" href="style.css" media="screen"> 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
  
-  <title>My Profile Learner</title> 
+  <title>My Profile Partner</title> 
   <!-- icon --> 
   <link href="assets/img/Lingoblue.png" rel="icon"> 
  
@@ -173,23 +173,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
 <body> 
   <!-- ======= Header ======= --> 
-  <header id="header" class="fixed-top header-inner-pages"> 
-    <div class="container d-flex align-items-center"> 
-      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" 
-          class="img-fluid"></a> 
-    </div> 
-    <nav id="navbar" class="navbar"> 
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center">
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+    </div>
+    <nav id="navbar" class="navbar">
       <ul> 
-        <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li> 
-        <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li> 
-        <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li> 
-        <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li> 
-        <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li> 
-        <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li> 
-      </ul> 
- 
-    </nav> 
-  </header> 
+    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
+    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
+    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+      </ul>
+
+    </nav>
+  </header>
   <!-- End Header --> 
   \ 
   <section id="signuplearner" class="signuplearner section-bg"> 
@@ -340,43 +339,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       </div> 
     </div> 
   </section> 
-  <!-- ======= Footer ======= --> 
-  <footer id="footer"> 
-    <div class="footer-top"> 
-      <div class="container"> 
-        <div class="row"> 
-          <div class="col-lg-3 col-md-6 footer-contact"> 
-            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a> 
-            <p> 
-              King Saud University <br> 
-              Riyadh <br> 
-              Saudi Arabia <br><br> 
-              <strong>Email:</strong> lingo@project.com<br> 
-            </p> 
-          </div> 
-          <div class="col-lg-3 col-md-6 footer-links"> 
-            <h4>Useful Links</h4> 
-            <ul> 
-              <!-- Links here --> 
-            </ul> 
-          </div> 
-          <div class="col-lg-3 col-md-6 footer-links"> 
-            <h4>Our Social Networks</h4> 
-            <div class="social-links mt-3"> 
-              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a> 
-              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a> 
-            </div> 
-          </div> 
-        </div> 
-      </div> 
-    </div> 
-    <div class="container footer-bottom clearfix"> 
-      <div class="copyright"> 
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved 
-      </div> 
-      <div class="credits"></div> 
-    </div> 
-  </footer> 
+ <!-- ======= Footer ======= -->
+ <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <p>
+              King Saud University <br>
+              Riyadh <br>
+              Saudi Arabia <br><br>
+              <strong>Email:</strong> lingo@project.com<br>
+            </p>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+			  <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.html">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.html">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.html">Language Learning Requests</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.html">my review and rating </a></li>
+            </ul>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom clearfix">
+      <div class="copyright">
+        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits"></div>
+    </div>
+  </footer>
+
   <script> 
     // Variable to track changes 
     var changesMade = false; 
