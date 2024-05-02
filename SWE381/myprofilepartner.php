@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } 
 
   // Update partner profile
-  $updateQuery = "UPDATE partners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', pricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['user_id']}'";
+  $updateQuery = "UPDATE partners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', pricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['[partner_id']}'";
   if ($connection->query($updateQuery) === TRUE) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
   } else { 
@@ -78,7 +78,7 @@ $database = "lingo";
 $connection = new mysqli($servername, $username, $dbPassword, $database); 
 
 $stmtFetch = $connection->prepare("SELECT * FROM partners WHERE partner_id = ?");
-$stmtFetch->bind_param("i", $_SESSION['learner_id']); 
+$stmtFetch->bind_param("i", $_SESSION['partner_id']); 
 $stmtFetch->execute(); 
 $resultFetch = $stmtFetch->get_result(); 
 
@@ -110,7 +110,7 @@ $connection->close();
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
   $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
-  $stmtDelete->bind_param("i", $_SESSION['user_id']); 
+  $stmtDelete->bind_param("i", $_SESSION['partner_id']); 
   if ($stmtDelete->execute()) { 
     header("Location: signuplearner.php"); 
     exit(); 
