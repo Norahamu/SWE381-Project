@@ -59,13 +59,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
 
-  // Update partner profile
+
+
+  // Check if the provided email already exists for another user
+$checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
+$result = $connection->query($checkEmailQuery);
+
+if ($result->num_rows > 0) {
+    // Email address is already registered for another user
+    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
+} else {
+    
+   // Update partner profile
   $updateQuery = "UPDATE partners SET first_name='$firstName', last_name='$lastName', email='$email', password='$password', photo='$target_file', location='$location', cultural_knowledge='$culturalKnowledge', education='$education', experience='$experience', PricePerSession='$pricePerSession', age='$age', gender='$gender' WHERE partner_id='{$_SESSION['[partner_id']}'";
   if ($connection->query($updateQuery) === TRUE) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
   } else { 
     echo "<div class='error-message'>Error: " . $connection->error . "</div>"; 
   } 
+}
+ 
+  
 
   $connection->close(); 
 } 
