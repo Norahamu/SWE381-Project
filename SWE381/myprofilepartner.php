@@ -257,11 +257,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <span>Arabic</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-    </select>
+    <?php
+    // Set the default option to "Select proficiency" if the language is not selected
+    $selected = ($ProficiencyLevel[0] === 'Select proficiency') ? 'selected' : '';
+    ?>
+    <option value="" <?php echo $selected; ?>>Select proficiency</option>
+    <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+    <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+    <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+</select>
+
 </div>
 
 <div class="language-selection">
@@ -270,11 +275,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <span>English</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-    </select>
+    <?php
+    // Set the default option to "Select proficiency" if the language is not selected
+    $selected = ($ProficiencyLevel[1] === 'Select proficiency') ? 'selected' : '';
+    ?>
+    <option value="" <?php echo $selected; ?>>Select proficiency</option>
+    <option value="Beginner" <?php if ($ProficiencyLevel[1] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+    <option value="Intermediate" <?php if ($ProficiencyLevel[1] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+    <option value="Advanced" <?php if ($ProficiencyLevel[1] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+</select>
+
 </div>
 
 <div class="language-selection">
@@ -283,11 +293,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         <span>French</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-    </select>
+    <?php
+    // Set the default option to "Select proficiency" if the language is not selected
+    $selected = ($ProficiencyLevel[2] === 'Select proficiency') ? 'selected' : '';
+    ?>
+    <option value="" <?php echo $selected; ?>>Select proficiency</option>
+    <option value="Beginner" <?php if ($ProficiencyLevel[2] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+    <option value="Intermediate" <?php if ($ProficiencyLevel[2] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+    <option value="Advanced" <?php if ($ProficiencyLevel[2] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+</select>
+
 </div>
 
   <div class="language-selection">
@@ -296,11 +311,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         <span>Spanish</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-    </select>
+    <?php
+    // Set the default option to "Select proficiency" if the language is not selected
+    $selected = ($ProficiencyLevel[3] === 'Select proficiency') ? 'selected' : '';
+    ?>
+    <option value="" <?php echo $selected; ?>>Select proficiency</option>
+    <option value="Beginner" <?php if ($ProficiencyLevel[3] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+    <option value="Intermediate" <?php if ($ProficiencyLevel[3] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+    <option value="Advanced" <?php if ($ProficiencyLevel[3] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+</select>
+
 </div>
 
 </div>
