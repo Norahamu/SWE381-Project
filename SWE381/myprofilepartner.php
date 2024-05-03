@@ -51,48 +51,46 @@ if (isset($_POST['languages'])) {
 
  
 
-  // Handle photo upload
-  $target_file = null;
-  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) { 
-    $fileTmpPath = $_FILES['photo']['tmp_name']; 
-    $fileName = $_FILES['photo']['name']; 
-    $target_dir = "assets/img/"; 
-    $fileExt = pathinfo($fileName, PATHINFO_EXTENSION); 
-    $newFileName = $firstName . $lastName . "." . $fileExt; 
-    $target_file = $target_dir . $newFileName; 
-
-    if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) { 
-      echo "Sorry, there was an error uploading your file."; 
-      exit; 
-    } 
-  } 
+  $target_file =null;  
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['photo']['tmp_name'];
+        $fileName = $_FILES['photo']['name'];
+        $target_dir = "assets/img/";
+        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+        $newFileName = $firstName . $lastName . "." . $fileExt;
+        $target_file = $target_dir . $newFileName;
+    
+        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+            echo "<div class='error-message'>Sorry, there was an error uploading your file.</div>";
+            exit;
+        }
+    }
 
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
 $result = $connection->query($checkEmailQuery);
 
 if ($result->num_rows > 0) {
-    // Email address is already registered for another user
-    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
+  // Email address is already registered for another user
+  $_SESSION['email_already_registered'] = true;
 } else {
-   
- //UPDATE
-  $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-  $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+  // UPDATE
+  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
 
+  if ($stmt->execute()) {
+      // Store success message in session variable
+      $_SESSION['profile_updated_success'] = true;
+  } else {
+      echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+  }
 
-  if ($stmt->execute()) { 
-    echo "<div class='success-message'>Profile updated successfully!</div>"; 
-  } else { 
-    echo "<div class='error-message'>Error: " . $stmt->error . "</div>"; 
-  } 
- 
-  $stmt->close(); 
+  $stmt->close();
 
 
  
   $connection->close(); 
-} 
+}
 }
 
 
@@ -205,6 +203,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 </head> 
  
 <body> 
+
+
   <!-- ======= Header ======= --> 
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
@@ -273,10 +273,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
                   </div>
               </div>
           </div>  
-            <div class="form-group">
-              <label>Upload Photo</label>
-              <input type="file" class="form-control" name="photo" id="photo" >
-            </div>
+          <div class="form-group"> 
+  <label>Upload Photo</label> 
+  <input type="file" class="form-control" name="photo" id="photoInput"> 
+  <?php if (!empty($photo)) { ?>
+    <span id="photoPath"><?php echo $photo; ?></span>
+  <?php } ?>
+</div>
+
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
@@ -376,9 +380,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         </div>
        <div class="text-center" style="display: flex; justify-content: space-between;">
         <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
-        <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button>
-    </div>
-      </div>
+        <button type="button" id="delete-account-btn" name="delete_account" onclick="confirmDelete()" style="background-color: red; border: 0; padding: 12px 34px; color: #fff; transition: 0.4s; border-radius: 50px;">Delete my account</button>
+
+       
+       <script>
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account?")) {
+            window.location.href = "delete_account.php";
+        }
+    }
+</script> 
+
     </div>
     </form>
         </div> 
@@ -451,6 +463,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         alert('No changes made.'); 
       } 
     }); 
+    <?php 
+if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+    echo "var profileUpdatedSuccess = true;";
+    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+} else {
+    echo "var profileUpdatedSuccess = false;";
+}
+?>
+
+// Add this JavaScript code to handle the success message
+if (profileUpdatedSuccess) {
+    alert('Profile updated successfully!');
+}
+<?php 
+if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+    echo "var emailAlreadyRegistered = true;";
+    unset($_SESSION['email_already_registered']); // Unset session variable after handling
+} else {
+    echo "var emailAlreadyRegistered = false;";
+}
+?>
+
+// Add this JavaScript code to handle the email already registered message
+if (emailAlreadyRegistered) {
+    alert('The email address is already registered. Please use another email.');
+}
+
+
   </script> 
  
 </body> 

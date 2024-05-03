@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $_POST['password']; // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
- 
+  $photo = $_POST['photo'];
  
  // Handle photo upload
   $target_file = null;  
@@ -41,20 +41,23 @@ $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id
 $result = $connection->query($checkEmailQuery);
 
 if ($result->num_rows > 0) {
-    // Email address is already registered for another user
-    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
+  // Email address is already registered for another user
+  $_SESSION['email_already_registered'] = true;
 } else {
      //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
   $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
  
-  if ($stmt->execute()) { 
-    echo "<div class='success-message'>Profile updated successfully!</div>"; 
-  } else { 
-    echo "<div class='error-message'>Error: " . $stmt->error . "</div>"; 
-  } 
- 
-  $stmt->close(); 
+  if ($stmt->execute()) {
+    // Store success message in session variable
+    $_SESSION['profile_updated_success'] = true;
+} else {
+    echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+}
+
+$stmt->close();
+
+$connection->close(); 
 } 
 }
 
@@ -93,15 +96,12 @@ if ($resultFetch->num_rows > 0) {
 $stmtFetch->close(); 
 $connection->close(); 
  
-// Handle form submission (delete profile) 
+/// Handle form submission (delete profile) 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
-  // Delete user from database 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?"); 
+  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?");
   $stmtDelete->bind_param("i", $_SESSION['learner_id']); 
   if ($stmtDelete->execute()) { 
-    // User deleted successfully, redirect to sign out or any other page 
-    // For example: 
     header("Location: signuplearner.html"); 
     exit(); 
   } else { 
@@ -111,6 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   $stmtDelete->close(); 
   $connection->close(); 
 } 
+
  
 ?> 
  
@@ -148,29 +149,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 <body> 
   <!-- ======= Header ======= --> 
   <header id="header" class="fixed-top header-inner-pages"> 
-    <div class="container d-flex align-items-center"> 
-      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" 
-          class="img-fluid"></a> 
-    </div> 
-    <nav id="navbar" class="navbar"> 
-      <ul> 
-        <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-                
-      </ul> 
- 
-    </nav> 
-  </header> 
+  <div class="container d-flex align-items-center"> 
+    <a href="index.html" class="logo me-auto">
+    
+    </a> 
+  </div> 
+  <nav id="navbar" class="navbar"> 
+    <ul> 
+      <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+      <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+      <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+      <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+      <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+      <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+    </ul> 
+  </nav> 
+</header> 
   <!-- End Header --> 
   \ 
   <section id="signuplearner" class="signuplearner section-bg"> 
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
         <h2>My Profile</h2> 
+        <?php 
+      if ($photo == null) {
+                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
+                        } else {
+                            echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
+                        }
+                        ?>
       </div> 
       <div class="row"> 
  
@@ -202,7 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             </div> 
             <div class="form-group"> 
               <label>Upload Photo</label> 
-              <input type="file" class="form-control" name="photo" id="photo"> 
+              <input type="file" class="form-control" name="photo" id="photo" > 
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
@@ -217,8 +224,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             <div class="text-center" style="display: flex; justify-content: space-between;"> 
               <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button> 
  
-              <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button> 
- 
+              <button type="button" id="delete-account-btn" name="delete_account" onclick="confirmDelete()" style="background-color: red; border: 0; padding: 12px 34px; color: #fff; transition: 0.4s; border-radius: 50px;">Delete my account</button>
+
+       
+       <script>
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account?")) {
+            window.location.href = "delete_account.php";
+        }
+    }
+</script> 
             </div> 
           </form> 
         </div> 
@@ -292,6 +307,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         alert('No changes made.'); 
       } 
     }); 
+    <?php 
+if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+    echo "var profileUpdatedSuccess = true;";
+    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+} else {
+    echo "var profileUpdatedSuccess = false;";
+}
+?>
+
+// Add this JavaScript code to handle the success message
+if (profileUpdatedSuccess) {
+    alert('Profile updated successfully!');
+}
+<?php 
+if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+    echo "var emailAlreadyRegistered = true;";
+    unset($_SESSION['email_already_registered']); // Unset session variable after handling
+} else {
+    echo "var emailAlreadyRegistered = false;";
+}
+?>
+
+// Add this JavaScript code to handle the email already registered message
+if (emailAlreadyRegistered) {
+    alert('The email address is already registered. Please use another email.');
+}
+
+
   </script> 
  
 </body> 
