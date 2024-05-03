@@ -1,32 +1,30 @@
 <?php
-DEFINE('DB_USER', 'root');
-DEFINE('DB_PSWD', '');
-DEFINE('DB_HOST', 'localhost');
-DEFINE('DB_NAME', 'lingo');
+session_start();
 
-// Establish database connection
-$conn = mysqli_connect(DB_HOST, DB_USER, DB_PSWD, DB_NAME);
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "lingo";
 
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+$connection = new mysqli($servername, $username, $password, $database);
+if ($connection->connect_error) {
+    die("Connection failed: " . $connection->connect_error);
 }
 
-// Specify the learner ID
-$learner_id =  $_GET['learnerID']; 
+if(isset($_SESSION['learner_id'])){
+    $learner_id = $_SESSION['learner_id'];
 
-$query1 = "SELECT P.first_name AS partner_first_name, P.last_name AS partner_last_name, P.photo AS partner_photo, S.session_date, S.session_time
-          FROM sessions AS S
-          JOIN partners AS P ON S.partner_id = P.partner_id
-          JOIN learner_sessions AS LS ON S.session_id = LS.session_id
-          WHERE LS.learner_id = $learner_id AND LS.session_status = 'current'";
+    $query = "SELECT P.first_name AS partner_first_name, P.last_name AS partner_last_name, P.photo AS partner_photo, S.session_date, S.session_time
+              FROM sessions AS S
+              JOIN partners AS P ON S.partner_id = P.partner_id
+              JOIN learner_sessions AS LS ON S.session_id = LS.session_id
+              WHERE LS.learner_id = $learner_id AND LS.session_status = 'current'";
 
+    $result = mysqli_query($connection, $query);
 
-
-$result = mysqli_query($conn, $query1);
-
-if (!$result) {
-    die("Query failed: " . mysqli_error($conn));
+    if (!$result) {
+        die("Query failed: " . mysqli_error($connection));
+    }
 }
 ?>
 
@@ -87,6 +85,9 @@ if (!$result) {
       </div>
       <div class="sessions">
           <?php
+           if (mysqli_num_rows($result) == 0) {
+       			echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+    	   } else {
           // Fetch and display session details
           while ($row = mysqli_fetch_assoc($result)) {
               echo "<div class='session'>";
@@ -96,12 +97,13 @@ if (!$result) {
               echo "<i class='fa fa-clock-o' style='font-size:24px'></i>";
               echo "</div>";
           }
+          }
 
           // Free result set
           mysqli_free_result($result);
 
           // Close connection
-          mysqli_close($conn);
+          mysqli_close($connection);
           ?>
       </div>
     </section>

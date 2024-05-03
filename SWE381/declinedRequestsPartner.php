@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
@@ -10,26 +12,24 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id =  $_GET['partnerID'];
+if(isset($_SESSION['learner_id'])){
+    $partner_id = $_SESSION['partner_id'];
+    
+	$query = "SELECT L.first_name AS learner_first_name, 
+                 	L.last_name AS learner_last_name, 
+                 	L.photo AS learner_photo, 
+                 	PR.Status AS RStatus
+          	FROM requests_partner AS PR
+          	JOIN learners AS L ON PR.learnerID = L.learner_ID
+          	WHERE PR.partnerID = $partner_id AND PR.Status='Declined'";
 
-$query = "SELECT L.first_name AS learner_first_name, 
-                 L.last_name AS learner_last_name, 
-                 L.photo AS learner_photo, 
-                 PR.Status AS RStatus
-          FROM requests_partner AS PR
-          JOIN learners AS L ON PR.learnerID = L.learner_ID
-          WHERE PR.partnerID = $partner_id AND PR.Status='Declined'";
+	$result = mysqli_query($conn, $query);
 
-
-
-
-
-
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-    die("Query failed: " . mysqli_error($conn));
+	if (!$result) {
+    	die("Query failed: " . mysqli_error($conn));
+	}
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -92,6 +92,10 @@ if (!$result) {
 
 <div id="site">
           <?php
+          
+          if (!isset($result) || mysqli_num_rows($result) == 0) {
+       			echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+    	   } else {
           // Fetch and display session details
           while ($row = mysqli_fetch_assoc($result)) {
               echo "<div class='session'>";
@@ -100,9 +104,12 @@ if (!$result) {
               echo "<h6 class='text2'>{$row['RStatus']}</h6>";
               echo "</div>";
           }
+          }
 
           // Free result set
-          mysqli_free_result($result);
+          if (isset($result)) {
+          	mysqli_free_result($result);
+          }
 
           // Close connection
           mysqli_close($conn);

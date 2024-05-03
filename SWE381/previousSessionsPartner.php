@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
@@ -10,20 +12,53 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id =  $_GET['partnerID'];
+if(isset($_SESSION['partner_id'])){
+    $partner_id = $_SESSION['partner_id'];
 
-$query = "SELECT L.first_name AS learner_first_name, L.last_name AS learner_last_name, L.photo AS learner_photo, S.session_date, S.session_time
-          FROM sessions AS S
-          JOIN learners AS L ON S.learner_id = L.learner_id
-          JOIN partner_sessions PS ON S.session_id = PS.session_id
-          WHERE PS.partner_id = $partner_id AND PS.session_status = 'previous'";
+	// Update session status to 'Previous' for sessions that have ended
+	$update_query = "UPDATE learner_sessions ls
+                	JOIN sessions s ON ls.session_id = s.session_id
+                	SET ls.session_status = 'Previous'
+                	WHERE NOW() >= DATE_ADD(CONCAT(s.session_date, ' ', s.session_time), INTERVAL s.duration HOUR)";
+
+	$update_query .= ";";
+
+	$update_query .= "UPDATE partner_sessions ps
+                    	JOIN sessions s ON ps.session_id = s.session_id
+                    	SET ps.session_status = 'Previous'
+                    	WHERE NOW() >= DATE_ADD(CONCAT(s.session_date, ' ', s.session_time), INTERVAL s.duration HOUR)";
+
+	$update_query .= ";";
+
+	if (!mysqli_multi_query($conn, $update_query)) {
+    	echo "Error updating session status: " . mysqli_error($conn);
+	}
+
+	// Free the result set after multi-query execution
+	while (mysqli_next_result($conn)) {
+    	if (!$result = mysqli_store_result($conn)) {
+        	if (mysqli_errno($conn)) {
+            	echo "Query execution error: " . mysqli_error($conn);
+        	}
+    	} else {
+        	mysqli_free_result($result);
+    	}
+	}
+
+
+	$query = "SELECT L.first_name AS learner_first_name, L.last_name AS learner_last_name, L.photo AS learner_photo, S.session_date, S.session_time
+          	FROM sessions AS S
+          	JOIN learners AS L ON S.learner_id = L.learner_id
+          	JOIN partner_sessions PS ON S.session_id = PS.session_id
+          	WHERE PS.partner_id = $partner_id AND PS.session_status = 'previous'";
 
 
 
-$result = mysqli_query($conn, $query);
+	$result = mysqli_query($conn, $query);
 
-if (!$result) {
-    die("Query failed: " . mysqli_error($conn));
+	if (!$result) {
+    	die("Query failed: " . mysqli_error($conn));
+	}
 }
 ?>
 
@@ -84,6 +119,10 @@ if (!$result) {
       </div>
       <div class="sessions">
           <?php
+          
+          if (mysqli_num_rows($result) == 0) {
+       			echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+    	   } else {
           // Fetch and display session details
           while ($row = mysqli_fetch_assoc($result)) {
               echo "<div class='session'>";
@@ -92,6 +131,7 @@ if (!$result) {
               echo "<h6 class='time'>{$row['session_date']} {$row['session_time']}</h6>";
               echo "<i class='fa fa-clock-o' style='font-size:24px'></i>";
               echo "</div>";
+          }
           }
 
           // Free result set

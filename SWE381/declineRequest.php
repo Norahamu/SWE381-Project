@@ -7,6 +7,13 @@ define("DBNAME", "lingo");
 
 $learnerID = $_POST['LID'];
 $requestID = $_POST['REQID'];
+
+// Check if PID is set in the $_GET array
+if (!isset($_GET['PID'])) {
+    echo "Error: Missing PID parameter";
+    exit(); // Terminate the script
+}
+
 $partnerID = $_GET['PID'];
 
 if ($requestID === null) {
