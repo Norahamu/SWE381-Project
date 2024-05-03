@@ -12,19 +12,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     die("Connection failed: " . $connection->connect_error); 
   } 
 
-  // Retrieve and sanitize form data
-  $firstName = $connection->real_escape_string($_POST['first_name']); 
-  $lastName = $connection->real_escape_string($_POST['last_name']); 
-  $email = $connection->real_escape_string($_POST['email']); 
-  $password = $_POST['password']; // Assuming the password is not hashed for simplicity 
-  $city = $connection->real_escape_string($_POST['city']); 
-  $location = $connection->real_escape_string($_POST['location']); 
-  $age = $connection->real_escape_string($_POST['age']); 
-  $gender = $connection->real_escape_string($_POST['gender']); 
-  $culturalKnowledge = $connection->real_escape_string($_POST['cultural_Knowledge']); 
-  $education = $connection->real_escape_string($_POST['Education']); 
-  $experience = $connection->real_escape_string($_POST['Experience']); 
-  $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']); 
+   // Retrieve and sanitize form data
+   $firstName = $connection->real_escape_string($_POST['first_name']);
+   $lastName = $connection->real_escape_string($_POST['last_name']);
+   $email = $connection->real_escape_string($_POST['email']);
+   $password = $connection->real_escape_string($_POST['password']); // Hash the password for security
+   $location = $connection->real_escape_string($_POST['location']);
+   $age = $connection->real_escape_string($_POST['age']);
+   $gender = $connection->real_escape_string($_POST['gender']);
+   $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']);
+   $education = $connection->real_escape_string($_POST['Education']);
+   $experience = $connection->real_escape_string($_POST['Experience']);
+   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
+
 
  // Process proficiency levels for languages
  if (isset($_POST['languages']) && isset($_POST['ProficiencyLevel'])) {
@@ -59,8 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
  
-$stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, education=?, experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-$stmt->bind_param("ssssssssssii", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+  $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+  $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+
 
   if ($stmt->execute()) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
@@ -124,6 +125,7 @@ function isLanguageSelected($language, $userLanguages) {
   $education = $userData['Education']; 
   $experience = $userData['Experience']; 
   $pricePerSession = $userData['PricePerSession']; 
+  
 } else { 
   // User not found, handle the error
 } 
@@ -212,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
 
 
-  <form action="signupPartner.php" method="post" class="php-email-form">
+  <form action="#" method="post" class="php-email-form"> 
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
@@ -241,7 +243,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             <div class="form-group">
               <label for="psw" class="required">Password</label>
               <div class="input-group">
-                  <input type="password" class="form-control" id="psw" value="<?php echo htmlspecialchars($password); ?>"minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" >
+                  <input type="password" class="form-control" name="password" id="password" value="<?php echo htmlspecialchars($password); ?>"minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" >
                   <div class="input-group-append">
                       <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                           <i class="fas fa-eye"></i>
@@ -349,10 +351,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
         <div class="form-group"></div>
           <label class="required">Cultural Knowledge</label>
-          <textarea class="form-control"  name="cultural_Knowledge" id="cultural_Knowledge" rows="5"><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
+          <textarea class="form-control"  name="cultural_knowledge" id="cultural_knowledge" rows="5"><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
-          <textarea class="form-control"name="Experience" id="Education" rows="5" ><?php echo htmlspecialchars($education); ?></textarea>
+          <textarea class="form-control"name="Education" id="Education" rows="5" ><?php echo htmlspecialchars($education); ?></textarea>
         </div>
         <div class="form-group">
           <label class="required">Experience</label>
@@ -364,7 +366,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         </div>
         <div class="form-group col-md-6">
 <label class="required">Price per session</label>
-<input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="price" id="price" min="50" step="1" >
+<input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="PricePerSession" id="PricePerSession" min="50" step="1" >
         </div>
        <div class="text-center" style="display: flex; justify-content: space-between;">
         <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
