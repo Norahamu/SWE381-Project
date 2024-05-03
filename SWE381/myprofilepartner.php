@@ -25,20 +25,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $experience = $connection->real_escape_string($_POST['Experience']);
    $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
 
-
- // Process proficiency levels for languages
- if (isset($_POST['languages']) && isset($_POST['ProficiencyLevel'])) {
+// Process proficiency levels for languages
+if (isset($_POST['languages'])) {
   $languages = $_POST['languages'];
-  $ProficiencyLevel = $_POST['ProficiencyLevel'];
 
-  // Update proficiency levels in the database
-  foreach ($languages as $index => $language) {
-    $ProficiencyLevel = $connection->real_escape_string($ProficiencyLevel[$index]);
-    
-    // Perform SQL update for each language's proficiency level
-    $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$ProficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
-    $connection->query($updateProficiencyQuery);
-    }
+  // Process proficiency levels for languages
+  foreach ($languages as $language) {
+      // Check if the proficiency level for the current language is set
+      if (isset($_POST[$language . '_proficiency'])) {
+          $proficiencyLevel = $connection->real_escape_string($_POST[$language . '_proficiency']);
+
+          // Perform SQL update for each language's proficiency level
+          $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+          $connection->query($updateProficiencyQuery);
+      }
+  }
+}
+
+
+
   }
 
  
@@ -274,39 +279,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
   <div class="language-selection">
     <label class="cbx" for="cbx-46-arabic">
-      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
-      <span>Arabic</span>
+        <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
+        <span>Arabic</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
-    <?php
-    // Set the default option to "Select proficiency" if the language is not selected
-    $selected = ($ProficiencyLevel[0] === 'Select proficiency') ? 'selected' : '';
-    ?>
-    <option value="" <?php echo $selected; ?>>Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-</select>
-
+        <option value="" <?php if ($ProficiencyLevel === 'Select proficiency') echo 'selected'; ?>>Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    </select>
 </div>
+
 
 <div class="language-selection">
     <label class="cbx" for="cbx-46-english">
-      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
-      <span>English</span>
+        <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
+        <span>English</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
-    <?php
-    // Set the default option to "Select proficiency" if the language is not selected
-    $selected = ($ProficiencyLevel[1] === 'Select proficiency') ? 'selected' : '';
-    ?>
-    <option value="" <?php echo $selected; ?>>Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel[1] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel[1] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel[1] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-</select>
-
+        <option value="" <?php if ($ProficiencyLevel === 'Select proficiency') echo 'selected'; ?>>Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    </select>
 </div>
+
+
 
 <div class="language-selection">
     <label class="cbx" for="cbx-46-french">
@@ -314,34 +312,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         <span>French</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
-    <?php
-    // Set the default option to "Select proficiency" if the language is not selected
-    $selected = ($ProficiencyLevel[2] === 'Select proficiency') ? 'selected' : '';
-    ?>
-    <option value="" <?php echo $selected; ?>>Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel[2] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel[2] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel[2] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-</select>
-
+        <option value="" <?php if ($ProficiencyLevel === 'Select proficiency') echo 'selected'; ?>>Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    </select>
 </div>
 
-  <div class="language-selection">
+  
+<div class="language-selection">
     <label class="cbx" for="cbx-46-spanish">
         <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" <?php if (isLanguageSelected("Spanish", $languages)) echo "checked"; ?> />
         <span>Spanish</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
-    <?php
-    // Set the default option to "Select proficiency" if the language is not selected
-    $selected = ($ProficiencyLevel[3] === 'Select proficiency') ? 'selected' : '';
-    ?>
-    <option value="" <?php echo $selected; ?>>Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel[3] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel[3] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel[3] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-</select>
-
+        <option value="" <?php if ($ProficiencyLevel === 'Select proficiency') echo 'selected'; ?>>Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    </select>
 </div>
 
 </div>
