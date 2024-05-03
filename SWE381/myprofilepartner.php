@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $experience = $connection->real_escape_string($_POST['Experience']);
    $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
    $photo = $_POST['photo'];
-   
+
 // Process proficiency levels for languages
 if (isset($_POST['languages'])) {
   $languages = $_POST['languages'];
@@ -52,20 +52,21 @@ if (isset($_POST['languages'])) {
 
  
 
-  $target_file =null;  
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['photo']['tmp_name'];
-        $fileName = $_FILES['photo']['name'];
-        $target_dir = "assets/img/";
-        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-        $newFileName = $firstName . $lastName . "." . $fileExt;
-        $target_file = $target_dir . $newFileName;
-    
-        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-            echo "<div class='error-message'>Sorry, there was an error uploading your file.</div>";
-            exit;
-        }
-    }
+  $target_file = "assets/img/OIP.jpg";
+  // Check if file is uploaded
+  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+      $fileTmpPath = $_FILES['photo']['tmp_name'];
+      $fileName = $_FILES['photo']['name'];
+      $photo = "assets/img/";
+      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+      $newFileName = $firstName . $lastName . "." . $fileExt;
+      $target_file = $photo . $newFileName;
+  
+      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+          echo "Sorry, there was an error uploading your file.";
+          exit;
+      }
+  }
 
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
@@ -77,7 +78,7 @@ if ($result->num_rows > 0) {
 } else {
   // UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
 
   if ($stmt->execute()) {
       // Store success message in session variable
