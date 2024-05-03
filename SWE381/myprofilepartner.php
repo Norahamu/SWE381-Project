@@ -94,19 +94,19 @@ if ($resultFetch->num_rows > 0) {
 
   
   // Fetch languages and proficiency levels for the partner
-  $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
-  $stmtLanguages->bind_param("i", $_SESSION['partner_id']); 
-  $stmtLanguages->execute(); 
-  $resultLanguages = $stmtLanguages->get_result(); 
+$stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
+$stmtLanguages->bind_param("i", $_SESSION['partner_id']);
+$stmtLanguages->execute();
+$resultLanguages = $stmtLanguages->get_result();
 
-  $languages = array();
-  $ProficiencyLevel= array();
+$languages = array();
+$proficiencyLevels = array(); // Separate array for proficiency levels
 
-  // Fetch languages and proficiency levels
-  while ($row = $resultLanguages->fetch_assoc()) {
+// Fetch languages and proficiency levels
+while ($row = $resultLanguages->fetch_assoc()) {
     $languages[] = $row['language'];
-    $ProficiencyLevel[] = $row['ProficiencyLevel'];
-  }
+    $proficiencyLevels[] = $row['ProficiencyLevel']; // Store proficiency levels in a separate array
+}
 
 // Check if a language is selected for the user
 function isLanguageSelected($language, $userLanguages) {
