@@ -27,7 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $education = $connection->real_escape_string($_POST['Education']);
    $experience = $connection->real_escape_string($_POST['Experience']);
    $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
-
+   $photo = $_POST['photo'];
+   
 // Process proficiency levels for languages
 if (isset($_POST['languages'])) {
   $languages = $_POST['languages'];
