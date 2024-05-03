@@ -81,7 +81,7 @@ if ($result->num_rows > 0) {
 
   if ($stmt->execute()) {
     // Store success message in session variable
-    $_SESSION['profile_updated'] = true;
+    $_SESSION['profile_updated_success'] = true;
 } else {
     echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
 }
@@ -205,12 +205,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
 <body> 
 
-<?php 
-if (isset($_SESSION['profile_updated']) && $_SESSION['profile_updated']) {
-    echo "<script>alert('Profile updated successfully!');</script>";
-    unset($_SESSION['profile_updated']); // Unset session variable after displaying the message
-}
-?>
+
   <!-- ======= Header ======= --> 
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
@@ -457,6 +452,20 @@ if (isset($_SESSION['profile_updated']) && $_SESSION['profile_updated']) {
         alert('No changes made.'); 
       } 
     }); 
+    <?php 
+if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+    echo "var profileUpdatedSuccess = true;";
+    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+} else {
+    echo "var profileUpdatedSuccess = false;";
+}
+?>
+
+// Add this JavaScript code to handle the success message
+if (profileUpdatedSuccess) {
+    alert('Profile updated successfully!');
+}
+
   </script> 
  
 </body> 
