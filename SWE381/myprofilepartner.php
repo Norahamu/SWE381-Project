@@ -436,53 +436,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   </footer>
 
   <script> 
-    // Variable to track changes
-var changesMade = false;
-
-// Object to store initial field values
-var initialFieldValues = {};
-
-// Function to handle input change
-function handleInputChange() {
-  // Get the input field's name and value
-  var fieldName = this.name;
-  var fieldValue = this.value;
-
-  // Compare with the initial field value
-  if (fieldValue !== initialFieldValues[fieldName]) {
-    changesMade = true;
-  } else {
-    changesMade = false;
-  }
-}
-
-// Function to store initial field values
-function storeInitialFieldValues() {
-  var inputFields = document.querySelectorAll('input, textarea');
-  inputFields.forEach(function (input) {
-    initialFieldValues[input.name] = input.value;
-  });
-}
-
-// Add event listeners to input fields
-var inputFields = document.querySelectorAll('input, textarea');
-inputFields.forEach(function (input) {
-  input.addEventListener('input', handleInputChange);
-});
-
-// Add event listener to the "Save Changes" button
-var saveChangesBtn = document.getElementById('save-changes-btn');
-saveChangesBtn.addEventListener('click', function (event) {
-  // Check if changes have been made
-  if (!changesMade) {
-    event.preventDefault(); // Prevent form submission if no changes
-    alert('No changes made.');
-  }
-});
-
-// Store initial field values when the page loads
-document.addEventListener('DOMContentLoaded', storeInitialFieldValues);
-
+    // Variable to track changes 
+    var changesMade = false; 
+ 
+    // Function to handle input change 
+    function handleInputChange() { 
+      changesMade = true; 
+    } 
+ 
+    // Add event listeners to input fields 
+    var inputFields = document.querySelectorAll('input, textarea'); 
+    inputFields.forEach(function (input) { 
+      input.addEventListener('input', handleInputChange); 
+    }); 
+ 
+    // Add event listener to the "Save Changes" button 
+    var saveChangesBtn = document.getElementById('save-changes-btn'); 
+    saveChangesBtn.addEventListener('click', function (event) { 
+      // Check if changes have been made 
+      if (!changesMade) { 
+        event.preventDefault(); // Prevent form submission if no changes 
+        alert('No changes made.'); 
+      } 
+    }); 
     <?php 
 if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
     echo "var profileUpdatedSuccess = true;";

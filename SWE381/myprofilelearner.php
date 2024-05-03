@@ -41,20 +41,21 @@ $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id
 $result = $connection->query($checkEmailQuery);
 
 if ($result->num_rows > 0) {
-    // Email address is already registered for another user
-    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
+  // Email address is already registered for another user
+  $_SESSION['email_already_registered'] = true;
 } else {
      //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
   $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
  
-  if ($stmt->execute()) { 
-    echo "<div class='success-message'>Profile updated successfully!</div>"; 
-  } else { 
-    echo "<div class='error-message'>Error: " . $stmt->error . "</div>"; 
-  } 
- 
-  $stmt->close(); 
+  if ($stmt->execute()) {
+    // Store success message in session variable
+    $_SESSION['profile_updated_success'] = true;
+} else {
+    echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+}
+
+$stmt->close();
 } 
 }
 
@@ -93,15 +94,12 @@ if ($resultFetch->num_rows > 0) {
 $stmtFetch->close(); 
 $connection->close(); 
  
-// Handle form submission (delete profile) 
+/// Handle form submission (delete profile) 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
-  // Delete user from database 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?"); 
+  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?");
   $stmtDelete->bind_param("i", $_SESSION['learner_id']); 
   if ($stmtDelete->execute()) { 
-    // User deleted successfully, redirect to sign out or any other page 
-    // For example: 
     header("Location: signuplearner.html"); 
     exit(); 
   } else { 
@@ -111,6 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   $stmtDelete->close(); 
   $connection->close(); 
 } 
+
  
 ?> 
  
@@ -217,8 +216,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             <div class="text-center" style="display: flex; justify-content: space-between;"> 
               <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button> 
  
-              <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button> 
- 
+              <button type="button" id="delete-account-btn" name="delete_account" onclick="confirmDelete()" style="background-color: red; border: 0; padding: 12px 34px; color: #fff; transition: 0.4s; border-radius: 50px;">Delete my account</button>
+
+       
+       <script>
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account?")) {
+            window.location.href = "delete_account.php";
+        }
+    }
+</script> 
             </div> 
           </form> 
         </div> 
@@ -292,6 +299,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         alert('No changes made.'); 
       } 
     }); 
+    <?php 
+if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+    echo "var profileUpdatedSuccess = true;";
+    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+} else {
+    echo "var profileUpdatedSuccess = false;";
+}
+?>
+
+// Add this JavaScript code to handle the success message
+if (profileUpdatedSuccess) {
+    alert('Profile updated successfully!');
+}
+<?php 
+if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+    echo "var emailAlreadyRegistered = true;";
+    unset($_SESSION['email_already_registered']); // Unset session variable after handling
+} else {
+    echo "var emailAlreadyRegistered = false;";
+}
+?>
+
+// Add this JavaScript code to handle the email already registered message
+if (emailAlreadyRegistered) {
+    alert('The email address is already registered. Please use another email.');
+}
+
+
   </script> 
  
 </body> 
