@@ -83,7 +83,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
 <!-- ======= Header ======= -->
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
-      <a href="index.html" class="logo me-auto"><img src="img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
@@ -169,7 +169,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
       <div class="container">
         <div class="row">
           <div class="col-lg-3 col-md-6 footer-contact">
-            <a href="index.html" class="logo me-auto"><img src="img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
             <p>
               King Saud University <br>
               Riyadh <br>
