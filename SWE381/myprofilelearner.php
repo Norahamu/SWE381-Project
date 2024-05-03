@@ -198,7 +198,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             </div> 
             <div class="form-group"> 
               <label class="required">Password</label> 
-              <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="password" id="password" > 
+              <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="password" id="password" minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$"  > 
             </div> 
             <div class="form-group"> 
               <label>Upload Photo</label> 
