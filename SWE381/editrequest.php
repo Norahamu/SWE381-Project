@@ -16,7 +16,7 @@ if (!$conn) {
 $language = "";
 $proficiencyLevel = "";
 $sessionDuration = "";
-$requestDate = "";
+$preferredSchedule = "";
 $requestID = ""; // Initialize $requestID
 
 // Check if request ID is set
@@ -24,7 +24,7 @@ if(isset($_GET['request_id'])) {
     $requestID = $_GET['request_id'];
     
     // Fetch data from requests_learner table based on request ID
-    $sql = "SELECT Language, ProficiencyLevel, SessionDuration, RequestDate FROM requests_learner WHERE RequestID = ?";
+    $sql = "SELECT Language, ProficiencyLevel, SessionDuration, preferred_schedule FROM requests_learner WHERE RequestID = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $requestID);
     mysqli_stmt_execute($stmt);
@@ -38,7 +38,7 @@ if(isset($_GET['request_id'])) {
         $language = $row['Language'];
         $proficiencyLevel = $row['ProficiencyLevel'];
         $sessionDuration = $row['SessionDuration'];
-        $requestDate = $row['RequestDate'];
+        $preferredSchedule = $row['preferred_schedule'];
     } else {
         echo "No records found";
     }
@@ -50,12 +50,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $language = $_POST['language'];
     $proficiencyLevel = $_POST['level'];
     $sessionDuration = $_POST['duration'];
-    $requestDate = $_POST['request_date'];
+    $preferredSchedule = $_POST['preferred_schedule'];
    
     // Update data in the database
-    $updateSql = "UPDATE requests_learner SET Language = ?, ProficiencyLevel = ?, SessionDuration = ?, RequestDate = ? WHERE RequestID = ?";
+    $updateSql = "UPDATE requests_learner SET Language = ?, ProficiencyLevel = ?, SessionDuration = ?, preferred_schedule = ? WHERE RequestID = ?";
     $stmt = mysqli_prepare($conn, $updateSql);
-    mysqli_stmt_bind_param($stmt, "ssssi", $language, $proficiencyLevel, $sessionDuration, $requestDate, $requestID);
+    mysqli_stmt_bind_param($stmt, "ssssi", $language, $proficiencyLevel, $sessionDuration, $preferredSchedule, $requestID);
     
     if (mysqli_stmt_execute($stmt)) {
         // Redirect to RequestsList.php after successful update
@@ -67,6 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 ?>
+
 
 
 
@@ -98,6 +99,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <!-- Main CSS File -->
   <link href="style.css" rel="stylesheet">
+  <script>
+function validateForm() {
+    const language = document.getElementById("lang").value;
+    const level = document.getElementById("level").value;
+    const sessionDuration = document.getElementById("duration").value;
+    const requestDateTime = document.getElementById("request_date").value;
+
+    // Regular expression to match the format YYYY-MM-DDTHH:MM
+    const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+
+    if (language === "" || level === "" || sessionDuration === "" || requestDateTime === "") {
+        alert("Please fill out all fields.");
+        return false;
+    }
+
+    if (!dateTimeRegex.test(requestDateTime)) {
+        alert("Invalid Date and Time Format. Please enter the date and time in the format YYYY-MM-DDTHH:MM.");
+        return false;
+    }
+
+    // Additional validation for the requestDateTime
+    const dateParts = requestDateTime.split("T")[0].split("-");
+    const timeParts = requestDateTime.split("T")[1].split(":");
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10);
+    const day = parseInt(dateParts[2], 10);
+    const hour = parseInt(timeParts[0], 10);
+    const minute = parseInt(timeParts[1], 10);
+
+    // Detailed check for valid date ranges
+    const dayObj = new Date(year, month - 1, day, hour, minute);
+
+    if (dayObj.getFullYear() !== year || dayObj.getMonth() + 1 !== month || dayObj.getDate() !== day ||
+        dayObj.getHours() !== hour || dayObj.getMinutes() !== minute) {
+        alert("Invalid Date or Time range detected. Please correct and submit again.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
 
 </head>
 <body>
@@ -120,42 +163,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </header>
   <!-- End Header -->
   <section id="req" class="req section-bg">
-        <div class="container aos-init aos-animate" data-aos="fade-up">
-            <div class="section-title">
-                <h2>Edit Language Learning Request</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 mt-5 mt-lg-0 d-flex align-items-stretch">
-                <form action="editrequest.php?request_id=<?php echo $requestID; ?>" method="post" class="php-email-form">
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+        <div class="section-title">
+            <h2>Edit Language Learning Request</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 mt-5 mt-lg-0 d-flex align-items-stretch">
+            
+<form action="editrequest.php?request_id=<?php echo $requestID; ?>" method="post" class="php-email-form">
+    <div class="row">
+        <div class="form-group">
+            <label for="lang">Language</label>
+            <select class="form-control" name="language" id="lang" required>
+                <option value="<?php echo htmlspecialchars($language); ?>"><?php echo htmlspecialchars($language); ?></option>
+                <option value="Arabic">Arabic</option>
+                <option value="English">English</option>
+                <option value="Français">Français</option>
+                <option value="Español">Español</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="level">Proficiency Level</label>
+            <select class="form-control" name="level" id="level" required>
+                <option value="<?php echo htmlspecialchars($proficiencyLevel); ?>"><?php echo htmlspecialchars($proficiencyLevel); ?></option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="duration">Session Duration</label>
+            <select class="form-control" name="duration" id="duration" required>
+                <option value="<?php echo htmlspecialchars($sessionDuration); ?>"><?php echo htmlspecialchars($sessionDuration); ?> hours</option>
+                <option value="1">1 hour</option>
+                <option value="2">2 hours</option>
+                <option value="3">3 hours</option>
+                <option value="4">4 hours</option>
+                <option value="5">5 hours</option>
+                <option value="6">6 hours</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="preferred_schedule">Preferred Schedule</label>
+            <input type="datetime-local" class="form-control" name="preferred_schedule" id="preferred_schedule" value="<?php echo htmlspecialchars($preferredSchedule); ?>" required>
+        </div>
+    </div>
+    <div class="text-center">
+        <button type="submit">Confirm Edit</button>
+    </div>
+</form>
+...
 
-                        <div class="row">
-                            <div class="form-group">
-                                <label for="lang">Language</label>
-                                <input type="text" class="form-control" name="language" id="lang" value="<?php echo htmlspecialchars($language); ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="level">Proficiency Level</label>
-
-                                <input type="text" class="form-control" name="level" id="level" value="<?php echo htmlspecialchars($proficiencyLevel); ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="duration">Session Duration</label>
-                                <input type="text"  class="form-control" name="duration" id="duration" value="<?php echo htmlspecialchars($sessionDuration); ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="requestDate">Request Date</label>
-                                <input type="text" class="form-control" name="request_date" id="request_date" value="<?php echo htmlspecialchars($requestDate); ?>" required>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit">Confirm Edit</button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
-    </section>
-    
+    </div>
+</section>
+
 
       <!-- ======= Footer ======= -->
   <footer id="footer">

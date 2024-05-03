@@ -82,14 +82,14 @@ if (!$result) {
 <section class="section-bg">
  <div class="section-title">
 <h2>Language Learning Requests</h2> </div>
-<br>
-<div class="menu">
 
-  <a href="AllReq.html" class="selected">All</a>
-  <a href="accepted.html">Accepted</a>
-  <a href="pending.html">Pending</a>
-  <a href="declined.html">Declined</a>
+<div class="menu">
+  <a href="allRequestsPartner.php" >All</a>
+  <a href="acceptedRequestsPartner.php"  >Accepted</a>
+  <a href="pendingRequestsPartner.php">Pending</a>
+  <a href="declinedRequestsPartner.php" class="selected">Declined</a>
 </div>
+
 <div id="site">
           <?php
           // Fetch and display session details

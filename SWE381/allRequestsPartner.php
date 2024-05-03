@@ -10,30 +10,22 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id = $_GET['partnerID'];
+$partner_id = 123456790;
+
 $query1 = "SELECT L.first_name AS learner_first_name, 
-                  L.last_name AS learner_last_name, 
-                  L.photo AS learner_photo,
-                  L.learner_id AS learnerID, 
-                  PR.Status AS RStatus,
-                  PR.SessionDuration AS REQsession_Duration,
-                  PR.preferred_schedule AS REQSchedule,
-                  PR.RequestID AS REQID
-           FROM requests_partner AS PR
-           JOIN learners AS L ON PR.learnerID = L.learner_ID
-           WHERE PR.partnerID = ?";
+                 L.last_name AS learner_last_name, 
+                 L.photo AS learner_photo,
+                 L.learner_id AS learnerID, 
+                 PR.Status AS RStatus,
+                 PR.SessionDuration AS REQsession_Duration,
+                 PR.preferred_schedule AS REQSchedule,
+                 PR.RequestID AS REQID
+          FROM requests_partner AS PR
+          JOIN learners AS L ON PR.learnerID = L.learner_ID
+          WHERE PR.partnerID = $partner_id";
 
-$stmt = $conn->prepare($query1);
-if ($stmt === false) {
-    die("Prepare failed: " . $conn->error);
-}
 
-$stmt->bind_param("i", $partner_id);
-if (!$stmt->execute()) {
-    die("Query failed: " . $stmt->error);
-}
-
-$result = $stmt->get_result();
+$result = mysqli_query($conn, $query1);
 
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
@@ -51,7 +43,7 @@ if (!$result) {
   <link href="assets/img/Lingoblue.png" rel="icon" >
 
   <!-- Google Fonts -->
- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
  
 
   <!-- Vendor CSS Files -->
@@ -66,11 +58,136 @@ if (!$result) {
   <link href="style.css" rel="stylesheet">
   <link href="sessionsStyle.css" rel="stylesheet">
   <link href="buttons.css" rel="stylesheet">
-<!-- jQuery File -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <!-- Main JS File -->
-<script src="updaterequest.js"></script>
+  
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#button2").click(function() {
+        console.log("Button clicked");
+        var learnerId = $(this).data('learner-id');
+        var requestID = $(this).data('req-id');
+        var partnerId = $(this).data('partner-id');
+        console.log(requestID);
 
+        $.ajax({
+            url: "declineRequest.php",
+            method: "POST",
+            data: { LID: learnerId, REQID: requestID , PID:partnerId },
+            success: function(response) {
+                if (response.trim() === "success") {
+                    window.location.reload();
+                    console.log("Request declined successfully");
+                } else {
+                    console.error("Error declining request:", response);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error sending AJAX request:", error);
+            }
+        });
+    });
+    
+    
+$("#button1").click(function(){
+    var partnerId = $(this).data('partner-id');
+    var requestID = $(this).data('req-id');
+    var learnerID = $(this).data('learner-id');
+    var RSch = $(this).data('req-sch');
+    var RDur = $(this).data('req-dur');
+
+    // Convert requested schedule to Date object
+    var requested_date = new Date(RSch);
+    var requested_year = requested_date.getFullYear();
+    var requested_month = requested_date.getMonth() + 1;
+    var requested_day = requested_date.getDate();
+    var requested_hour = requested_date.getHours();
+    var requested_minute = requested_date.getMinutes();
+    var requDate = requested_year + "-" + requested_month + "-" + requested_day;
+    var requTime = requested_hour + ":" + requested_minute + ":00";
+
+    // Check for overlapping sessions before accepting the request
+    $.getJSON("partnerSessions.php?PID=" + partnerId, function(response) {
+        console.log("Button1 after partnerSessions");
+    }).done(function(response) {
+        var overlap = false;
+        response.forEach(function(session) {
+            // Convert session date and time to JavaScript Date objects
+            var session_start = new Date(session.session_date + 'T' + session.session_time);
+            
+            // Calculate session end time based on start time and duration
+            var session_end = new Date(session_start.getTime() + session.duration * 3600000); // Convert hours to milliseconds
+
+            // Convert requested date and time to JavaScript Date objects
+            var requested_start = new Date(RSch);
+            var requested_end = new Date(requested_start.getTime() + RDur * 3600000); // Convert hours to milliseconds
+            
+            console.log("session_date:", session.session_date);
+    		console.log("session_time:", session.session_time);
+    		console.log("session_duration:", session.session_duration);
+            console.log("session_start");
+            console.log(session_start);
+            console.log("session_end");
+            console.log(session_end);
+            console.log("requested_start");
+            console.log(requested_start);
+            console.log("requested_end");
+            console.log(requested_end);
+
+            // Check for overlap between session and requested time
+            if (requested_start < session_end && requested_end > session_start) {
+                overlap = true;
+                console.log("Sessions overlap");
+                // You might want to break the loop here if you only need to check for any overlap
+            }
+        });
+
+        // After looping through all sessions, check if there was any overlap
+        if (!overlap) {
+            console.log("no overlap");
+            $.get("acceptRequest.php", { 
+                LID: learnerID, 
+                PID: partnerId,
+                REQID: requestID, 
+                reqDate: requDate,
+                reqTime: requTime, 
+                reqDuration: RDur 
+            }, function(response) {
+                console.log(response); // Log the response to see its structure
+                try {
+                    var jsonResponse = JSON.parse(response); // Parse JSON response
+                    if (jsonResponse.success) {
+                        window.location.reload();
+                        alert("Booking accepted successfully!");
+                    } else {
+                        console.error("Error message from server:", jsonResponse.message);
+                        alert("An error occurred while accepting the booking: " + jsonResponse.message);
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                    alert("An error occurred while parsing the server response.");
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Error accepting request:", textStatus, errorThrown);
+                alert("An error occurred while accepting the booking. Please try again later.");
+            });
+        } else {
+            alert("you have an existing session that overlaps this session time!");
+        }
+    });
+});
+    
+    
+
+
+});
+
+
+
+</script>
+
+
+  
 </head>
 <body>
 
@@ -96,31 +213,36 @@ if (!$result) {
  <div class="section-title">
 <h2>Language Learning Requests</h2> </div>
 <br>
+
 <div class="menu">
 
-  <a href="AllReq.html" class="selected">All</a>
-  <a href="accepted.html">Accepted</a>
-  <a href="pending.html">Pending</a>
-  <a href="declined.html">Declined</a>
+  <a href="allRequestsPartner.php" class="selected">All</a>
+  <a href="acceptedRequestsPartner.php">Accepted</a>
+  <a href="pendingRequestsPartner.php">Pending</a>
+  <a href="declinedRequestsPartner.php">Declined</a>
 </div>
+
 <div id="site">
-          <?php
-         while ($row = mysqli_fetch_assoc($result)) {
+  <?php        
+          
+while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
     echo "<a href='#' class='TPName' id='partnerName' data-learner-id='{$row['learnerID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
     echo "<h6 class='text2'>{$row['RStatus']}</h6>"; 
               
     if ($row['RStatus'] == 'Pending') {
-    echo '<div class="button-container">';
-	echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'    data-req-ID='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
-	echo "<button type='button' class='button2' id='button2'  data-partner-id='$partner_id' data-req-ID='{$row['REQID']}' >Decline</button>";
+        echo '<div class="button-container">';
+        echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
+        echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
 
-    echo '</div>';
-}
+
+        echo '</div>';
+    }
 
     echo "</div>";
 }
+
 ?>
 
 
@@ -172,17 +294,8 @@ if (!$result) {
       <div class="credits"></div>
     </div>
   </footer>
-  <script>
-  
-  
-    
-    const accButton = document.getElementById('button1');
-    accButton.addEventListener("click", AcceptRequest);
-    
-    const decButton = document.getElementById('button2');
-    decButton.addEventListener("click", declineRequest);
-    
-    const partnerNameElement = document.getElementById('partnerName');
+  <script>    
+  	const partnerNameElement = document.getElementById('partnerName');
     partnerNameElement.addEventListener("click", redirectToLearnerPage);
 
 
@@ -194,102 +307,9 @@ if (!$result) {
         const url = `learnerCard.php?id=${learnerId}`;
         window.location.href = url;
     }
-    
-    
-    
-    
-    
-    
-function generateSessionID() {
-    // Generate a random 9-digit number
-    return rand(100000000, 999999999);
-}
+   </script> 
 
-function AcceptRequest() {
-    global $conn;
-    const button = event.target;
-    const partner_id = button.getAttribute('data-partner-id');
-    const req_ID = button.getAttribute('data-req-ID');
-    const req_sch = button.getAttribute('data-req-sch');
-    const req_dur = button.getAttribute('data-req-dur');
-    
-    // Check for overlapping sessions before accepting the request
-    $query = "SELECT * FROM sessions WHERE partner_id = $partner_id";
-    $result = mysqli_query($conn, $query);
-
-    if (!$result) {
-        die("Query failed: " . mysqli_error($conn));
-    }
-
-    while ($row = mysqli_fetch_assoc($result)) {
-        // Get the session date, time, and duration
-        $session_start = strtotime($row['session_date'] . ' ' . $row['session_time']);
-        $session_end = $session_start + $row['session_duration'] * 3600; // Convert duration to seconds
-
-        // Convert requested schedule to timestamp
-        $requested_start = strtotime($req_sch);
-        $requested_end = $requested_start + $req_dur * 3600; // Convert duration to seconds
-
-        // Check for overlap
-        if (($requested_start >= $session_start && $requested_start < $session_end) ||
-            ($requested_end > $session_start && $requested_end <= $session_end) ||
-            ($requested_start < $session_start && $requested_end > $session_end)) {
-            // There is an overlap, display an error message
-            echo "<script>alert('This request can't be accepted! You have an existing session that overlaps this request preferred time.');</script>";
-            return; // Exit the function to prevent accepting the request
-        }
-    }
-
-    // No overlap found, proceed with accepting the request
-    mysqli_begin_transaction($conn);
-    $acceptQuery = "UPDATE requests_partner SET Status = 'Accepted' WHERE partnerID = $partner_id AND REQ_ID = $req_ID";
-    
-    // Generate a random session ID
-    $sessionID = generateSessionID();
-    
-    // Insert the new session
-    $insertQuery = "INSERT INTO sessions (session_ID, partner_id, learner_id, session_date, session_time) VALUES ('$sessionID', $partner_id, '2024-05-23', '08:00')";
-
-    // Execute the queries
-    $acceptingResult = mysqli_query($conn, $acceptQuery);
-    $insertResult = mysqli_query($conn, $insertQuery);
-
-    // Check if any query failed
-    if (!$acceptingResult || !$insertResult) {
-        mysqli_rollback($conn);
-        die("Query failed: " . mysqli_error($conn));
-        echo "<script>alert('This request cant be accepted! You have an existing session that overlaps this request preferred time.');</script>";
-        return; // Exit the function to prevent further execution
-    }
-
-    // If all queries executed successfully, commit the transaction
-    mysqli_commit($conn);
-    echo "<script>alert('Accepted successfully!');</script>";
-}
-
-
-
-
-
-
-
-
-function declineRequest( ) {
-    global $conn;
-    const button = event.target;
-    const partner_id = button.getAttribute('data-partner-id');
-    // Update the status of the request to "Declined"
-    $declineQuery = "UPDATE requests_partner SET Status = 'Declined' WHERE partnerID = $partner_id";
-    $decliningResult = mysqli_query($conn, $declineQuery);
-
-    if (!$decliningResult) {
-        die("Query failed: " . mysqli_error($conn));
-    } else {
-        echo "<script>alert('The request declined successfully!');</script>";
-    }
-}
-</script>
-<php?
+<?php
           // Free result set
           mysqli_free_result($result);
 
