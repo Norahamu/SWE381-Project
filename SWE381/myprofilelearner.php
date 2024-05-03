@@ -37,6 +37,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
  
+// Check if the provided email already exists for another user
+$checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
+$result = $connection->query($checkEmailQuery);
+
+if ($result->num_rows > 0) {
+    // Email address is already registered for another user
+    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
+} else {
+     //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
   $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
  
@@ -48,6 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
   $stmt->close(); 
 } 
+}
+
  
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
