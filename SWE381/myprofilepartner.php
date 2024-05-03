@@ -51,7 +51,7 @@ if (isset($_POST['languages'])) {
 
  
 
-  $target_file = $userData['photo'];  
+  $target_file =null;  
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['photo']['tmp_name'];
         $fileName = $_FILES['photo']['name'];
