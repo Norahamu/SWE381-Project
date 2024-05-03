@@ -276,15 +276,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           <div class="form-group"> 
   <label>Upload Photo</label> 
   <input type="file" class="form-control" name="photo" id="photoInput"> 
-  <span id="photoPath"></span>
-</div> 
-
-<script>
-document.getElementById('photoInput').addEventListener('change', function() {
-  var fileName = this.value.split('\\').pop(); // Get the file name without the path
-  document.getElementById('photoPath').textContent = fileName;
-});
-</script> 
+  <?php if (!empty($photo)) { ?>
+    <span id="photoPath"><?php echo $photo; ?></span>
+  <?php } ?>
+</div>
 
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
