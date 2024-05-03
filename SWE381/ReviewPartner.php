@@ -54,8 +54,8 @@
 			
 		 <?php
              session_start();    
-if (isset($_SESSION['userr_id'])){
-   $partnerID = $_SESSION['user_id'];
+if (isset($_SESSION['partner_id'])){
+   $partnerID = $_SESSION['partner_id'];
 }
 
                 //$partnerID = 123456789;
