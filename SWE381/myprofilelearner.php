@@ -180,13 +180,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               <div class="form-group col-md-6"> 
  
                 <label class="required">First Name</label> 
-                <input type="text" name="first_name" class="form-control" id="fname" 
+                <input type="text" name="first_name" class="form-control" id="first_name" 
                   value="<?php echo htmlspecialchars($firstName); ?>" > 
  
               </div> 
               <div class="form-group col-md-6"> 
                 <label class="required">Last Name</label> 
-                <input type="text" name="last_name" class="form-control" id="lname" 
+                <input type="text" name="last_name" class="form-control" id="last_name" 
                   value="<?php echo htmlspecialchars($lastName); ?>" > 
  
               </div> 
@@ -198,7 +198,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             </div> 
             <div class="form-group"> 
               <label class="required">Password</label> 
-              <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="Password" id="psw" > 
+              <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="password" id="password" > 
             </div> 
             <div class="form-group"> 
               <label>Upload Photo</label> 
