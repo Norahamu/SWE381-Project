@@ -62,7 +62,7 @@
 
             <div class ="superlanguage">
                 <?php
-                $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
+                $connection = mysqli_connect('localhost', 'root', '', 'lingo');
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
@@ -120,7 +120,7 @@
             <div class ="superlanguage">
 
                 <?php
-                $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
+                $connection = mysqli_connect('localhost', 'root', '', 'lingo');
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
@@ -170,7 +170,7 @@
             <h2 id ="FrenshLanguage" class =" LanguageTitle">French </h2>
             <div class ="superlanguage">
                 <?php
-                $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
+                $connection = mysqli_connect('localhost', 'root', '', 'lingo');
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
@@ -221,7 +221,7 @@
             <div class ="superlanguage">
 
                 <?php
-                $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
+                $connection = mysqli_connect('localhost', 'root', '', 'lingo');
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
