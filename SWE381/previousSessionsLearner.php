@@ -45,7 +45,13 @@ if(isset($_SESSION['learner_id'])){
 	}
 
 
-	$query = "SELECT P.first_name AS partner_first_name, P.last_name AS partner_last_name, P.photo AS partner_photo, S.session_date, S.session_time
+	$query = "SELECT P.first_name AS partner_first_name,
+			 P.last_name AS partner_last_name,
+			 P.partner_id AS partner_id,
+			 P.photo AS partner_photo,
+			 S.session_date,
+			 S.session_id AS sessionID,
+			 S.session_time
           	FROM sessions AS S
           	JOIN partners AS P ON S.partner_id = P.partner_id
           	JOIN learner_sessions AS LS ON S.session_id = LS.session_id
@@ -129,7 +135,7 @@ if(isset($_SESSION['learner_id'])){
               echo "<strong class='TPName'>{$row['partner_first_name']} {$row['partner_last_name']}</strong><br>";
               echo "<h6 class='time'>{$row['session_date']} {$row['session_time']}</h6>";
               echo "<i class='fa fa-clock-o' style='font-size:24px'></i>";
-              echo '<a class="btn" id="reviewButton" href="ReviewLearner.php"><svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" class="sparkle"><path d="M10,21.236,6.755,14.745,0.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path></svg><span class="text">Rate!</span></a>';
+			  echo '<a class="btn" id="reviewButton" href="ReviewLearner.php?partner_id=' . $row['partner_id'] . '&learner_id=' . $learner_id . '&session_id=' . $row['sessionID'] . '"><svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" class="sparkle"><path d="M10,21.236,6.755,14.745,0.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path></svg><span class="text">Rate!</span></a>';
               echo "</div>";
           }
           }
