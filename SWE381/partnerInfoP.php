@@ -57,7 +57,7 @@
                 <?php
                 $partnerID = $_GET['partnerID'];
 
-                $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
+                $connection = mysqli_connect('localhost', 'root', '', 'lingo');
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
