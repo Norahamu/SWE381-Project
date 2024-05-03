@@ -376,7 +376,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         </div>
        <div class="text-center" style="display: flex; justify-content: space-between;">
         <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
-        <button type="submit" name="delete_account" onclick="confirmDelete()" style="background-color: red;">Delete my account</button>
+        <button type="button" id="delete-account-btn" onclick="confirmDelete()" style="background-color: red;">Delete my account</button>
+       
+       <script>
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account?")) {
+            window.location.href = "delete_account.php";
+        }
+    }
+</script> 
+
     </div>
       </div>
     </div>
