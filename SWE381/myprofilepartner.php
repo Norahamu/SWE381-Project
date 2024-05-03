@@ -66,30 +66,24 @@ if (isset($_POST['languages'])) {
         }
     }
 
-// Check if the provided email already exists for another user
-$checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
-$result = $connection->query($checkEmailQuery);
-
-if ($result->num_rows > 0) {
-    // Email address is already registered for another user
-    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
-} else {
-   
- //UPDATE
-  $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-  $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
-
-  if ($stmt->execute()) {
-    // Store success message in session variable
-    $_SESSION['profile_updated_success'] = true;
-} else {
-    echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
-}
-
-$stmt->close();
-
-
- 
+    if ($result->num_rows > 0) {
+      // Email address is already registered for another user
+      $_SESSION['email_already_registered'] = true;
+  } else {
+      // UPDATE
+      $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
+      $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
+  
+      if ($stmt->execute()) {
+          // Store success message in session variable
+          $_SESSION['profile_updated_success'] = true;
+      } else {
+          echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+      }
+  
+      $stmt->close();
+  
+  
   $connection->close(); 
 } 
 }
@@ -464,6 +458,19 @@ if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_su
 // Add this JavaScript code to handle the success message
 if (profileUpdatedSuccess) {
     alert('Profile updated successfully!');
+}
+<?php 
+if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+    echo "var emailAlreadyRegistered = true;";
+    unset($_SESSION['email_already_registered']); // Unset session variable after handling
+} else {
+    echo "var emailAlreadyRegistered = false;";
+}
+?>
+
+// Add this JavaScript code to handle the email already registered message
+if (emailAlreadyRegistered) {
+    alert('The email address is already registered. Please use another email.');
 }
 
   </script> 
