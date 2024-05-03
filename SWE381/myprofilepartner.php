@@ -366,7 +366,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         </div>
         <div class="form-group col-md-6">
 <label class="required">Price per session</label>
-<input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="price" id="price" min="50" step="1" >
+<input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="PricePerSession" id="PricePerSession" min="50" step="1" >
         </div>
        <div class="text-center" style="display: flex; justify-content: space-between;">
         <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
