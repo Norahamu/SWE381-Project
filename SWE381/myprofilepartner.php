@@ -218,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
     <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
-    <li><a class="nav-link scrollto" href="review#Partner.php">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="reviewPartner.php">My reviews and rating</a></li>
     <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
        </ul>
 
