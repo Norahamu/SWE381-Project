@@ -207,6 +207,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               <label class="required">Password</label> 
               <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="password" id="password" minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$"  > 
             </div> 
+            <script>
+$(document).ready(function() {
+    $("#togglePassword").click(function() {
+        var password = $("#password");
+        var type = password.attr("type") === "password" ? "text" : "password";
+        password.attr("type", type);
+        
+        // toggle the eye / eye-slash icon
+        $(this).toggleClass("fa-eye fa-eye-slash");
+    });
+});
+</script>
             <div class="form-group"> 
               <label>Upload Photo</label> 
               <input type="file" class="form-control" name="photo" id="photo" > 
