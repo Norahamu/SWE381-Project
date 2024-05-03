@@ -13,6 +13,13 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+function generateRequestID($length = 9) {
+    // Generate a random number with 9 digits
+    $random_number = mt_rand(100000000, 999999999);
+    return $random_number;
+}
+
+$requestID = generateRequestID();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $language = $_POST['language'];
     $level = $_POST['level'];
@@ -30,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $partnerID = $row['partner_id'];
 
     // Insert data into requests_partner table
-    $sql_partner = "INSERT INTO requests_partner (PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
-    VALUES ('$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
+    $sql_partner = "INSERT INTO requests_partner (RequestID, PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
+    VALUES ('$requestID','$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
 
     if ($conn->query($sql_partner) === TRUE) {
         echo "New record created successfully for partner";
@@ -40,8 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert data into requests_learner table
-    $sql_learner = "INSERT INTO requests_learner (LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
-    VALUES ('$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
+    $sql_learner = "INSERT INTO requests_learner (RequestID, LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
+    VALUES ('$requestID','$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
 
     if ($conn->query($sql_learner) === TRUE) {
         echo "New record created successfully for learner";
