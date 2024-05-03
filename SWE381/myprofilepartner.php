@@ -212,7 +212,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
 
 
-  <form action="signupPartner.php" method="post" class="php-email-form">
+        <form action="#" method="post" class="php-email-form"> 
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
