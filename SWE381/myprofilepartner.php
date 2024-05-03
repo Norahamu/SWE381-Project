@@ -280,12 +280,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               </div>
           </div>  
           <div class="form-group"> 
-  <label>Upload Photo</label> 
-  <input type="file" class="form-control" name="photo" id="photoInput"> 
-  <?php if (!empty($photo)) { ?>
-    <span id="photoPath"><?php echo $photo; ?></span>
-  <?php } ?>
-</div>
+              <label>Upload Photo</label> 
+              <input type="file" class="form-control" name="photo" id="photo" > 
+            </div> 
 
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
