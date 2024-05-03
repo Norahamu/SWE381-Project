@@ -66,27 +66,31 @@ if (isset($_POST['languages'])) {
         }
     }
 
-    if ($result->num_rows > 0) {
-      // Email address is already registered for another user
-      $_SESSION['email_already_registered'] = true;
+// Check if the provided email already exists for another user
+$checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
+$result = $connection->query($checkEmailQuery);
+
+if ($result->num_rows > 0) {
+  // Email address is already registered for another user
+  $_SESSION['email_already_registered'] = true;
+} else {
+  // UPDATE
+  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
+
+  if ($stmt->execute()) {
+      // Store success message in session variable
+      $_SESSION['profile_updated_success'] = true;
   } else {
-      // UPDATE
-      $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
-      $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
-  
-      if ($stmt->execute()) {
-          // Store success message in session variable
-          $_SESSION['profile_updated_success'] = true;
-      } else {
-          echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
-      }
-  
-      $stmt->close();
-  
+      echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+  }
+
+  $stmt->close();
+
+
  
+  $connection->close(); 
 } 
- 
-$connection->close();
 }
 
 
@@ -473,6 +477,7 @@ if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_reg
 if (emailAlreadyRegistered) {
     alert('The email address is already registered. Please use another email.');
 }
+
 
   </script> 
  
