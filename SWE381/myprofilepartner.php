@@ -481,12 +481,12 @@ $(document).ready(function() {
         }
     });
 
-    <?php
+    <?php 
     if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
         echo "var profileUpdatedSuccess = true;";
         unset($_SESSION['profile_updated_success']); // Unset session variable after handling
     } else {
-        echo "var profileUpdatedSuccess = false;";
+        echo "var profileUpdatedSuccess = false;"; 
     }
     ?>
 
