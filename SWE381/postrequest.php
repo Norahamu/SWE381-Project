@@ -24,30 +24,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $learnerID = 1; // Replace with the actual learner's ID
     $partnerID = 1; // Replace with the actual partner's ID
 
-    // Insert data into requests_learner table
-    $sql = "INSERT INTO requests_learner (LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
-    VALUES ('$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully for learner";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
     // Insert data into requests_partner table
-    $sql = "INSERT INTO requests_partner (PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
+    $sql_partner = "INSERT INTO requests_partner (PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
     VALUES ('$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
 
-    if ($conn->query($sql) === TRUE) {
+    if ($conn->query($sql_partner) === TRUE) {
         echo "New record created successfully for partner";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $sql_partner . "<br>" . $conn->error;
+    }
+
+    // Insert data into requests_learner table
+    $sql_learner = "INSERT INTO requests_learner (LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
+    VALUES ('$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
+
+    if ($conn->query($sql_learner) === TRUE) {
+        echo "New record created successfully for learner";
+    } else {
+        echo "Error: " . $sql_learner . "<br>" . $conn->error;
     }
 }
 
 // Close connection
 mysqli_close($conn);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
