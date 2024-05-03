@@ -19,10 +19,11 @@ $query = "SELECT L.first_name AS learner_first_name,
                  L.photo AS learner_photo, 
                  L.city AS learner_city,
                  L.location AS learner_location,
-                 
+                 L.email As learner_email,
                  PR.Language AS learning_language,
                  PR.ProficiencyLevel AS Proficiency_Level,
                  PR.SessionDuration AS Session_Duration,
+                 PR.Status AS RStatus,
                  PR.preferred_schedule AS preferred_schedule
           FROM requests_partner AS PR
           JOIN learners AS L ON L.learner_ID = PR.LearnerID
@@ -224,7 +225,7 @@ $("#button1").click(function(){
               echo "<div id='name'>";
               echo "<h1 class='quickFade delayTwo'>{$row['learner_first_name']} {$row['learner_last_name']}</h1>";
               echo "<div class='tooltip-container' style='right: 1000px;'>";
-              echo "<a href='mailto:{$row['learner_first_name']}@gmail.com'>@</a>";
+              echo "<a href='mailto:{$row['learner_email']}'>@</a>";
               echo "</div>";
               echo "</div>";
               echo "<div class='clear'></div>";
@@ -254,10 +255,12 @@ $("#button1").click(function(){
               $datetime = '2024-05-23T08:00';
               $formatted_datetime = date('Y-m-d \a\t H:i', strtotime($datetime));
               echo "Preferred Schedule: ".$formatted_datetime;
-       		  echo '<div class="button-container">';
-        	  echo "<button style='right: 160px;' type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='$learner_id'  data-req-id='$$request_id'    data-req-sch='{$row['preferred_schedule']}'   data-req-dur='{$row['Session_Duration']}' >Accept</button>";
-        	  echo "<button style='right: 260px;' type='button' class='button2' id='button2' data-learner-id='$learner_id' data-req-id='$request_id'>Decline</button>";
-        	  echo '</div>';             
+			  if ($row['RStatus'] == 'Pending') {
+			      echo '<div class="button-container">';
+        		  echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
+ 			      echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
+        		  echo '</div>';
+    		  }             
               echo "</div>";
               echo "</section>";
               echo "</div>";

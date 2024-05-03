@@ -122,17 +122,6 @@ $("#button1").click(function(){
             var requested_start = new Date(RSch);
             var requested_end = new Date(requested_start.getTime() + RDur * 3600000); // Convert hours to milliseconds
             
-            console.log("session_date:", session.session_date);
-    		console.log("session_time:", session.session_time);
-    		console.log("session_duration:", session.session_duration);
-            console.log("session_start");
-            console.log(session_start);
-            console.log("session_end");
-            console.log(session_end);
-            console.log("requested_start");
-            console.log(requested_start);
-            console.log("requested_end");
-            console.log(requested_end);
 
             // Check for overlap between session and requested time
             if (requested_start < session_end && requested_end > session_start) {
@@ -235,8 +224,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<div class="button-container">';
         echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
         echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
-
-
         echo '</div>';
     }
 
