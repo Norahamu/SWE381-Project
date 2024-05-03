@@ -87,12 +87,12 @@ exit();
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
-    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
     <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
-    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
-    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+    <li><a class="nav-link scrollto" href="PartnersList.php">Partners List</a></li>
+    <li><a class="nav-link scrollto" href="ReviewLearner.php ">Review my Partner</a></li>
       </ul>
 
     </nav>
