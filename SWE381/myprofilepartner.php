@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $firstName = $connection->real_escape_string($_POST['first_name']); 
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
-  $password = $_POST['password']; // Assuming the password is not hashed for simplicity 
+  $password = $connection->real_escape_string($_POST['password']);  // Assuming the password is not hashed for simplicity 
 
   $location = $connection->real_escape_string($_POST['location']); 
   $age = $connection->real_escape_string($_POST['age']); 
