@@ -49,7 +49,8 @@
  
 	  <div class="section-title">
 	 <h2> Reviews and Ratings</h2> </div>
-			
+		                 <div class='review'>
+	
 		 <?php
              session_start();    
 if (isset($_SESSION['partner_id'])){
@@ -63,7 +64,6 @@ if (isset($_SESSION['partner_id'])){
                 }
               else{
                 echo" 
-                 <div class='review'>
 
                         <div class='heading'>";
                     $sql4 = "SELECT * FROM review_and_rating WHERE partner_id = '$partnerID'";
@@ -94,10 +94,10 @@ if (isset($_SESSION['partner_id'])){
                        
                        echo" <div class='learner-review'>
                             <p class ='Aleen'>".$review."</p>
-                        </div> <!--learner review-->
-                    </div> <!-- review1-->";
+                        </div> <!--learner review-->";
+                    
                     }}
-                ?>	 
+                ?>	 </div> <!-- review1-->
         </div> <!-- site-->
 <!-- ======= Footer ======= -->
   <footer id="footer">

@@ -99,7 +99,6 @@ header("Location: partnerInfo.php?partnerID=$pid");
   </header>
   <!-- End Header -->
 
-
 <section id="signuppartner" class="signuppartner section-bg">
     <div class="container aos-init aos-animate" data-aos="fade-up">
       <div class="section-title">
@@ -164,7 +163,6 @@ header("Location: partnerInfo.php?partnerID=$pid");
       </form>
     </div>
   </section>
-
       <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="footer-top">

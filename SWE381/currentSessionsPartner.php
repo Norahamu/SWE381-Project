@@ -10,7 +10,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id =  $_GET['partnerID']; 
+$partner_id =  $_GET['PartnerID']; 
 
 $query = "SELECT L.first_name AS learner_first_name, L.last_name AS learner_last_name, L.photo AS learner_photo, S.session_date, S.session_time
           FROM sessions AS S

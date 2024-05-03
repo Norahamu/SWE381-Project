@@ -10,7 +10,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id = 123456790;
+$partner_id = 123456792;
 
 $query1 = "SELECT L.first_name AS learner_first_name, 
                  L.last_name AS learner_last_name, 
