@@ -1,6 +1,9 @@
 <?php 
 session_start(); 
 
+// Define variables
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") { 
   $servername = "localhost"; 
   $username = "root"; 
@@ -25,21 +28,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $experience = $connection->real_escape_string($_POST['Experience']);
    $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
 
-
- // Process proficiency levels for languages
- if (isset($_POST['languages']) && isset($_POST['ProficiencyLevel'])) {
+// Process proficiency levels for languages
+if (isset($_POST['languages'])) {
   $languages = $_POST['languages'];
-  $ProficiencyLevel = $_POST['ProficiencyLevel'];
 
-  // Update proficiency levels in the database
-  foreach ($languages as $index => $language) {
-    $ProficiencyLevel = $connection->real_escape_string($ProficiencyLevel[$index]);
-    
-    // Perform SQL update for each language's proficiency level
-    $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$ProficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
-    $connection->query($updateProficiencyQuery);
-    }
+  // Process proficiency levels for languages
+  foreach ($languages as $language) {
+      // Check if the proficiency level for the current language is set
+      if (isset($_POST[$language . '_proficiency'])) {
+          $proficiencyLevel = $connection->real_escape_string($_POST[$language . '_proficiency']);
+
+          // Perform SQL update for each language's proficiency level
+          $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+          $connection->query($updateProficiencyQuery);
+      }
   }
+}
+
+
+
+  
 
  
 
@@ -58,7 +66,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       exit; 
     } 
   } 
- 
+
+// Check if the provided email already exists for another user
+$checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
+$result = $connection->query($checkEmailQuery);
+
+if ($result->num_rows > 0) {
+    // Email address is already registered for another user
+    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
+} else {
+   
+ //UPDATE
   $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
   $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
 
@@ -75,6 +93,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
   $connection->close(); 
 } 
+}
+
+
+
 
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
@@ -190,13 +212,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
-    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
-    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
-    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
-      </ul>
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
+       </ul>
 
     </nav>
   </header>
@@ -253,46 +275,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           </div>  
             <div class="form-group">
               <label>Upload Photo</label>
-              <input type="file" class="form-control" name="photo" id="photo" value="<?php echo htmlspecialchars($target_dir); ?>">
+              <input type="file" class="form-control" name="photo" id="photo" >
             </div>
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
   <div class="language-selection">
     <label class="cbx" for="cbx-46-arabic">
-      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
-      <span>Arabic</span>
+        <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
+        <span>Arabic</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
-    <?php
-    // Set the default option to "Select proficiency" if the language is not selected
-    $selected = ($ProficiencyLevel[0] === 'Select proficiency') ? 'selected' : '';
-    ?>
-    <option value="" <?php echo $selected; ?>>Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-</select>
-
+    <select name="proficiency_levels" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
+        <option value="" >Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    </select>
 </div>
+
 
 <div class="language-selection">
     <label class="cbx" for="cbx-46-english">
-      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
-      <span>English</span>
+        <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
+        <span>English</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
-    <?php
-    // Set the default option to "Select proficiency" if the language is not selected
-    $selected = ($ProficiencyLevel[1] === 'Select proficiency') ? 'selected' : '';
-    ?>
-    <option value="" <?php echo $selected; ?>>Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel[1] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel[1] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel[1] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-</select>
-
+        <option value="" >Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    </select>
 </div>
+
+
 
 <div class="language-selection">
     <label class="cbx" for="cbx-46-french">
@@ -300,34 +315,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         <span>French</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
-    <?php
-    // Set the default option to "Select proficiency" if the language is not selected
-    $selected = ($ProficiencyLevel[2] === 'Select proficiency') ? 'selected' : '';
-    ?>
-    <option value="" <?php echo $selected; ?>>Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel[2] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel[2] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel[2] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-</select>
-
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    </select>
 </div>
 
-  <div class="language-selection">
+  
+<div class="language-selection">
     <label class="cbx" for="cbx-46-spanish">
         <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" <?php if (isLanguageSelected("Spanish", $languages)) echo "checked"; ?> />
         <span>Spanish</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
-    <?php
-    // Set the default option to "Select proficiency" if the language is not selected
-    $selected = ($ProficiencyLevel[3] === 'Select proficiency') ? 'selected' : '';
-    ?>
-    <option value="" <?php echo $selected; ?>>Select proficiency</option>
-    <option value="Beginner" <?php if ($ProficiencyLevel[3] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-    <option value="Intermediate" <?php if ($ProficiencyLevel[3] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-    <option value="Advanced" <?php if ($ProficiencyLevel[3] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-</select>
-
+        <option value="" >Select proficiency</option>
+        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    </select>
 </div>
 
 </div>
@@ -395,12 +401,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
-            <ul>
-			  <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.html">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.html">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.html">Language Learning Requests</a></li>
-			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.html">my review and rating </a></li>
+            <ul>  <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
+                           <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">

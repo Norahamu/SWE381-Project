@@ -20,9 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
  
  
- 
-  $target_file = null; 
-  // Check if file is uploaded 
+ // Handle photo upload
+  $target_file = null;  
   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) { 
     $fileTmpPath = $_FILES['photo']['tmp_name']; 
     $fileName = $_FILES['photo']['name']; 
@@ -37,6 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
  
+// Check if the provided email already exists for another user
+$checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
+$result = $connection->query($checkEmailQuery);
+
+if ($result->num_rows > 0) {
+    // Email address is already registered for another user
+    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
+} else {
+     //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
   $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
  
@@ -48,6 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
   $stmt->close(); 
 } 
+}
+
  
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
@@ -144,12 +154,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     </div> 
     <nav id="navbar" class="navbar"> 
       <ul> 
-        <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li> 
-        <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li> 
-        <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li> 
-        <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li> 
-        <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li> 
-        <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li> 
+        <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+                
       </ul> 
  
     </nav> 
@@ -169,13 +180,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               <div class="form-group col-md-6"> 
  
                 <label class="required">First Name</label> 
-                <input type="text" name="first_name" class="form-control" id="fname" 
+                <input type="text" name="first_name" class="form-control" id="first_name" 
                   value="<?php echo htmlspecialchars($firstName); ?>" > 
  
               </div> 
               <div class="form-group col-md-6"> 
                 <label class="required">Last Name</label> 
-                <input type="text" name="last_name" class="form-control" id="lname" 
+                <input type="text" name="last_name" class="form-control" id="last_name" 
                   value="<?php echo htmlspecialchars($lastName); ?>" > 
  
               </div> 
@@ -187,7 +198,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             </div> 
             <div class="form-group"> 
               <label class="required">Password</label> 
-              <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="Password" id="psw" > 
+              <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="password" id="password" minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$"  > 
             </div> 
             <div class="form-group"> 
               <label>Upload Photo</label> 
@@ -231,7 +242,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           <div class="col-lg-3 col-md-6 footer-links"> 
             <h4>Useful Links</h4> 
             <ul> 
-              <!-- Links here --> 
+              <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
+                           
             </ul> 
           </div> 
           <div class="col-lg-3 col-md-6 footer-links"> 

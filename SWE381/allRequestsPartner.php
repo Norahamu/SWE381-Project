@@ -122,17 +122,6 @@ $("#button1").click(function(){
             var requested_start = new Date(RSch);
             var requested_end = new Date(requested_start.getTime() + RDur * 3600000); // Convert hours to milliseconds
             
-            console.log("session_date:", session.session_date);
-    		console.log("session_time:", session.session_time);
-    		console.log("session_duration:", session.session_duration);
-            console.log("session_start");
-            console.log(session_start);
-            console.log("session_end");
-            console.log(session_end);
-            console.log("requested_start");
-            console.log(requested_start);
-            console.log("requested_end");
-            console.log(requested_end);
 
             // Check for overlap between session and requested time
             if (requested_start < session_end && requested_end > session_start) {
@@ -198,13 +187,12 @@ $("#button1").click(function(){
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
-    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
-    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
-    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
-      </ul>
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li> </ul>
 
     </nav>
   </header>
@@ -235,8 +223,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<div class="button-container">';
         echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
         echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
-
-
         echo '</div>';
     }
 
@@ -269,13 +255,13 @@ while ($row = mysqli_fetch_assoc($result)) {
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.html">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.html">Language Learning Requests</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="PartnersList.html">Partner List</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.html">Review my partner</a></li>
-            </ul>
+                <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
+                           <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
+             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Our Social Networks</h4>

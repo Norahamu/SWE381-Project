@@ -19,9 +19,11 @@ $query = "SELECT L.first_name AS learner_first_name,
                  L.photo AS learner_photo, 
                  L.city AS learner_city,
                  L.location AS learner_location,
+                 L.email As learner_email,
                  PR.Language AS learning_language,
                  PR.ProficiencyLevel AS Proficiency_Level,
                  PR.SessionDuration AS Session_Duration,
+                 PR.Status AS RStatus,
                  PR.preferred_schedule AS preferred_schedule
           FROM requests_partner AS PR
           JOIN learners AS L ON L.learner_ID = PR.LearnerID
@@ -126,17 +128,6 @@ $("#button1").click(function(){
             var requested_start = new Date(RSch);
             var requested_end = new Date(requested_start.getTime() + RDur * 3600000); // Convert hours to milliseconds
             
-            console.log("session_date:", session.session_date);
-    		console.log("session_time:", session.session_time);
-    		console.log("session_duration:", session.session_duration);
-            console.log("session_start");
-            console.log(session_start);
-            console.log("session_end");
-            console.log(session_end);
-            console.log("requested_start");
-            console.log(requested_start);
-            console.log("requested_end");
-            console.log(requested_end);
 
             // Check for overlap between session and requested time
             if (requested_start < session_end && requested_end > session_start) {
@@ -198,12 +189,13 @@ $("#button1").click(function(){
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
-    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
-    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
-    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+   <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+                
       </ul>
 
     </nav>
@@ -211,14 +203,14 @@ $("#button1").click(function(){
   <!-- End Header -->
 <section class="section-bg">
  <div class="section-title">
+ 
 <h2>Language Learning Requests</h2> </div>
-<br>
-<div class="menu">
 
-  <a href="AllReq.html" class="selected">All</a>
-  <a href="accepted.html">Accepted</a>
-  <a href="pending.html">Pending</a>
-  <a href="declined.html">Declined</a>
+<div class="menu">
+  <a href="allRequestsPartner.php" >All</a>
+  <a href="acceptedRequestsPartner.php" class="selected">Accepted</a>
+  <a href="pendingRequestsPartner.php">Pending</a>
+  <a href="declinedRequestsPartner.php">Declined</a>
 </div>
 <div id="site">
           
@@ -233,8 +225,8 @@ $("#button1").click(function(){
               echo "</div>";
               echo "<div id='name'>";
               echo "<h1 class='quickFade delayTwo'>{$row['learner_first_name']} {$row['learner_last_name']}</h1>";
-              echo "<div class='tooltip-container' style=''>";
-              echo "<a href='mailto:{$row['learner_first_name']}@gmail.com'>@</a>";
+              echo "<div class='tooltip-container' style='right: 1000px;'>";
+              echo "<a href='mailto:{$row['learner_email']}'>@</a>";
               echo "</div>";
               echo "</div>";
               echo "<div class='clear'></div>";
@@ -246,8 +238,8 @@ $("#button1").click(function(){
               echo "<h1>Personal Profile</h1>";
               echo "</div>";
               echo "<div class='sectionContent'>";
-              echo "<p> City: {$row['learner_city']} </p>";
-              echo "<p> Location: {$row['learner_location']} </p>";
+              echo "<p> City: {$row['learner_city']} <br>";
+              echo " Location: {$row['learner_location']} </p>";
               echo "</div>";
               echo "</article>";
               echo "<div class='clear'></div>";
@@ -264,10 +256,12 @@ $("#button1").click(function(){
               $datetime = '2024-05-23T08:00';
               $formatted_datetime = date('Y-m-d \a\t H:i', strtotime($datetime));
               echo "Preferred Schedule: ".$formatted_datetime;
-       		  echo '<div class="button-container">';
-        	  echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='$learner_id'  data-req-id='$$request_id'    data-req-sch='{$row['preferred_schedule']}'   data-req-dur='{$row['Session_Duration']}' >Accept</button>";
-        	  echo "<button type='button' class='button2' id='button2' data-learner-id='$learner_id' data-req-id='$request_id'>Decline</button>";
-        	  echo '</div>';             
+			  if ($row['RStatus'] == 'Pending') {
+			      echo '<div class="button-container">';
+        		  echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
+ 			      echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
+        		  echo '</div>';
+    		  }             
               echo "</div>";
               echo "</section>";
               echo "</div>";
@@ -295,12 +289,13 @@ $("#button1").click(function(){
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.html">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.html">Language Learning Requests</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="PartnersList.html">Partner List</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.html">Review my partner</a></li>
+               <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
+                           
             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
