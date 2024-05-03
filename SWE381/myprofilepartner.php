@@ -51,21 +51,20 @@ if (isset($_POST['languages'])) {
 
  
 
-  // Handle photo upload
-  $target_file = null;
-  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) { 
-    $fileTmpPath = $_FILES['photo']['tmp_name']; 
-    $fileName = $_FILES['photo']['name']; 
-    $target_dir = "assets/img/"; 
-    $fileExt = pathinfo($fileName, PATHINFO_EXTENSION); 
-    $newFileName = $firstName . $lastName . "." . $fileExt; 
-    $target_file = $target_dir . $newFileName; 
-
-    if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) { 
-      echo "Sorry, there was an error uploading your file."; 
-      exit; 
-    } 
-  } 
+  $target_file = $userData['photo'];  
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['photo']['tmp_name'];
+        $fileName = $_FILES['photo']['name'];
+        $target_dir = "assets/img/";
+        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+        $newFileName = $firstName . $lastName . "." . $fileExt;
+        $target_file = $target_dir . $newFileName;
+    
+        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+            echo "<div class='error-message'>Sorry, there was an error uploading your file.</div>";
+            exit;
+        }
+    }
 
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
