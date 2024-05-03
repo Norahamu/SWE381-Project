@@ -290,11 +290,7 @@ $(document).ready(function() {
               <label for="psw" class="required">Password</label>
               <div class="input-group">
                   <input type="password" class="form-control" value="<?php echo htmlspecialchars($password); ?>" id="psw" name="password" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character.">
-                  <div class="input-group-append">
-                      <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                          <i class="fas fa-eye"></i>
-                      </button>
-                  </div>
+                
               </div>
           </div>  
 
