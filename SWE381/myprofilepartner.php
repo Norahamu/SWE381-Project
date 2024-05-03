@@ -455,60 +455,61 @@ $(document).ready(function() {
     </div>
   </footer>
 
-  <script> 
-    // Variable to track changes 
-    var changesMade = false; 
- 
-    // Function to handle input change 
-    function handleInputChange() { 
-      changesMade = true; 
-    } 
- 
-    // Add event listeners to input fields 
-    var inputFields = document.querySelectorAll('input, textarea'); 
-    inputFields.forEach(function (input) { 
-      input.addEventListener('input', handleInputChange); 
-    }); 
- 
-    // Add event listener to the "Save Changes" button 
-    var saveChangesBtn = document.getElementById('save-changes-btn'); 
-    saveChangesBtn.addEventListener('click', function (event) { 
-      // Check if changes have been made 
-      if (!changesMade) { 
-        event.preventDefault(); // Prevent form submission if no changes 
-        alert('No changes made.'); 
-      } 
-    }); 
-    <?php 
-if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
-    echo "var profileUpdatedSuccess = true;";
-    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
-} else {
-    echo "var profileUpdatedSuccess = false;";
-}
-?>
+  <script>
+    // Variable to track changes
+    var changesMade = false;
 
-// Add this JavaScript code to handle the success message
-if (profileUpdatedSuccess) {
-    alert('Profile updated successfully!');
-}
-<?php 
-if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
-    echo "var emailAlreadyRegistered = true;";
-    unset($_SESSION['email_already_registered']); // Unset session variable after handling
-} else {
-    echo "var emailAlreadyRegistered = false;";
-}
-?>
+    // Function to handle input and selection change
+    function handleInputChange() {
+        changesMade = true;
+    }
 
-// Add this JavaScript code to handle the email already registered message
-if (emailAlreadyRegistered) {
-    alert('The email address is already registered. Please use another email.');
-}
+    // Add event listeners to input fields
+    var inputFields = document.querySelectorAll('input, textarea, select');
+    inputFields.forEach(function(input) {
+        input.addEventListener('input', handleInputChange);
+        input.addEventListener('change', handleInputChange); // Adding change event listener
+    });
 
+    // Add event listener to the "Save Changes" button
+    var saveChangesBtn = document.getElementById('save-changes-btn');
+    saveChangesBtn.addEventListener('click', function(event) {
+        // Check if changes have been made
+        if (!changesMade) {
+            event.preventDefault(); // Prevent form submission if no changes
+            alert('No changes made.');
+        }
+    });
 
-  </script> 
- 
+    <?php
+    if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+        echo "var profileUpdatedSuccess = true;";
+        unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+    } else {
+        echo "var profileUpdatedSuccess = false;";
+    }
+    ?>
+
+    // Add this JavaScript code to handle the success message
+    if (profileUpdatedSuccess) {
+        alert('Profile updated successfully!');
+    }
+
+    <?php
+    if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+        echo "var emailAlreadyRegistered = true;";
+        unset($_SESSION['email_already_registered']); // Unset session variable after handling
+    } else {
+        echo "var emailAlreadyRegistered = false;";
+    }
+    ?>
+
+    // Add this JavaScript code to handle the email already registered message
+    if (emailAlreadyRegistered) {
+        alert('The email address is already registered. Please use another email.');
+    }
+</script>
+
 </body> 
  
 </html>
