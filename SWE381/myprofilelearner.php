@@ -151,13 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <header id="header" class="fixed-top header-inner-pages"> 
   <div class="container d-flex align-items-center"> 
     <a href="index.html" class="logo me-auto">
-    <?php 
-      if ($photo == null) {
-                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
-                        } else {
-                            echo "<img class = 'personal' src='" . $photo . "' width ='90' height= '80' alt='personal'>";
-                        }
-                        ?>
+    
     </a> 
   </div> 
   <nav id="navbar" class="navbar"> 
@@ -177,6 +171,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
         <h2>My Profile</h2> 
+        <?php 
+      if ($photo == null) {
+                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
+                        } else {
+                            echo "<img class = 'personal' src='" . $photo . "' width ='90' height= '80' alt='personal'>";
+                        }
+                        ?>
       </div> 
       <div class="row"> 
  
