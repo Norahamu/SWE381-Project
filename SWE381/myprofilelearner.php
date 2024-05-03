@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $_POST['password']; // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
- 
+  $photo = $_POST['photo'];
  
  // Handle photo upload
   $target_file = null;  
@@ -155,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       if ($photo == null) {
                             echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
                         } else {
-                            echo "<img class = 'personal' src='" . $target_dir . "' width ='90' height= '80' alt='personal'>";
+                            echo "<img class = 'personal' src='" . $photo . "' width ='90' height= '80' alt='personal'>";
                         }
                         ?>
     </a> 
