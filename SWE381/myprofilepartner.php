@@ -376,29 +376,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         </div>
        <div class="text-center" style="display: flex; justify-content: space-between;">
         <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
-        <!-- Separate form for deleting account -->
-<form id="delete-account-form" action="#" method="post">
-   
-        <button type="button"  name="delete_account" onclick="confirmDelete()" style="background-color: red;">Delete my account</button>
-    
-</form>
+        <button type="submit" name="delete_account" onclick="confirmDelete()" style="background-color: red;">Delete my account</button>
     </div>
-</form>
-
-
-
-<script>
-    function confirmDelete() {
-        if (confirm("Are you sure you want to delete your account?")) {
-            // If user confirms, submit the delete-account form
-            document.getElementById("delete-account-form").submit();
-        }
-    }
-</script>
       </div>
     </div>
     </form>
-    
         </div> 
       </div> 
     </div> 
