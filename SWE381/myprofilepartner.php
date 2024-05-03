@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $age = $connection->real_escape_string($_POST['age']); 
   $gender = $connection->real_escape_string($_POST['gender']); 
-  $culturalKnowledge = $connection->real_escape_string($_POST['cultural_Knowledge']); 
+  $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']); 
   $education = $connection->real_escape_string($_POST['Education']); 
   $experience = $connection->real_escape_string($_POST['Experience']); 
   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']); 
@@ -212,7 +212,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
 
 
-        <form action="#" method="post" class="php-email-form"> 
+  <form action="#" method="post" class="php-email-form"> 
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
@@ -349,7 +349,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
         <div class="form-group"></div>
           <label class="required">Cultural Knowledge</label>
-          <textarea class="form-control"  name="cultural_Knowledge" id="cultural_Knowledge" rows="5"><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
+          <textarea class="form-control"  name="cultural_knowledge" id="cultural_knowledge" rows="5"><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
           <textarea class="form-control"name="Experience" id="Education" rows="5" ><?php echo htmlspecialchars($education); ?></textarea>
