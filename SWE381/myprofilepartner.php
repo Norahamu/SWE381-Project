@@ -1,6 +1,10 @@
 <?php 
 session_start(); 
 
+// Define variables
+$email = "";
+$connection = null;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") { 
   $servername = "localhost"; 
   $username = "root"; 
