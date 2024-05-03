@@ -1,17 +1,21 @@
 <?php
 
+
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
 DEFINE('DB_NAME', 'lingo');
 
+
 // Establish database connection
 $conn = mysqli_connect(DB_HOST, DB_USER, DB_PSWD, DB_NAME);
+
 
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
+
 
 function generateRequestID($length = 9) {
     // Generate a random number with 9 digits
@@ -19,43 +23,82 @@ function generateRequestID($length = 9) {
     return $random_number;
 }
 
+
 $requestID = generateRequestID();
+
+// Check if partnerID is provided via query parameter
+if(isset($_GET['partnerID'])) {
+    $partnerID = $_GET['partnerID'];
+
+    // Fetch partner's languages from the database
+    $partnerLanguagesQuery = "SELECT language FROM partner_languages WHERE partner_id = '$partnerID'";
+    $partnerLanguagesResult = mysqli_query($conn, $partnerLanguagesQuery);
+
+    // Initialize an array to store languages
+    $languages = array();
+
+    // Fetch languages and store them in the array
+    while ($row = mysqli_fetch_assoc($partnerLanguagesResult)) {
+        $languages[] = $row['language'];
+    }
+} else {
+    // Default to an empty array if partnerID is not provided
+    $languages = array();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $language = $_POST['language'];
     $level = $_POST['level'];
     $sessionDuration = $_POST['sessionDuration'];
-    $preferredSchedule = $_POST['preferred_schedule']; // Replaced 'RequestDate' with 'preferred_schedule'
-    $status = 'Pending'; // Status could be set to 'Pending' by default, adjust as needed
+    $preferredSchedule = $_POST['preferred_schedule'];
+    $status = 'Pending';
+    $learnerID = 1; // Assuming the learner ID is retrieved from session or elsewhere
 
-    // For simplicity, let's assume LearnerID is provided via session or some other means
-    $learnerID = 1; // Replace with the actual learner's ID
 
-    // Fetch partner_id from the partners table
-    $partnerIDQuery = "SELECT partner_id FROM partners LIMIT 1"; // Assuming you want the first partner_id
-    $result = mysqli_query($conn, $partnerIDQuery);
-    $row = mysqli_fetch_assoc($result);
-    $partnerID = $row['partner_id'];
+    // Retrieve partner ID from the query parameter
+    if(isset($_GET['partnerID'])) {
+        $partnerID = $_GET['partnerID'];
 
-    // Insert data into requests_partner table
-    $sql_partner = "INSERT INTO requests_partner (RequestID, PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
-    VALUES ('$requestID','$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
 
-    if ($conn->query($sql_partner) === TRUE) {
-        echo "New record created successfully for partner";
+        // Check if the partner ID exists in the database
+        $partnerCheckQuery = "SELECT COUNT(*) AS count FROM partners WHERE partner_id = '$partnerID'";
+        $partnerCheckResult = mysqli_query($conn, $partnerCheckQuery);
+        $partnerCheckRow = mysqli_fetch_assoc($partnerCheckResult);
+        $partnerCount = $partnerCheckRow['count'];
+
+
+        if ($partnerCount == 1) {
+            // Insert data into requests_partner table
+            $sql_partner = "INSERT INTO requests_partner (RequestID, PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
+            VALUES ('$requestID', '$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
+
+
+            if ($conn->query($sql_partner) === TRUE) {
+                echo "New record created successfully for partner";
+            } else {
+                echo "Error: " . $sql_partner . "<br>" . $conn->error;
+            }
+
+
+            // Insert data into requests_learner table
+            $sql_learner = "INSERT INTO requests_learner (RequestID, LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
+            VALUES ('$requestID', '$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
+
+
+            if ($conn->query($sql_learner) === TRUE) {
+                echo "New record created successfully for learner";
+            } else {
+                echo "Error: " . $sql_learner . "<br>" . $conn->error;
+            }
+        } else {
+            echo "Error: Invalid partner ID";
+        }
     } else {
-        echo "Error: " . $sql_partner . "<br>" . $conn->error;
-    }
-
-    // Insert data into requests_learner table
-    $sql_learner = "INSERT INTO requests_learner (RequestID, LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
-    VALUES ('$requestID','$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
-
-    if ($conn->query($sql_learner) === TRUE) {
-        echo "New record created successfully for learner";
-    } else {
-        echo "Error: " . $sql_learner . "<br>" . $conn->error;
+        echo "Error: Partner ID not provided";
     }
 }
+
+
 
 // Close connection
 mysqli_close($conn);
@@ -84,18 +127,22 @@ mysqli_close($conn);
     const sessionDuration = document.getElementById("sessionDuration").value;
     const preferredSchedule = document.getElementById("preferred_schedule").value;
 
+
     // Regular expression to match the format YYYY-MM-DDTHH:MM
     const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+
 
     if (language === "" || level === "" || sessionDuration === "" || preferredSchedule === "") {
         alert("Please fill out all fields.");
         return false;
     }
 
+
     if (!dateTimeRegex.test(preferredSchedule)) {
         alert("Invalid Date and Time Format. Please enter the date and time in the format YYYY-MM-DDTHH:MM.");
         return false;
     }
+
 
     // Additional validation for the preferredSchedule
     const dateParts = preferredSchedule.split("T")[0].split("-");
@@ -106,8 +153,10 @@ mysqli_close($conn);
     const hour = parseInt(timeParts[0], 10);
     const minute = parseInt(timeParts[1], 10);
 
+
     // Detailed check for valid date ranges
     const dayObj = new Date(year, month - 1, day, hour, minute);
+
 
     if (dayObj.getFullYear() !== year || dayObj.getMonth() + 1 !== month || dayObj.getDate() !== day ||
         dayObj.getHours() !== hour || dayObj.getMinutes() !== minute) {
@@ -115,13 +164,19 @@ mysqli_close($conn);
         return false;
     }
 
+
     return true;
 }
+
 
 </script>
 
 
+
+
        
+
+
 
 
 </head>
@@ -133,13 +188,12 @@ mysqli_close($conn);
     </div>
     <nav id="navbar" class="navbar">
         <ul>
-            <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-                
+            <li><a class="nav-link scrollto" href="HomePage.html">Sign out</a></li>
+            <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
+            <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
+            <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
+            <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
+            <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
         </ul>
     </nav>
 </header>
@@ -150,56 +204,67 @@ mysqli_close($conn);
             <h2>Post a Language Learning Request</h2></div>
         <div class="row">
             <div class="col-lg-12 mt-5 mt-lg-0 d-flex align-items-stretch">
-                <form action="" method="post" class="php-email-form" id="languageForm">
-                    <div class="row">
-                    
-                    <div class="form-group">
-                            <label for="lang">Language</label>
-                            <select class="form-control" name="language" id="lang" required="">
+            <form action="" method="post" class="php-email-form" id="languageForm">
+    <div class="row">
+        <div class="form-group">
+            <label for="lang">Language</label>
+            <select class="form-control" name="language" id="lang" required="">
                                 <option value="" disabled selected>Select Language</option>
-                                <option value="Arabic">Arabic</option>
-                                <option value="English">English</option>
-                                <option value="Français">Français</option>
-                                <option value="Español">Español</option>
+                                <?php foreach($languages as $language): ?>
+                                    <option value="<?php echo $language; ?>"><?php echo $language; ?></option>
+                                <?php endforeach; ?>
                             </select>
-                        </div>
+        </div>
 
-                    <div class="form-group">
-                        <label for="level">Proficiency Level</label>
-                        <select class="form-control" name="level" id="level" required="">
-                            <option value="" disabled selected>Select Proficiency Level</option>
-                            <option value="Beginner">Beginner</option>
-                            <option value="Intermediate">Intermediate</option>
-                            <option value="Advanced">Advanced</option>
-                        </select>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="sessionDuration">Session Duration</label>
-                        <select class="form-control" name="sessionDuration" id="sessionDuration" required="">
-                            <option value="" disabled selected>Select Session Duration</option>
-                            <option value="1">1 hour</option>
-                            <option value="2">2 hours</option>
-                            <option value="3">3 hours</option>
-                            <option value="4">4 hours</option>
-                            <option value="5">5 hours</option>
-                            <option value="6">6 hours</option>
-                        </select>
-                         <div class="form-group">
-                                <label for="preferred_schedule">Preferred Schedule</label> <!-- Changed label text to 'Preferred Schedule' -->
-                                <input type="datetime-local" class="form-control" name="preferred_schedule" id="preferred_schedule" placeholder="Preferred Schedule" required> <!-- Changed id and placeholder -->
-                        </div>
+        <div class="form-group">
+            <label for="level">Proficiency Level</label>
+            <select class="form-control" name="level" id="level" required="">
+                <option value="" disabled selected>Select Proficiency Level</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+        </div>
 
-                   
 
-                    <div class="text-center">
-                        <button id="submitButton" type="submit">Post</button>
-                    </div>
-                </form>
+        <div class="form-group">
+            <label for="sessionDuration">Session Duration</label>
+            <select class="form-control" name="sessionDuration" id="sessionDuration" required="">
+                <option value="" disabled selected>Select Session Duration</option>
+                <option value="1">1 hour</option>
+                <option value="2">2 hours</option>
+                <option value="3">3 hours</option>
+                <option value="4">4 hours</option>
+                <option value="5">5 hours</option>
+                <option value="6">6 hours</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="preferred_schedule">Preferred Schedule</label>
+            <input type="datetime-local" class="form-control" name="preferred_schedule" id="preferred_schedule" placeholder="Preferred Schedule" required>
+        </div>
+
+
+        <!-- Hidden input field for partner ID -->
+        <input type="hidden" name="partnerID" id="partnerID" value="1"> <!-- Replace '1' with the actual partner ID -->
+    </div>
+
+
+    <div class="text-center">
+        <button id="submitButton" type="submit">Post</button>
+    </div>
+</form>
+
+
             </div>
         </div>
     </div>
 </section>
+
+
 
 
  <!-- ======= Footer ======= -->
@@ -220,13 +285,15 @@ mysqli_close($conn);
                 <div class="col-lg-3 col-md-6 footer-links">
                     <h4>Useful Links</h4>
                     <ul>
-                      <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
-                           
+                        <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner">My profile</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.html">Sessions</a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.html">Language Learning
+                                Requests</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="PartnersList.html">Partner List</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.html">Review my partner</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-6 footer-links">
@@ -248,5 +315,3 @@ mysqli_close($conn);
 </footer>
 </body>
 </html>
-
-

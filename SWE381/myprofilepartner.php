@@ -27,7 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $education = $connection->real_escape_string($_POST['Education']);
    $experience = $connection->real_escape_string($_POST['Experience']);
    $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
-
+   $photo = $_POST['photo'];
+   
 // Process proficiency levels for languages
 if (isset($_POST['languages'])) {
   $languages = $_POST['languages'];
@@ -228,6 +229,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
         <h2>My Profile</h2> 
+        if ($photo == null) {
+                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
+                        } else {
+                            echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
+                        }
+                        ?>
       </div> 
       <div class="row"> 
  
@@ -274,12 +281,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               </div>
           </div>  
           <div class="form-group"> 
-  <label>Upload Photo</label> 
-  <input type="file" class="form-control" name="photo" id="photoInput"> 
-  <?php if (!empty($photo)) { ?>
-    <span id="photoPath"><?php echo $photo; ?></span>
-  <?php } ?>
-</div>
+              <label>Upload Photo</label> 
+              <input type="file" class="form-control" name="photo" id="photo" > 
+            </div> 
 
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">

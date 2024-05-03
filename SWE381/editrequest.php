@@ -1,5 +1,4 @@
 <?php
-
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
@@ -13,32 +12,44 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$language = "";
-$proficiencyLevel = "";
-$sessionDuration = "";
-$preferredSchedule = "";
-$requestID = ""; // Initialize $requestID
+$requestID = "";
 
 // Check if request ID is set
-if(isset($_GET['request_id'])) {
+if (isset($_GET['request_id'])) {
     $requestID = $_GET['request_id'];
-    
+
     // Fetch data from requests_learner table based on request ID
-    $sql = "SELECT Language, ProficiencyLevel, SessionDuration, preferred_schedule FROM requests_learner WHERE RequestID = ?";
+    $sql = "SELECT Language, ProficiencyLevel, SessionDuration, preferred_schedule, PartnerID FROM requests_learner WHERE RequestID = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $requestID);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-     
+
     if (mysqli_num_rows($result) > 0) {
         // Fetch the data
         $row = mysqli_fetch_assoc($result);
-        
+
         // Assign fetched data to variables
         $language = $row['Language'];
         $proficiencyLevel = $row['ProficiencyLevel'];
         $sessionDuration = $row['SessionDuration'];
         $preferredSchedule = $row['preferred_schedule'];
+        $partnerID = $row['PartnerID'];
+
+        // Fetch partner's languages from the database
+        $partnerLanguagesQuery = "SELECT language FROM partner_languages WHERE partner_id = ?";
+        $stmtPartnerLanguages = mysqli_prepare($conn, $partnerLanguagesQuery);
+        mysqli_stmt_bind_param($stmtPartnerLanguages, "i", $partnerID);
+        mysqli_stmt_execute($stmtPartnerLanguages);
+        $partnerLanguagesResult = mysqli_stmt_get_result($stmtPartnerLanguages);
+
+        // Initialize an array to store languages
+        $languages = array();
+
+        // Fetch languages and store them in the array
+        while ($lang_row = mysqli_fetch_assoc($partnerLanguagesResult)) {
+            $languages[] = $lang_row['language'];
+        }
     } else {
         echo "No records found";
     }
@@ -52,12 +63,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sessionDuration = $_POST['duration'];
     $preferredSchedule = $_POST['preferred_schedule'];
    
-    // Update data in the database
-    $updateSql = "UPDATE requests_learner SET Language = ?, ProficiencyLevel = ?, SessionDuration = ?, preferred_schedule = ? WHERE RequestID = ?";
-    $stmt = mysqli_prepare($conn, $updateSql);
-    mysqli_stmt_bind_param($stmt, "ssssi", $language, $proficiencyLevel, $sessionDuration, $preferredSchedule, $requestID);
+    // Update data in the requests_learner table
+    $updateSqlLearner = "UPDATE requests_learner SET Language = ?, ProficiencyLevel = ?, SessionDuration = ?, preferred_schedule = ? WHERE RequestID = ?";
+    $stmtLearner = mysqli_prepare($conn, $updateSqlLearner);
+    mysqli_stmt_bind_param($stmtLearner, "ssssi", $language, $proficiencyLevel, $sessionDuration, $preferredSchedule, $requestID);
     
-    if (mysqli_stmt_execute($stmt)) {
+    // Update data in the requests_partner table
+    $updateSqlPartner = "UPDATE requests_partner SET Language = ?, ProficiencyLevel = ?, SessionDuration = ?, preferred_schedule = ? WHERE RequestID = ?";
+    $stmtPartner = mysqli_prepare($conn, $updateSqlPartner);
+    mysqli_stmt_bind_param($stmtPartner, "ssssi", $language, $proficiencyLevel, $sessionDuration, $preferredSchedule, $requestID);
+    
+    // Execute both update queries
+    $learnerUpdateResult = mysqli_stmt_execute($stmtLearner);
+    $partnerUpdateResult = mysqli_stmt_execute($stmtPartner);
+    
+    if ($learnerUpdateResult && $partnerUpdateResult) {
         // Redirect to RequestsList.php after successful update
         header("Location: RequestsList.php");
         exit(); // Ensure script execution stops after redirection
@@ -66,11 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// Close connection
+mysqli_close($conn);
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -174,14 +192,12 @@ function validateForm() {
 <form action="editrequest.php?request_id=<?php echo $requestID; ?>" method="post" class="php-email-form">
     <div class="row">
         <div class="form-group">
-            <label for="lang">Language</label>
-            <select class="form-control" name="language" id="lang" required>
-                <option value="<?php echo htmlspecialchars($language); ?>"><?php echo htmlspecialchars($language); ?></option>
-                <option value="Arabic">Arabic</option>
-                <option value="English">English</option>
-                <option value="Français">Français</option>
-                <option value="Español">Español</option>
-            </select>
+        <label for="language">Language:</label>
+                            <select class="form-control" id="lang" name="language">
+                                <?php foreach ($languages as $lang) : ?>
+                                    <option value="<?php echo $lang; ?>" <?php if ($language === $lang) echo "selected"; ?>><?php echo $lang; ?></option>
+                                <?php endforeach; ?>
+                            </select>
         </div>
         <div class="form-group">
             <label for="level">Proficiency Level</label>
@@ -193,17 +209,17 @@ function validateForm() {
             </select>
         </div>
         <div class="form-group">
-            <label for="duration">Session Duration</label>
-            <select class="form-control" name="duration" id="duration" required>
-                <option value="<?php echo htmlspecialchars($sessionDuration); ?>"><?php echo htmlspecialchars($sessionDuration); ?> hours</option>
-                <option value="1">1 hour</option>
-                <option value="2">2 hours</option>
-                <option value="3">3 hours</option>
-                <option value="4">4 hours</option>
-                <option value="5">5 hours</option>
-                <option value="6">6 hours</option>
-            </select>
-        </div>
+                            <label for="duration">Session Duration</label>
+                            <select class="form-control" name="duration" id="duration" required>
+                                <option value="<?php echo htmlspecialchars($sessionDuration); ?>"><?php echo htmlspecialchars($sessionDuration); ?> hours</option>
+                                <option value="1">1 hour</option>
+                                <option value="2">2 hours</option>
+                                <option value="3">3 hours</option>
+                                <option value="4">4 hours</option>
+                                <option value="5">5 hours</option>
+                                <option value="6">6 hours</option>
+                            </select>
+                        </div>
         <div class="form-group">
             <label for="preferred_schedule">Preferred Schedule</label>
             <input type="datetime-local" class="form-control" name="preferred_schedule" id="preferred_schedule" value="<?php echo htmlspecialchars($preferredSchedule); ?>" required>
