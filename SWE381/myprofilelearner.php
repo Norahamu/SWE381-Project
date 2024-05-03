@@ -15,26 +15,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $firstName = $connection->real_escape_string($_POST['first_name']); 
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
-  $password = $_POST['password']; // Assuming the password is not hashed for simplicity 
+  $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
+  $photo = $_POST['photo'];
  
- 
- // Handle photo upload
-  $target_file = null;  
-  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) { 
-    $fileTmpPath = $_FILES['photo']['tmp_name']; 
-    $fileName = $_FILES['photo']['name']; 
-    $target_dir = "assets/img/"; 
-    $fileExt = pathinfo($fileName, PATHINFO_EXTENSION); 
-    $newFileName = $firstName . $lastName . "." . $fileExt; 
-    $target_file = $target_dir . $newFileName; 
- 
-    if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) { 
-      echo "Sorry, there was an error uploading your file."; 
-      exit; 
-    } 
-  } 
+  $target_file = "assets/img/OIP.jpg";
+  // Check if file is uploaded
+  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+      $fileTmpPath = $_FILES['photo']['tmp_name'];
+      $fileName = $_FILES['photo']['name'];
+      $photo = "assets/img/";
+      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+      $newFileName = $firstName . $lastName . "." . $fileExt;
+      $target_file = $photo . $newFileName;
+  
+      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+          echo "Sorry, there was an error uploading your file.";
+          exit;
+      }
+  }
  
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
@@ -46,7 +46,7 @@ if ($result->num_rows > 0) {
 } else {
      //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
  
   if ($stmt->execute()) {
     // Store success message in session variable
@@ -149,29 +149,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 <body> 
   <!-- ======= Header ======= --> 
   <header id="header" class="fixed-top header-inner-pages"> 
-    <div class="container d-flex align-items-center"> 
-      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" 
-          class="img-fluid"></a> 
-    </div> 
-    <nav id="navbar" class="navbar"> 
-      <ul> 
-        <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-                
-      </ul> 
- 
-    </nav> 
-  </header> 
+  <div class="container d-flex align-items-center"> 
+    <a href="index.html" class="logo me-auto">
+    
+    </a> 
+  </div> 
+  <nav id="navbar" class="navbar"> 
+    <ul> 
+      <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+      <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+      <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+      <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+      <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+      <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+    </ul> 
+  </nav> 
+</header> 
   <!-- End Header --> 
   \ 
   <section id="signuplearner" class="signuplearner section-bg"> 
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
         <h2>My Profile</h2> 
+        <?php 
+      if ($photo == null) {
+                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
+                        } else {
+                            echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
+                        }
+                        ?>
       </div> 
       <div class="row"> 
  
@@ -203,7 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             </div> 
             <div class="form-group"> 
               <label>Upload Photo</label> 
-              <input type="file" class="form-control" name="photo" id="photo"> 
+              <input type="file" class="form-control" name="photo" id="photo" > 
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 

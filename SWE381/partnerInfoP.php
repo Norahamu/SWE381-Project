@@ -181,7 +181,7 @@
                             $sql5 = "SELECT * FROM learners WHERE learner_id = '$learnerid'";
                             $result5 = mysqli_query($connection, $sql5);
                             
-                             if ($review!= null && $review!= ""){
+                            
                             echo" 
                  <div class='review'>
 
@@ -210,7 +210,7 @@
                             echo" <div class='learner-review'>
                             <p class ='Aleen'>" . $review . "</p>
                         </div> <!--learner review-->
-                        </div> <!-- review1-->";}
+                        </div> <!-- review1-->";
                         }
                     }
                 }
