@@ -62,12 +62,12 @@ if (!$result) {
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
-    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
-    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
-    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>
 
     </nav>
@@ -120,12 +120,12 @@ if (!$result) {
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.html">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.html">Language Learning Requests</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="PartnersList.html">Partner List</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.html">Review my partner</a></li>
+               <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
+                           <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
