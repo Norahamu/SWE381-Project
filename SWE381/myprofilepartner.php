@@ -2,8 +2,7 @@
 session_start(); 
 
 // Define variables
-$email = "";
-$connection = null;
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") { 
   $servername = "localhost"; 
@@ -48,7 +47,7 @@ if (isset($_POST['languages'])) {
 
 
 
-  }
+  
 
  
 
@@ -67,7 +66,7 @@ if (isset($_POST['languages'])) {
       exit; 
     } 
   } 
-// Check if the provided email already exists for another user
+
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
 $result = $connection->query($checkEmailQuery);
@@ -94,7 +93,7 @@ if ($result->num_rows > 0) {
  
   $connection->close(); 
 } 
-
+}
 
 
 

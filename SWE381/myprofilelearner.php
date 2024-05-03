@@ -20,9 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
  
  
- 
-  $target_file = null; 
-  // Check if file is uploaded 
+ // Handle photo upload
+  $target_file = null;  
   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) { 
     $fileTmpPath = $_FILES['photo']['tmp_name']; 
     $fileName = $_FILES['photo']['name']; 
