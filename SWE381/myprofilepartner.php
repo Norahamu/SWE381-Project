@@ -79,14 +79,14 @@ if ($result->num_rows > 0) {
   $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
   $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
 
+  if ($stmt->execute()) {
+    // Store success message in session variable
+    $_SESSION['profile_updated'] = true;
+} else {
+    echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+}
 
-  if ($stmt->execute()) { 
-    echo "<div class='success-message'>Profile updated successfully!</div>"; 
-  } else { 
-    echo "<div class='error-message'>Error: " . $stmt->error . "</div>"; 
-  } 
- 
-  $stmt->close(); 
+$stmt->close();
 
 
  
@@ -204,6 +204,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 </head> 
  
 <body> 
+
+<?php 
+if (isset($_SESSION['profile_updated']) && $_SESSION['profile_updated']) {
+    echo "<script>alert('Profile updated successfully!');</script>";
+    unset($_SESSION['profile_updated']); // Unset session variable after displaying the message
+}
+?>
   <!-- ======= Header ======= --> 
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
