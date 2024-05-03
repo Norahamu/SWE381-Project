@@ -202,17 +202,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="password" id="password" minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$"  > 
             </div> 
             <div class="form-group"> 
-  <label>Upload Photo</label> 
-  <input type="text" class="form-control" id="photoPath" readonly value="<?php echo $photo; ?>">
-  <div class="input-group">
-    <span class="input-group-btn">
-      <span class="btn btn-primary btn-file">
-        Browse… <input type="file" id="photoInput" name="photo" onchange="displayFileName(this);">
-      </span>
-    </span>
-  </div>
-</div>
-
+              <label>Upload Photo</label> 
+              <input type="file" class="form-control" name="photo" id="photo" value="<?php echo htmlspecialchars($target_file); ?>"> 
+            </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
               <input type="text" class="form-control"  value="<?php echo htmlspecialchars($city); ?>"name="city" id="city" >
