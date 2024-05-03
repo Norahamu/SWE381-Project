@@ -273,10 +273,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
                   </div>
               </div>
           </div>  
-            <div class="form-group">
-              <label>Upload Photo</label>
-              <input type="file" class="form-control" name="photo" id="photo" >
-            </div>
+          <div class="form-group"> 
+  <label>Upload Photo</label> 
+  <input type="file" class="form-control" name="photo" id="photoInput"> 
+  <span id="photoPath"></span>
+</div> 
+
+<script>
+document.getElementById('photoInput').addEventListener('change', function() {
+  var fileName = this.value.split('\\').pop(); // Get the file name without the path
+  document.getElementById('photoPath').textContent = fileName;
+});
+</script> 
+
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
