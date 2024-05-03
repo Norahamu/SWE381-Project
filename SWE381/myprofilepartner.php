@@ -374,17 +374,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 <label class="required">Price per session</label>
 <input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="PricePerSession" id="PricePerSession" min="50" step="1" >
         </div>
-        <div class="text-center" style="display: flex; justify-content: space-between;">
+       <div class="text-center" style="display: flex; justify-content: space-between;">
         <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
+        <!-- Separate form for deleting account -->
+<form id="delete-account-form" action="#" method="post">
+    <div class="text-center">
+        <button type="button" onclick="confirmDelete()" style="background-color: red;">Delete my account</button>
+    </div>
+</form>
     </div>
 </form>
 
-<!-- Separate form for deleting account -->
-<form id="delete-account-form" action="#" method="post">
-    <div class="text-center">
-        <button type="button" onclick="confirmDelete()" style="background-color: red; border: none; padding: 10px 20px; color: white; cursor: pointer;">Delete my account</button>
-    </div>
-</form>
+
 
 <script>
     function confirmDelete() {
@@ -396,7 +397,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 </script>
       </div>
     </div>
-    
+    </form>
     
         </div> 
       </div> 
