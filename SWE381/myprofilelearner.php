@@ -151,8 +151,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <header id="header" class="fixed-top header-inner-pages"> 
   <div class="container d-flex align-items-center"> 
     <a href="index.html" class="logo me-auto">
-      <!-- Assuming $photo contains the path to the user's profile image -->
-      <img src="<?php echo htmlspecialchars($photo); ?>" alt="User Profile Image" class="img-fluid profile-image">
+    <?php 
+      if ($photo == null) {
+                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
+                        } else {
+                            echo "<img class = 'personal' src='" . $target_dir . "' width ='90' height= '80' alt='personal'>";
+                        }
+                        ?>
     </a> 
   </div> 
   <nav id="navbar" class="navbar"> 
