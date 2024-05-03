@@ -378,9 +378,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
         <!-- Separate form for deleting account -->
 <form id="delete-account-form" action="#" method="post">
-    <div class="text-center">
+   
         <button type="button"  name="delete_account" onclick="confirmDelete()" style="background-color: red;">Delete my account</button>
-    </div>
+    
 </form>
     </div>
 </form>
