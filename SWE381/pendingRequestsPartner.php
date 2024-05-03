@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
@@ -10,7 +12,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id =  123456790;
+if(isset($_SESSION['partner_id'])){
+    $partner_id = $_SESSION['partner_id'];
 
 $query = "SELECT L.first_name AS learner_first_name, 
                  L.last_name AS learner_last_name, 
@@ -28,6 +31,7 @@ $result = mysqli_query($conn, $query);
 
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
+}
 }
 ?>
 
@@ -62,7 +66,6 @@ if (!$result) {
 <script>
 $(document).ready(function(){
     $("#button2").click(function() {
-        console.log("Button clicked");
         var learnerId = $(this).data('learner-id');
         var requestID = $(this).data('req-id');
 
@@ -72,8 +75,8 @@ $(document).ready(function(){
             data: { LID: learnerId, REQID: requestID },
             success: function(response) {
                 if (response.trim() === "success") {
-                    alert("Request declined successfully");
                     window.location.reload();
+                    alert("Request declined successfully");
                 } else {
                     console.error("Error declining request:", response);
                 }
@@ -104,7 +107,6 @@ $("#button1").click(function(){
 
     // Check for overlapping sessions before accepting the request
     $.getJSON("partnerSessions.php?PID=" + partnerId, function(response) {
-        console.log("Button1 after partnerSessions");
     }).done(function(response) {
         var overlap = false;
         response.forEach(function(session) {
@@ -118,29 +120,15 @@ $("#button1").click(function(){
             var requested_start = new Date(RSch);
             var requested_end = new Date(requested_start.getTime() + RDur * 3600000); // Convert hours to milliseconds
             
-            console.log("session_date:", session.session_date);
-    		console.log("session_time:", session.session_time);
-    		console.log("session_duration:", session.session_duration);
-            console.log("session_start");
-            console.log(session_start);
-            console.log("session_end");
-            console.log(session_end);
-            console.log("requested_start");
-            console.log(requested_start);
-            console.log("requested_end");
-            console.log(requested_end);
-
             // Check for overlap between session and requested time
             if (requested_start < session_end && requested_end > session_start) {
                 overlap = true;
-                console.log("Sessions overlap");
-                // You might want to break the loop here if you only need to check for any overlap
+                break;
             }
         });
 
         // After looping through all sessions, check if there was any overlap
         if (!overlap) {
-            console.log("no overlap");
             $.get("acceptRequest.php", { 
                 LID: learnerID, 
                 PID: partnerId,
@@ -149,7 +137,6 @@ $("#button1").click(function(){
                 reqTime: requTime, 
                 reqDuration: RDur 
             }, function(response) {
-                console.log(response); // Log the response to see its structure
                 try {
                     var jsonResponse = JSON.parse(response); // Parse JSON response
                     if (jsonResponse.success) {
@@ -172,9 +159,6 @@ $("#button1").click(function(){
         }
     });
 });
-    
-    
-
 
 });
 
@@ -219,7 +203,9 @@ $("#button1").click(function(){
 
 <div id="site">
             <?php        
-          
+if (!isset($result) || mysqli_num_rows($result) == 0) {
+ 	echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+} else {          
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
@@ -234,10 +220,11 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         echo '</div>';
     }
+    
 
     echo "</div>";
 }
-
+}
 ?>
       </div>
     </section>

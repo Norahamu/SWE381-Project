@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
@@ -10,7 +12,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id = 123456792;
+if(isset($_SESSION['learner_id'])){
+    $partner_id = $_SESSION['partner_id'];
 
 $query1 = "SELECT L.first_name AS learner_first_name, 
                  L.last_name AS learner_last_name, 
@@ -29,6 +32,7 @@ $result = mysqli_query($conn, $query1);
 
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
+}
 }
 ?>
 
@@ -64,20 +68,18 @@ if (!$result) {
 <script>
 $(document).ready(function(){
     $("#button2").click(function() {
-        console.log("Button clicked");
         var learnerId = $(this).data('learner-id');
         var requestID = $(this).data('req-id');
         var partnerId = $(this).data('partner-id');
-        console.log(requestID);
 
         $.ajax({
             url: "declineRequest.php",
             method: "POST",
-            data: { LID: learnerId, REQID: requestID , PID:partnerId },
+            data: { LID: learnerId, REQID: requestID , PID: partnerId },
             success: function(response) {
                 if (response.trim() === "success") {
                     window.location.reload();
-                    console.log("Request declined successfully");
+                    alert("The Request Declined successfully!");
                 } else {
                     console.error("Error declining request:", response);
                 }
@@ -108,7 +110,6 @@ $("#button1").click(function(){
 
     // Check for overlapping sessions before accepting the request
     $.getJSON("partnerSessions.php?PID=" + partnerId, function(response) {
-        console.log("Button1 after partnerSessions");
     }).done(function(response) {
         var overlap = false;
         response.forEach(function(session) {
@@ -126,7 +127,6 @@ $("#button1").click(function(){
             // Check for overlap between session and requested time
             if (requested_start < session_end && requested_end > session_start) {
                 overlap = true;
-                console.log("Sessions overlap");
                 // You might want to break the loop here if you only need to check for any overlap
             }
         });
@@ -142,7 +142,6 @@ $("#button1").click(function(){
                 reqTime: requTime, 
                 reqDuration: RDur 
             }, function(response) {
-                console.log(response); // Log the response to see its structure
                 try {
                     var jsonResponse = JSON.parse(response); // Parse JSON response
                     if (jsonResponse.success) {
@@ -212,7 +211,9 @@ $("#button1").click(function(){
 
 <div id="site">
   <?php        
-          
+if (!isset($result) || mysqli_num_rows($result) == 0) {
+    echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+} else {          
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
@@ -225,15 +226,13 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
         echo '</div>';
     }
+ }
 
     echo "</div>";
 }
 
 ?>
-
-
-
-          
+   
 
       </div>
     </section>
