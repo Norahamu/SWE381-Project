@@ -286,10 +286,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
         <span>Arabic</span>
     </label>
     <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="" >Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if ($languages[0] === 'Arabic' && $ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if ($languages[0] === 'Arabic' && $ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if ($languages[0] === 'Arabic' && $ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 
