@@ -78,7 +78,7 @@ if ($result->num_rows > 0) {
 } else {
   // UPDATE
   $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?,cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-  $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $photo,  $location,$education, $experience, $pricePerSession, $age, $gender, $culturalKnowledge,  $_SESSION['partner_id']);
+  $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $photo,  $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
 
   if ($stmt->execute()) {
       // Store success message in session variable
