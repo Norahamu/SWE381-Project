@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $language = $_POST['language'];
     $level = $_POST['level'];
     $sessionDuration = $_POST['sessionDuration'];
-    $requestDate = date('Y-m-d H:i:s'); // Get the current date and time
+    $preferredSchedule = $_POST['preferred_schedule']; // Replaced 'RequestDate' with 'preferred_schedule'
     $status = 'Pending'; // Status could be set to 'Pending' by default, adjust as needed
 
     // For simplicity, let's assume LearnerID and PartnerID are provided via session or some other means
@@ -25,8 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $partnerID = 1; // Replace with the actual partner's ID
 
     // Insert data into requests_learner table
-    $sql = "INSERT INTO requests_learner (LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, RequestDate, Status)
-    VALUES ('$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$requestDate', '$status')";
+    $sql = "INSERT INTO requests_learner (LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
+    VALUES ('$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
 
     if ($conn->query($sql) === TRUE) {
         echo "New record created successfully for learner";
@@ -35,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert data into requests_partner table
-    $sql = "INSERT INTO requests_partner (PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, RequestDate, Status)
-    VALUES ('$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$requestDate', '$status')";
+    $sql = "INSERT INTO requests_partner (PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
+    VALUES ('$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
 
     if ($conn->query($sql) === TRUE) {
         echo "New record created successfully for partner";
@@ -62,39 +62,54 @@ mysqli_close($conn);
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Find the form and submit button
-            const form = document.getElementById("languageForm");
-            const submitButton = document.getElementById("submitButton");
+    function validateForm() {
+    const language = document.getElementById("lang").value;
+    const level = document.getElementById("level").value;
+    const sessionDuration = document.getElementById("sessionDuration").value;
+    const preferredSchedule = document.getElementById("preferred_schedule").value;
 
-            // Add event listener to the submit button
-            submitButton.addEventListener("click", function(event) {
-                // Prevent default form submission
-                event.preventDefault();
+    // Regular expression to match the format YYYY-MM-DDTHH:MM
+    const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
 
-                // Serialize form data
-                const formData = new FormData(form);
+    if (language === "" || level === "" || sessionDuration === "" || preferredSchedule === "") {
+        alert("Please fill out all fields.");
+        return false;
+    }
 
-                // Submit the form data using fetch API
-                fetch("submit_request.php", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Redirect to RequestsList.php after successful submission
-                        window.location.href = "RequestsList.php";
-                    } else {
-                        console.error("Error submitting form:", response.statusText);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-            });
-        });
-    </script>
+    if (!dateTimeRegex.test(preferredSchedule)) {
+        alert("Invalid Date and Time Format. Please enter the date and time in the format YYYY-MM-DDTHH:MM.");
+        return false;
+    }
+
+    // Additional validation for the preferredSchedule
+    const dateParts = preferredSchedule.split("T")[0].split("-");
+    const timeParts = preferredSchedule.split("T")[1].split(":");
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10);
+    const day = parseInt(dateParts[2], 10);
+    const hour = parseInt(timeParts[0], 10);
+    const minute = parseInt(timeParts[1], 10);
+
+    // Detailed check for valid date ranges
+    const dayObj = new Date(year, month - 1, day, hour, minute);
+
+    if (dayObj.getFullYear() !== year || dayObj.getMonth() + 1 !== month || dayObj.getDate() !== day ||
+        dayObj.getHours() !== hour || dayObj.getMinutes() !== minute) {
+        alert("Invalid Date or Time range detected. Please correct and submit again.");
+        return false;
+    }
+
+    return true;
+}
+
+</script>
+
+
+       
+
+
 </head>
 <body>
 <header id="header" class="fixed-top header-inner-pages">
@@ -125,26 +140,48 @@ mysqli_close($conn);
             <div class="col-lg-12 mt-5 mt-lg-0 d-flex align-items-stretch">
                 <form action="" method="post" class="php-email-form" id="languageForm">
                     <div class="row">
-                        <div class="form-group">
+                    
+                    <div class="form-group">
                             <label for="lang">Language</label>
-                            <input type="text" class="form-control" placeholder="Enter the language" name="language"
-                                   id="lang" required="">
+                            <select class="form-control" name="language" id="lang" required="">
+                                <option value="" disabled selected>Select Language</option>
+                                <option value="Arabic">Arabic</option>
+                                <option value="English">English</option>
+                                <option value="Français">Français</option>
+                                <option value="Español">Español</option>
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label for="level">Proficiency Level</label>
-                            <input type="text" class="form-control" placeholder="Enter your proficiency level"
-                                   name="level" id="level" required="">
-                        </div>
-                        <div class="form-group">
-                            <label for="sessionDuration">Session Duration</label>
-                            <input type="text" class="form-control" placeholder="Enter the session duration"
-                                   name="sessionDuration" id="sessionDuration" required="">
-                        </div>
+
+                    <div class="form-group">
+                        <label for="level">Proficiency Level</label>
+                        <select class="form-control" name="level" id="level" required="">
+                            <option value="" disabled selected>Select Proficiency Level</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
                     </div>
-                    <p>Preferred Schedule</p>
-                    <input type="datetime-local" name="preferredSchedule">
+
+                    <div class="form-group">
+                        <label for="sessionDuration">Session Duration</label>
+                        <select class="form-control" name="sessionDuration" id="sessionDuration" required="">
+                            <option value="" disabled selected>Select Session Duration</option>
+                            <option value="1">1 hour</option>
+                            <option value="2">2 hours</option>
+                            <option value="3">3 hours</option>
+                            <option value="4">4 hours</option>
+                            <option value="5">5 hours</option>
+                            <option value="6">6 hours</option>
+                        </select>
+                         <div class="form-group">
+                                <label for="preferred_schedule">Preferred Schedule</label> <!-- Changed label text to 'Preferred Schedule' -->
+                                <input type="datetime-local" class="form-control" name="preferred_schedule" id="preferred_schedule" placeholder="Preferred Schedule" required> <!-- Changed id and placeholder -->
+                        </div>
+
+                   
+
                     <div class="text-center">
-                        <button id="submitButton" class="btn-sign" type="submit">Post</button>
+                        <button id="submitButton" type="submit">Post</button>
                     </div>
                 </form>
             </div>
@@ -152,6 +189,8 @@ mysqli_close($conn);
     </div>
 </section>
 
+
+ <!-- ======= Footer ======= -->
 <footer id="footer">
     <div class="footer-top">
         <div class="container">
@@ -199,3 +238,5 @@ mysqli_close($conn);
 </footer>
 </body>
 </html>
+
+
