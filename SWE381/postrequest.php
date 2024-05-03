@@ -20,9 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $preferredSchedule = $_POST['preferred_schedule']; // Replaced 'RequestDate' with 'preferred_schedule'
     $status = 'Pending'; // Status could be set to 'Pending' by default, adjust as needed
 
-    // For simplicity, let's assume LearnerID and PartnerID are provided via session or some other means
+    // For simplicity, let's assume LearnerID is provided via session or some other means
     $learnerID = 1; // Replace with the actual learner's ID
-    $partnerID = 1; // Replace with the actual partner's ID
+
+    // Fetch partner_id from the partners table
+    $partnerIDQuery = "SELECT partner_id FROM partners LIMIT 1"; // Assuming you want the first partner_id
+    $result = mysqli_query($conn, $partnerIDQuery);
+    $row = mysqli_fetch_assoc($result);
+    $partnerID = $row['partner_id'];
 
     // Insert data into requests_partner table
     $sql_partner = "INSERT INTO requests_partner (PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
@@ -48,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close connection
 mysqli_close($conn);
 ?>
+
 
 
 <!DOCTYPE html>
