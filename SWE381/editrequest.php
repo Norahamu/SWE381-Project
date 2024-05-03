@@ -226,7 +226,7 @@ function validateForm() {
         </div>
     </div>
     <div class="text-center">
-        <button type="submit">Confirm Edit</button>
+        <button type="submit" class="btn-sign">Confirm Edit</button>
     </div>
 </form>
 ...

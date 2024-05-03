@@ -1,4 +1,6 @@
 <?php
+session_start(); 
+
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
@@ -19,11 +21,14 @@ $conn = mysqli_connect(DB_HOST, DB_USER, DB_PSWD, DB_NAME);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
+// Retrieve learner ID from session or wherever it's stored
+$learner_id = $_SESSION['learner_id']; // Change 'learner_id' to match your session variable name
 
-// Fetch data from requests_learner table
+/// Fetch data from requests_learner table based on learner ID
 $sql_learner = "SELECT rl.RequestID, rl.Status, p.first_name, p.last_name, p.photo 
-                FROM requests_learner rl 
-                INNER JOIN partners p ON rl.PartnerID = p.partner_id";
+FROM requests_learner rl 
+INNER JOIN partners p ON rl.PartnerID = p.partner_id
+WHERE rl.LearnerID = $learner_id"; // Modify the query to include WHERE clause
 $result_learner = mysqli_query($conn, $sql_learner);
 
 
