@@ -83,9 +83,10 @@ if (isset($_POST['languages'])) {
   
       $stmt->close();
   
-  
-  $connection->close(); 
+ 
 } 
+ 
+$connection->close();
 }
 
 
