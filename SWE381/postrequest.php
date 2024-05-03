@@ -1,28 +1,23 @@
 <?php
-
-
+session_start();
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
 DEFINE('DB_NAME', 'lingo');
 
-
 // Establish database connection
 $conn = mysqli_connect(DB_HOST, DB_USER, DB_PSWD, DB_NAME);
-
 
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-
 function generateRequestID($length = 9) {
     // Generate a random number with 9 digits
     $random_number = mt_rand(100000000, 999999999);
     return $random_number;
 }
-
 
 $requestID = generateRequestID();
 
@@ -52,13 +47,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sessionDuration = $_POST['sessionDuration'];
     $preferredSchedule = $_POST['preferred_schedule'];
     $status = 'Pending';
-    $learnerID = 1; // Assuming the learner ID is retrieved from session or elsewhere
-
+    if(isset($_SESSION['learner_id'])){
+        $learnerID = $_SESSION['learner_id'];
+    }
+   // Assuming the learner ID is retrieved from session or elsewhere
 
     // Retrieve partner ID from the query parameter
     if(isset($_GET['partnerID'])) {
         $partnerID = $_GET['partnerID'];
-
 
         // Check if the partner ID exists in the database
         $partnerCheckQuery = "SELECT COUNT(*) AS count FROM partners WHERE partner_id = '$partnerID'";
@@ -66,29 +62,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $partnerCheckRow = mysqli_fetch_assoc($partnerCheckResult);
         $partnerCount = $partnerCheckRow['count'];
 
-
         if ($partnerCount == 1) {
             // Insert data into requests_partner table
             $sql_partner = "INSERT INTO requests_partner (RequestID, PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
             VALUES ('$requestID', '$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
 
-
-            if ($conn->query($sql_partner) === TRUE) {
-                echo "New record created successfully for partner";
-            } else {
-                echo "Error: " . $sql_partner . "<br>" . $conn->error;
-            }
-
-
             // Insert data into requests_learner table
             $sql_learner = "INSERT INTO requests_learner (RequestID, LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
             VALUES ('$requestID', '$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
 
-
-            if ($conn->query($sql_learner) === TRUE) {
-                echo "New record created successfully for learner";
+            // Execute both queries
+            if ($conn->query($sql_partner) === TRUE && $conn->query($sql_learner) === TRUE) {
+                // Both queries executed successfully
+                // Redirect to RequestsList.php
+                header("Location: RequestsList.php");
+                exit(); // Ensure script execution stops after redirection
             } else {
-                echo "Error: " . $sql_learner . "<br>" . $conn->error;
+                // Error occurred in query execution
+                echo "Error: " . $conn->error;
             }
         } else {
             echo "Error: Invalid partner ID";
@@ -97,8 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: Partner ID not provided";
     }
 }
-
-
 
 // Close connection
 mysqli_close($conn);
@@ -254,7 +243,7 @@ mysqli_close($conn);
 
 
     <div class="text-center">
-        <button id="submitButton" type="submit">Post</button>
+        <button id="submitButton" class="btn-sign"type="submit">Post</button>
     </div>
 </form>
 
