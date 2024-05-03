@@ -58,7 +58,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       exit; 
     } 
   } 
- 
+// Check if the provided email already exists for another user
+$checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
+$result = $connection->query($checkEmailQuery);
+
+if ($result->num_rows > 0) {
+    // Email address is already registered for another user
+    echo "<div class='error-message'>The email address is already registered. Please use another email.</div>";
+} else {
+   
+ //UPDATE
   $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
   $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
 
@@ -75,6 +84,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
   $connection->close(); 
 } 
+}
+
+
+
+
 
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
@@ -253,7 +267,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           </div>  
             <div class="form-group">
               <label>Upload Photo</label>
-              <input type="file" class="form-control" name="photo" id="photo" value="<?php echo htmlspecialchars($target_dir); ?>">
+              <input type="file" class="form-control" name="photo" id="photo" >
             </div>
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
