@@ -4,7 +4,7 @@
         <meta charset="UTF-8"> <!-- character encoding-->
         <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings-->
         <link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
-        <title>Akram</title>
+        <title>Partner Information</title>
         <!-- icon -->
         <link href="assets/img/Lingoblue.png" rel="icon" >
 
@@ -22,7 +22,7 @@
 
         <!-- Main CSS File -->
         <link href="style.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="2css.css">
+        <link rel="stylesheet" type="text/css" href="cssPartnerInfo.css">
         <link rel="stylesheet" type="text/css" href="ratingpartnerstyle.css">
 
     </head>
@@ -34,12 +34,13 @@
             </div>
             <nav id="navbar" class="navbar">
                 <ul> 
-                    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-                    <li><a class="nav-link scrollto" href="PartnersList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+                   <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+                    
                 </ul>
 
             </nav>
@@ -58,7 +59,7 @@
                 <?php
                 $partnerID = $_GET['partnerID'];
 
-                $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+                $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
                 if (!$connection) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
@@ -176,17 +177,20 @@
                         echo "<p id='noReviews'> there is no Reviews <p>";
                     } else {
                         while ($row = mysqli_fetch_assoc($result4)) {
+                            $learnerid = $row['learner_id'];
+                            $star = $row['Rating'];
+                            $review = $row['Review'];
+                            $sql5 = "SELECT * FROM learners WHERE learner_id = '$learnerid'";
+                            $result5 = mysqli_query($connection, $sql5);
+                            
+                             if ($review!= null && $review!= ""){
                             echo" 
                  <div class='review'>
 
 
                         <div class='heading'>";
 
-                            $learnerid = $row['learner_id'];
-                            $star = $row['Rating'];
-                            $review = $row['Review'];
-                            $sql5 = "SELECT * FROM learners WHERE learner_id = '$learnerid'";
-                            $result5 = mysqli_query($connection, $sql5);
+                           
                             while ($row = mysqli_fetch_assoc($result5)) {
                                 $img = $row['photo'];
                                 $fn = $row['first_name'];
@@ -208,7 +212,7 @@
                             echo" <div class='learner-review'>
                             <p class ='Aleen'>" . $review . "</p>
                         </div> <!--learner review-->
-                    </div> <!-- review1-->";
+                        </div> <!-- review1-->";}
                         }
                     }
                 }
@@ -247,12 +251,13 @@
                         <div class="col-lg-3 col-md-6 footer-links">
                             <h4>Useful Links</h4>
                             <ul>
-                                <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner">My profile</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.html">Sessions</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.html">Language Learning Requests</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="PartnersList.html">Partner List</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.html">Review my partner</a></li>
+                                 <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
+           
                             </ul>
                         </div>
                         <div class="col-lg-3 col-md-6 footer-links">
