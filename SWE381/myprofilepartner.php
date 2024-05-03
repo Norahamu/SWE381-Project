@@ -12,19 +12,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     die("Connection failed: " . $connection->connect_error); 
   } 
 
-  // Retrieve and sanitize form data
-  $firstName = $connection->real_escape_string($_POST['first_name']); 
-  $lastName = $connection->real_escape_string($_POST['last_name']); 
-  $email = $connection->real_escape_string($_POST['email']); 
-  $password = $connection->real_escape_string($_POST['password']);  // Assuming the password is not hashed for simplicity 
+   // Retrieve and sanitize form data
+   $firstName = $connection->real_escape_string($_POST['first_name']);
+   $lastName = $connection->real_escape_string($_POST['last_name']);
+   $email = $connection->real_escape_string($_POST['email']);
+   $password = $connection->real_escape_string($_POST['password']); // Hash the password for security
+   $location = $connection->real_escape_string($_POST['location']);
+   $age = $connection->real_escape_string($_POST['age']);
+   $gender = $connection->real_escape_string($_POST['gender']);
+   $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']);
+   $education = $connection->real_escape_string($_POST['Education']);
+   $experience = $connection->real_escape_string($_POST['Experience']);
+   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
 
-  $location = $connection->real_escape_string($_POST['location']); 
-  $age = $connection->real_escape_string($_POST['age']); 
-  $gender = $connection->real_escape_string($_POST['gender']); 
-  $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']); 
-  $education = $connection->real_escape_string($_POST['Education']); 
-  $experience = $connection->real_escape_string($_POST['Experience']); 
-  $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']); 
 
  // Process proficiency levels for languages
  if (isset($_POST['languages']) && isset($_POST['ProficiencyLevel'])) {
@@ -59,8 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
   } 
  
-$stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-$stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+  $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $hashedPassword, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
 
   if ($stmt->execute()) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
