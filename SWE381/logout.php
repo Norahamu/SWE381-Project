@@ -1,14 +1,10 @@
 <?php
-// Start the session
 session_start();
 
-// Unset all session variables
-$_SESSION = array();
+$_SESSION = [];
 
-// Destroy the session
 session_destroy();
 
-// Redirect the user to the home page
 header("Location: HomePage.html");
 exit;
 ?>

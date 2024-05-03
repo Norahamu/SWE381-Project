@@ -1,47 +1,50 @@
 <?php 
 session_start(); 
- 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") { 
   $servername = "localhost"; 
   $username = "root"; 
   $dbPassword = ""; 
   $database = "lingo"; 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
- 
+
   if ($connection->connect_error) { 
     die("Connection failed: " . $connection->connect_error); 
   } 
- 
-  $firstName = $connection->real_escape_string($_POST['first_name']); 
-  $lastName = $connection->real_escape_string($_POST['last_name']); 
-  $email = $connection->real_escape_string($_POST['email']); 
-  $password = $_POST['password']; // Assuming the password is not hashed for simplicity 
-  $city = $connection->real_escape_string($_POST['city']); 
-  $location = $connection->real_escape_string($_POST['location']); 
-  $age = $connection->real_escape_string($_POST['age']); 
-  $gender = $connection->real_escape_string($_POST['gender']); 
-  $culturalKnowledge = $connection->real_escape_string($_POST['culturalKnowledge']); 
-  $education = $connection->real_escape_string($_POST['education']); 
-  $experience = $connection->real_escape_string($_POST['experience']); 
- $pricePerSession = $connection->real_escape_string($_POST['pricePerSession']); 
+
+   // Retrieve and sanitize form data
+   $firstName = $connection->real_escape_string($_POST['first_name']);
+   $lastName = $connection->real_escape_string($_POST['last_name']);
+   $email = $connection->real_escape_string($_POST['email']);
+   $password = $connection->real_escape_string($_POST['password']); // Hash the password for security
+   $location = $connection->real_escape_string($_POST['location']);
+   $age = $connection->real_escape_string($_POST['age']);
+   $gender = $connection->real_escape_string($_POST['gender']);
+   $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']);
+   $education = $connection->real_escape_string($_POST['Education']);
+   $experience = $connection->real_escape_string($_POST['Experience']);
+   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
+
+
+ // Process proficiency levels for languages
+ if (isset($_POST['languages']) && isset($_POST['ProficiencyLevel'])) {
+  $languages = $_POST['languages'];
+  $ProficiencyLevel = $_POST['ProficiencyLevel'];
+
+  // Update proficiency levels in the database
+  foreach ($languages as $index => $language) {
+    $ProficiencyLevel = $connection->real_escape_string($ProficiencyLevel[$index]);
+    
+    // Perform SQL update for each language's proficiency level
+    $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$ProficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+    $connection->query($updateProficiencyQuery);
+    }
+  }
+
  
 
-   
- 
-  // If email already exists 
-  $checkEmailQuery = "SELECT email FROM learners WHERE email = ?"; 
-  $stmt = $connection->prepare($checkEmailQuery); 
-  $stmt->bind_param("s", $email); 
-  $stmt->execute(); 
-  $result = $stmt->get_result(); 
-  $stmt->close(); 
-  if ($result->num_rows > 0) { 
-    echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuppartner.html';</script>"; 
-    exit; 
-  } 
- 
-  $target_file = null; 
-  // Check if file is uploaded 
+  // Handle photo upload
+  $target_file = null;
   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) { 
     $fileTmpPath = $_FILES['photo']['tmp_name']; 
     $fileName = $_FILES['photo']['name']; 
@@ -49,17 +52,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fileExt = pathinfo($fileName, PATHINFO_EXTENSION); 
     $newFileName = $firstName . $lastName . "." . $fileExt; 
     $target_file = $target_dir . $newFileName; 
- 
+
     if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) { 
       echo "Sorry, there was an error uploading your file."; 
       exit; 
     } 
   } 
+ 
+  $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+  $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
 
- 
-  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, cultural_knowledge=?, cultural_knowledge=?, education=?, experience=?, pricePerSession=?,age=?,gender=?  WHERE partner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['user_id']); 
- 
+
   if ($stmt->execute()) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
   } else { 
@@ -67,59 +70,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } 
  
   $stmt->close(); 
-} 
+
+
  
+  $connection->close(); 
+} 
+
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
 $username = "root"; 
 $dbPassword = ""; 
 $database = "lingo"; 
 $connection = new mysqli($servername, $username, $dbPassword, $database); 
- 
-$stmtFetch = $connection->prepare("SELECT * FROM learners WHERE learner_id = ?"); 
-$stmtFetch->bind_param("i", $_SESSION['learner_id']); 
+
+$stmtFetch = $connection->prepare("SELECT * FROM partners WHERE partner_id = ?");
+$stmtFetch->bind_param("i", $_SESSION['partner_id']); 
 $stmtFetch->execute(); 
 $resultFetch = $stmtFetch->get_result(); 
- 
-// Check if user exists 
+
+// Fetch user data
 if ($resultFetch->num_rows > 0) { 
-  // Fetch user data 
   $userData = $resultFetch->fetch_assoc(); 
- 
+
+  
+  // Fetch languages and proficiency levels for the partner
+  $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
+  $stmtLanguages->bind_param("i", $_SESSION['partner_id']); 
+  $stmtLanguages->execute(); 
+  $resultLanguages = $stmtLanguages->get_result(); 
+
+  $languages = array();
+  $ProficiencyLevel= array();
+
+  // Fetch languages and proficiency levels
+  while ($row = $resultLanguages->fetch_assoc()) {
+    $languages[] = $row['language'];
+    $ProficiencyLevel[] = $row['ProficiencyLevel'];
+  }
+
+// Check if a language is selected for the user
+function isLanguageSelected($language, $userLanguages) {
+  return in_array($language, $userLanguages);
+}
   // Assign user data to variables for pre-filling the form 
   $firstName = $userData['first_name']; 
   $lastName = $userData['last_name']; 
   $email = $userData['email']; 
-  $password = $userData['password']; // Assuming the password is stored in the database 
+  $password = $userData['password']; 
   $location = $userData['location']; 
   $photo = $userData['photo']; 
   $age = $userData['age']; 
-   $gender = $userData['gender']; 
-   $culturalKnowledge = $userData['culturalKnowledge']; 
-    $education = $userData['education'];
-    $photo = $userData['photo'];
-    $experience = $userData['experience'];
- $pricePerSession = $userData['pricePerSession'];
- 
+  $gender = $userData['gender']; 
+  $culturalKnowledge = $userData['cultural_knowledge']; 
+  $education = $userData['Education']; 
+  $experience = $userData['Experience']; 
+  $pricePerSession = $userData['PricePerSession']; 
+  
 } else { 
-  // User not found, handle the error (e.g., redirect to an error page) 
-  // die("User not found."); 
+  // User not found, handle the error
 } 
- 
-// Close the prepared statement and database connection 
+
 $stmtFetch->close(); 
 $connection->close(); 
- 
+
 // Handle form submission (delete profile) 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
-  // Delete user from database 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?"); 
-  $stmtDelete->bind_param("i", $_SESSION['user_id']); 
+  $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
+  $stmtDelete->bind_param("i", $_SESSION['partner_id']); 
   if ($stmtDelete->execute()) { 
-    // User deleted successfully, redirect to sign out or any other page 
-    // For example: 
-    header("Location: signuplearner.php"); 
+    header("Location: signuppartner.html"); 
     exit(); 
   } else { 
     echo "<div class='error-message'>Error: " .
@@ -128,9 +148,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   $stmtDelete->close(); 
   $connection->close(); 
 } 
- 
+
 ?> 
- 
+
 <!DOCTYPE html> 
 <html lang="en"> 
  
@@ -141,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <link rel="stylesheet" type="text/css" href="style.css" media="screen"> 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
  
-  <title>My Profile Learner</title> 
+  <title>My Profile Partner</title> 
   <!-- icon --> 
   <link href="assets/img/Lingoblue.png" rel="icon"> 
  
@@ -164,25 +184,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
 <body> 
   <!-- ======= Header ======= --> 
-  <header id="header" class="fixed-top header-inner-pages"> 
-    <div class="container d-flex align-items-center"> 
-      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" 
-          class="img-fluid"></a> 
-    </div> 
-    <nav id="navbar" class="navbar"> 
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center">
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+    </div>
+    <nav id="navbar" class="navbar">
       <ul> 
-        <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li> 
-        <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li> 
-        <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li> 
-        <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li> 
-        <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li> 
-        <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li> 
-      </ul> 
- 
-    </nav> 
-  </header> 
+    <li><a class="nav-link scrollto " href="HomePage.html">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
+    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
+    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+      </ul>
+
+    </nav>
+  </header>
   <!-- End Header --> 
-  \ 
+  
   <section id="signuplearner" class="signuplearner section-bg"> 
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
@@ -191,40 +210,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <div class="row"> 
  
         <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
-          <form action="#" method="post" class="php-email-form"> 
+      
 
 
 
-  <form action="signupPartner.php" method="post" class="php-email-form">
+  <form action="#" method="post" class="php-email-form"> 
           <div class="row">
             <div class="form-group col-md-6">
-              <label class="required">First Name</label>
-              <input type="text" placeholder="Enter your first name" name="fname" class="form-control" id="fname" required>
+                   <label class="required">First Name</label>
+              <input type="text" value="<?php echo htmlspecialchars($firstName); ?>" name="first_name" class="form-control" id="fname">
             </div>
             <div class="form-group col-md-6">
               <label class="required">Last Name</label>
-              <input type="text" placeholder="Enter your last name" name="lname" class="form-control" id="lname" required>
+              <input type="text" value="<?php echo htmlspecialchars($lastName); ?>" name="last_name" class="form-control" id="lname" >
             </div>
             <div class="form-group col-md-6">
               <label class="required">Age</label>
-              <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" required min="18" title="You must be at least 18 years old to register.">
+              <input type="number" class="form-control" id="age" name="age" value="<?php echo htmlspecialchars($age); ?>">
             </div>
             <div class="form-group col-md-6">
-    <label class="required">Gender</label>
-    <select name="gender" class="form-control">
-        <option value="">Select Gender</option>
-        <option value="female">Female</option>
-        <option value="male">Male</option>
-    </select>
+  <label class="required">Gender</label>
+  <select name="gender" class="form-control">
+    <option value="">Select Gender</option>
+    <option value="female" <?php if ($gender === 'female') echo 'selected'; ?>>Female</option>
+    <option value="male" <?php if ($gender === 'male') echo 'selected'; ?>>Male</option>
+  </select>
 </div>
             <div class="form-group">
               <label class="required">Email</label>
-              <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required>
+              <input type="email" class="form-control"value="<?php echo htmlspecialchars($email); ?>" name="email" id="email" >
             </div>
             <div class="form-group">
               <label for="psw" class="required">Password</label>
               <div class="input-group">
-                  <input type="password" class="form-control" id="psw" name="psw" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character.">
+                  <input type="password" class="form-control" name="password" id="password" value="<?php echo htmlspecialchars($password); ?>"minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" >
                   <div class="input-group-append">
                       <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                           <i class="fas fa-eye"></i>
@@ -241,52 +260,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
   <div class="language-selection">
     <label class="cbx" for="cbx-46-arabic">
-      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" />
+      <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
       <span>Arabic</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" disabled>
-      <option value="">Select proficiency</option>
-      <option value="Beginner">Beginner</option>
-      <option value="Intermediate">Intermediate</option>
-      <option value="Advanced">Advanced</option>
-    </select>
-  </div>
-  <div class="language-selection">
+    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
+    <?php
+    // Set the default option to "Select proficiency" if the language is not selected
+    $selected = ($ProficiencyLevel[0] === 'Select proficiency') ? 'selected' : '';
+    ?>
+    <option value="" <?php echo $selected; ?>>Select proficiency</option>
+    <option value="Beginner" <?php if ($ProficiencyLevel[0] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+    <option value="Intermediate" <?php if ($ProficiencyLevel[0] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+    <option value="Advanced" <?php if ($ProficiencyLevel[0] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+</select>
+
+</div>
+
+<div class="language-selection">
     <label class="cbx" for="cbx-46-english">
-      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" />
+      <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
       <span>English</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" disabled>
-      <option value="">Select proficiency</option>
-      <option value="Beginner">Beginner</option>
-      <option value="Intermediate">Intermediate</option>
-      <option value="Advanced">Advanced</option>
-    </select>
-  </div>
-  <div class="language-selection">
+    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
+    <?php
+    // Set the default option to "Select proficiency" if the language is not selected
+    $selected = ($ProficiencyLevel[1] === 'Select proficiency') ? 'selected' : '';
+    ?>
+    <option value="" <?php echo $selected; ?>>Select proficiency</option>
+    <option value="Beginner" <?php if ($ProficiencyLevel[1] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+    <option value="Intermediate" <?php if ($ProficiencyLevel[1] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+    <option value="Advanced" <?php if ($ProficiencyLevel[1] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+</select>
+
+</div>
+
+<div class="language-selection">
     <label class="cbx" for="cbx-46-french">
-      <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" />
-      <span>French</span>
+        <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" <?php if (isLanguageSelected("French", $languages)) echo "checked"; ?> />
+        <span>French</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" disabled>
-      <option value="">Select proficiency</option>
-      <option value="Beginner">Beginner</option>
-      <option value="Intermediate">Intermediate</option>
-      <option value="Advanced">Advanced</option>
-    </select>
-  </div>
+    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
+    <?php
+    // Set the default option to "Select proficiency" if the language is not selected
+    $selected = ($ProficiencyLevel[2] === 'Select proficiency') ? 'selected' : '';
+    ?>
+    <option value="" <?php echo $selected; ?>>Select proficiency</option>
+    <option value="Beginner" <?php if ($ProficiencyLevel[2] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+    <option value="Intermediate" <?php if ($ProficiencyLevel[2] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+    <option value="Advanced" <?php if ($ProficiencyLevel[2] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+</select>
+
+</div>
+
   <div class="language-selection">
     <label class="cbx" for="cbx-46-spanish">
-      <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" />
-      <span>Spanish</span>
+        <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" <?php if (isLanguageSelected("Spanish", $languages)) echo "checked"; ?> />
+        <span>Spanish</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" disabled>
-      <option value="">Select proficiency</option>
-      <option value="Beginner">Beginner</option>
-      <option value="Intermediate">Intermediate</option>
-      <option value="Advanced">Advanced</option>
-    </select>
-  </div>
+    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
+    <?php
+    // Set the default option to "Select proficiency" if the language is not selected
+    $selected = ($ProficiencyLevel[3] === 'Select proficiency') ? 'selected' : '';
+    ?>
+    <option value="" <?php echo $selected; ?>>Select proficiency</option>
+    <option value="Beginner" <?php if ($ProficiencyLevel[3] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+    <option value="Intermediate" <?php if ($ProficiencyLevel[3] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+    <option value="Advanced" <?php if ($ProficiencyLevel[3] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+</select>
+
+</div>
+
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -298,142 +341,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
           selectElement.value = '';
         }
       });
+
+      // Check initial state of checkboxes
+      let selectElement = checkbox.closest('.language-selection').querySelector('.form-control');
+      selectElement.disabled = !checkbox.checked;
     });
   });
 </script>
+
         <div class="form-group"></div>
           <label class="required">Cultural Knowledge</label>
-          <textarea class="form-control" placeholder="Enter your cultural knowledge" name="cultural_knowledge" id="cultural_knowledge" rows="5" required></textarea>       </div>
+          <textarea class="form-control"  name="cultural_knowledge" id="cultural_knowledge" rows="5"><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
-          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="eduaction" rows="5" required></textarea>
+          <textarea class="form-control"name="Education" id="Education" rows="5" ><?php echo htmlspecialchars($education); ?></textarea>
         </div>
         <div class="form-group">
           <label class="required">Experience</label>
-          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="experience" rows="5" required></textarea>
+          <textarea class="form-control"name="Experience" id="Experience" rows="5" ><?php echo htmlspecialchars($experience); ?></textarea>
         </div>
         <div class="form-group">
           <label for="location" class="required">Location</label>
-          <input type="text" name="location" class="form-control" id="location" placeholder="Enter your location" required>
+          <input type="text" name="location" class="form-control" id="location" value="<?php echo htmlspecialchars($location); ?>">
         </div>
         <div class="form-group col-md-6">
 <label class="required">Price per session</label>
-<input type="number" class="form-control" placeholder="Enter price in SAR" name="price" id="price" min="50" step="1" required>
+<input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="PricePerSession" id="PricePerSession" min="50" step="1" >
         </div>
-          <div class="text-center" style="display: flex; justify-content: space-between;"> 
-          <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button> 
- 
-              <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button> 
- 
-        </div>
+       <div class="text-center" style="display: flex; justify-content: space-between;">
+        <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
+        <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button>
+    </div>
       </div>
     </div>
     </form>
-
-
-
-
-
-
-
-           
-
-
-
-
-
-/*
-           <div class="row"> 
-              <div class="form-group col-md-6"> 
- 
-                <label class="required">First Name</label> 
-                <input type="text" name="first_name" class="form-control" id="fname" 
-                  value="<?php echo htmlspecialchars($firstName); ?>"> 
- 
-              </div> 
-              <div class="form-group col-md-6"> 
-                <label class="required">Last Name</label> 
-                <input type="text" name="last_name" class="form-control" id="lname" 
-                  value="<?php echo htmlspecialchars($lastName); ?>" > 
- 
-              </div> 
-              <div class="form-group"> 
-                <label class="required">Email</label> 
-                <input type="email" name="email" class="form-control" id="email" 
-                  value="<?php echo htmlspecialchars($email); ?>"> 
-              </div> 
-
-              <div class="form-group"> 
-                <label class="required">Password</label> 
-                <input type="password" name="password" class="form-control" id="psw" 
-                  value="<?php echo htmlspecialchars($password); ?>"> 
-              </div> 
-
-              <div class="form-group"> 
-                <label class="required">Password</label> 
-                <input type="password" name="password" class="form-control" id="psw" 
-                  value="<?php echo htmlspecialchars($password); ?>"> 
-              </div> 
-             
-   <div class="form-group"> 
-                <label class="required">Password</label> 
-                <input type="password" name="password" class="form-control" id="psw" 
-                  value="<?php echo htmlspecialchars($password); ?>"> 
-              </div> 
-
-             
-            </div> 
-         
- 
-            <div class="text-center" style="display: flex; justify-content: space-between;"> 
-              <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button> 
- 
-              <button type="submit" name="delete_account" style="background-color: red;">Delete my account</button> 
- 
-            </div> 
-          </form> 
-         */
         </div> 
       </div> 
     </div> 
   </section> 
-  <!-- ======= Footer ======= --> 
-  <footer id="footer"> 
-    <div class="footer-top"> 
-      <div class="container"> 
-        <div class="row"> 
-          <div class="col-lg-3 col-md-6 footer-contact"> 
-            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a> 
-            <p> 
-              King Saud University <br> 
-              Riyadh <br> 
-              Saudi Arabia <br><br> 
-              <strong>Email:</strong> lingo@project.com<br> 
-            </p> 
-          </div> 
-          <div class="col-lg-3 col-md-6 footer-links"> 
-            <h4>Useful Links</h4> 
-            <ul> 
-              <!-- Links here --> 
-            </ul> 
-          </div> 
-          <div class="col-lg-3 col-md-6 footer-links"> 
-            <h4>Our Social Networks</h4> 
-            <div class="social-links mt-3"> 
-              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a> 
-              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a> 
-            </div> 
-          </div> 
-        </div> 
-      </div> 
-    </div> 
-    <div class="container footer-bottom clearfix"> 
-      <div class="copyright"> 
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved 
-      </div> 
-      <div class="credits"></div> 
-    </div> 
-  </footer> 
+ <!-- ======= Footer ======= -->
+ <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <p>
+              King Saud University <br>
+              Riyadh <br>
+              Saudi Arabia <br><br>
+              <strong>Email:</strong> lingo@project.com<br>
+            </p>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+			  <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.html">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.html">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.html">Language Learning Requests</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.html">my review and rating </a></li>
+            </ul>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom clearfix">
+      <div class="copyright">
+        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits"></div>
+    </div>
+  </footer>
+
   <script> 
     // Variable to track changes 
     var changesMade = false; 

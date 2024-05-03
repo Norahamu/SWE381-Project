@@ -4,7 +4,7 @@
  <meta charset="UTF-8"> <!-- character encoding-->
  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings-->
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
-<title>Partner List</title>
+<title>Partners List</title>
    <!-- icon -->
   <link href="assets/img/Lingoblue.png" rel="icon" >
 
@@ -21,7 +21,7 @@
 
   <!-- Main CSS File -->
   <link href="style.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="newcss.css">
+  <link rel="stylesheet" type="text/css" href="cssPartnerList.css">
 
 </head>
 <body>
@@ -33,11 +33,11 @@
     <nav id="navbar" class="navbar">
       <ul> 
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
-    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
-    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
       </ul>
 
     </nav>
@@ -50,8 +50,8 @@
             <ul>
                 <li><a href="#ArabicLanguage"> Arabic</a></li>
                 <li><a href="#EnglishLanguage"> English</a></li>
-                <li><a href="#FrenshLanguage"> français</a></li>
-                <li><a href="#EspanishLanguage"> Español</a></li>
+                <li><a href="#FrenshLanguage"> French</a></li>
+                <li><a href="#EspanishLanguage"> Spanish</a></li>
 
             </ul>
         </div>
@@ -62,7 +62,7 @@
        
         <div class ="superlanguage">
         <?php
-         $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+         $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -90,13 +90,13 @@
          echo  "<h1 class = 'name'>" .$fname. " ".$lname." </h1>";
          echo "<p class = 'bio' >".$Cknowldge."</p>";
          
-         $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
-            $result3 = mysqli_query($connection, $sql3);
-            echo  " Languages I teach:";
-            while ($row2 = mysqli_fetch_assoc($result3)){
-                $lang=$row2['language'];
-                 echo  " ".$lang.",";
-            }
+         $sql3 = "SELECT language FROM partner_languages WHERE partner_id = '$pID'";
+$result3 = mysqli_query($connection, $sql3);
+$languages = [];while ($row2 = mysqli_fetch_assoc($result3)) {
+    $languages[] = $row2['language'];
+}
+$language_list = implode(", ", $languages);
+echo "Languages I teach: " . $language_list;
          echo  "<a class = 'chatMe' href='mailto:".$mail."'> for initial discussion </a>";
          echo  "<a  class = 'knowMoreAboutme' href='partnerInfo.php?partnerID=".$partnerID."'> read more!</a>";
         echo	"<a class='postreq' href='postrequest.php?partnerID=".$partnerID."'>Post language learning request</a>";
@@ -119,7 +119,7 @@
         <div class ="superlanguage">
 
              <?php
-         $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+         $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -149,13 +149,13 @@
          echo  "<h1 class = 'name'>" .$fname. " ".$lname." </h1>";
          echo "<p class = 'bio' >".$Cknowldge."</p>";
          
-         $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
-            $result3 = mysqli_query($connection, $sql3);
-            echo  "Languages I teach:";
-            while ($row2 = mysqli_fetch_assoc($result3)){
-                $lang=$row2['language'];
-                 echo  " ".$lang.",";
-            }
+         $sql3 = "SELECT language FROM partner_languages WHERE partner_id = '$pID'";
+$result3 = mysqli_query($connection, $sql3);
+$languages = [];while ($row2 = mysqli_fetch_assoc($result3)) {
+    $languages[] = $row2['language'];
+}
+$language_list = implode(", ", $languages);
+echo "Languages I teach: " . $language_list;
            
          echo  "<a class = 'chatMe' href='mailto:".$mail."'> for initial discussion </a>";
          echo  "<a  class = 'knowMoreAboutme' href='partnerInfo.php?partnerID=".$partnerID."'> read more!</a>";
@@ -169,7 +169,7 @@
 <h2 id ="FrenshLanguage" class =" LanguageTitle">French </h2>
         <div class ="superlanguage">
   <?php
-         $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+         $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -199,13 +199,13 @@
          echo  "<h1 class = 'name'>" .$fname. " ".$lname." </h1>";
          echo "<p class = 'bio' >".$Cknowldge."</p>";
          
-         $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
-            $result3 = mysqli_query($connection, $sql3);
-            echo  "Languages I teach:";
-            while ($row2 = mysqli_fetch_assoc($result3)){
-                $lang=$row2['language'];
-                 echo  " ".$lang.",";
-            }
+         $sql3 = "SELECT language FROM partner_languages WHERE partner_id = '$pID'";
+$result3 = mysqli_query($connection, $sql3);
+$languages = [];while ($row2 = mysqli_fetch_assoc($result3)) {
+    $languages[] = $row2['language'];
+}
+$language_list = implode(", ", $languages);
+echo "Languages I teach: " . $language_list;
          echo  "<a class = 'chatMe' href='mailto:".$mail."'> for initial discussion </a>";
          echo  "<a  class = 'knowMoreAboutme' href='partnerInfo.php?partnerID=".$partnerID."'> read more!</a>";
         echo	"<a class='postreq' href='postrequest.php?partnerrID=".$partnerID."'>Post language learning request</a>";
@@ -220,7 +220,7 @@
         <div class ="superlanguage">
 
             <?php
-         $connection = mysqli_connect('localhost', 'root', '', 'lingo');
+         $connection = mysqli_connect('localhost', 'root', 'root', 'lingo');
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -248,14 +248,14 @@
         }
         echo  "<h1 class = 'name'>" .$fname. " ".$lname." </h1>";
          echo "<p class = 'bio' >".$Cknowldge."</p>";
-         
-         $sql3 = "SELECT language FROM partner_languages WHERE partner_id  = '$pID'";
-            $result3 = mysqli_query($connection, $sql3);
-            echo  "Languages I teach:";
-            while ($row2 = mysqli_fetch_assoc($result3)){
-                $lang=$row2['language'];
-                 echo  " ".$lang.",";
-            }
+         $sql3 = "SELECT language FROM partner_languages WHERE partner_id = '$pID'";
+$result3 = mysqli_query($connection, $sql3);
+$languages = [];while ($row2 = mysqli_fetch_assoc($result3)) {
+    $languages[] = $row2['language'];
+}
+$language_list = implode(", ", $languages);
+echo "Languages I teach: " . $language_list;
+        
          echo  "<a class = 'chatMe' href='mailto:".$mail."'> for initial discussion </a>";
          echo  "<a  class = 'knowMoreAboutme' href='partnerInfo.php?partnerID=".$partnerID."'> read more!</a>";
         echo	"<a class='postreq' href='postrequest.php?partnerrID=".$partnerID."'>Post language learning request</a>";
@@ -288,12 +288,12 @@
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-			  <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.html">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.html">Language Learning Requests</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="PartnersList.html">Partner List</a></li>
-			  <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.html">Review my partner</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">

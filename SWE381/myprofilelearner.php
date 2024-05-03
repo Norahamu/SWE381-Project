@@ -19,17 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
  
-  // If email already exists 
-  $checkEmailQuery = "SELECT email FROM learners WHERE email = ?"; 
-  $stmt = $connection->prepare($checkEmailQuery); 
-  $stmt->bind_param("s", $email); 
-  $stmt->execute(); 
-  $result = $stmt->get_result(); 
-  $stmt->close(); 
-  if ($result->num_rows > 0) { 
-    echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuplearner.html';</script>"; 
-    exit; 
-  } 
+ 
  
   $target_file = null; 
   // Check if file is uploaded 
@@ -48,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } 
  
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['user_id']); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']); 
  
   if ($stmt->execute()) { 
     echo "<div class='success-message'>Profile updated successfully!</div>"; 
@@ -98,11 +88,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   // Delete user from database 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
   $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?"); 
-  $stmtDelete->bind_param("i", $_SESSION['user_id']); 
+  $stmtDelete->bind_param("i", $_SESSION['learner_id']); 
   if ($stmtDelete->execute()) { 
     // User deleted successfully, redirect to sign out or any other page 
     // For example: 
-    header("Location: signuplearner.php"); 
+    header("Location: signuplearner.html"); 
     exit(); 
   } else { 
     echo "<div class='error-message'>Error: " .
@@ -180,24 +170,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
                 <label class="required">First Name</label> 
                 <input type="text" name="first_name" class="form-control" id="fname" 
-                  value="<?php echo htmlspecialchars($firstName); ?>" required> 
+                  value="<?php echo htmlspecialchars($firstName); ?>" > 
  
               </div> 
               <div class="form-group col-md-6"> 
                 <label class="required">Last Name</label> 
                 <input type="text" name="last_name" class="form-control" id="lname" 
-                  value="<?php echo htmlspecialchars($lastName); ?>" required> 
+                  value="<?php echo htmlspecialchars($lastName); ?>" > 
  
               </div> 
               <div class="form-group"> 
                 <label class="required">Email</label> 
                 <input type="email" name="email" class="form-control" id="email" 
-                  value="<?php echo htmlspecialchars($email); ?>" required> 
+                  value="<?php echo htmlspecialchars($email); ?>"> 
               </div> 
             </div> 
             <div class="form-group"> 
               <label class="required">Password</label> 
-              <input type="password" class="form-control" placeholder="*********" name="Password" id="psw" required> 
+              <input type="password" class="form-control"  value="<?php echo htmlspecialchars($password); ?>" name="Password" id="psw" > 
             </div> 
             <div class="form-group"> 
               <label>Upload Photo</label> 
@@ -205,12 +195,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
-              <input type="text" class="form-control" placeholder="Riyadh" name="city" id="city" required>
+              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($city); ?>"name="city" id="city" >
               </div> 
             <div class="form-group"> 
               <label class="required">Location</label> 
-              <input type="text" class="form-control" placeholder="Saudi Arabia-Riyadh" name="location" id="location" 
-                required=""> 
+              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($location); ?>" name="location" id="location"> 
+  
             </div> 
  
             <div class="text-center" style="display: flex; justify-content: space-between;"> 

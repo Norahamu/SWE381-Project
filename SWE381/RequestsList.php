@@ -4,6 +4,14 @@ DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
 DEFINE('DB_NAME', 'lingo');
 
+try {
+    $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PSWD);
+    // Set the PDO error mode to exception
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
+
 // Establish database connection
 $conn = mysqli_connect(DB_HOST, DB_USER, DB_PSWD, DB_NAME);
 
@@ -21,6 +29,7 @@ $result_learner = mysqli_query($conn, $sql_learner);
 
 // Close connection
 mysqli_close($conn);
+
 ?>
 
 <!DOCTYPE html>
@@ -141,7 +150,7 @@ mysqli_close($conn);
     }
 </script>
 
-
+ <!-- ======= Footer ======= -->
 <footer id="footer">
     <div class="footer-top">
         <div class="container">

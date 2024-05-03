@@ -25,11 +25,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING);
     $location = filter_input(INPUT_POST, 'location', FILTER_SANITIZE_STRING);
     $culturalKnowledge = filter_input(INPUT_POST, 'cultural_knowledge', FILTER_SANITIZE_STRING);
-    $education = filter_input(INPUT_POST, 'experience', FILTER_SANITIZE_STRING);
+    $education = filter_input(INPUT_POST, 'education', FILTER_SANITIZE_STRING);
+if (empty($education)) {
+    $education = "Not Specified";}
     $experience = filter_input(INPUT_POST, 'experience', FILTER_SANITIZE_STRING);
     $pricePerSession = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_INT);
+    $languages = isset($_POST['languages']) ? $_POST['languages'] : [];
+    $proficiencyLevels = isset($_POST['proficiency_levels']) ? $_POST['proficiency_levels'] : [];
 
-   
+
+// If email already exists
+$checkEmailQuery = "SELECT email FROM partners WHERE email = ?";
+$stmt = $pdo->prepare($checkEmailQuery);
+$stmt->execute([$email]); 
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($result) {
+    echo "<script>alert('The email address is already registered. Please use another email.'); window.location.href='signuppartner.html';</script>";
+    exit;
+}
+
     $target_file = "assets/img/OIP.jpg";
     // Check if file is uploaded
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
@@ -45,29 +59,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
         }
     }
-
     try {
+        $pdo->beginTransaction();
+
         $sql = "INSERT INTO partners (first_name, last_name, email, password, photo, location, cultural_knowledge, Education, Experience, PricePerSession, age, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender]);
 
-        if (!empty($_POST['languages']) && !empty($_POST['proficiency_levels'])) {
-            $languages = $_POST['languages'];
-            $proficiencyLevels = $_POST['proficiency_levels'];
+        $partner_id = $pdo->lastInsertId();
 
-            $sqlLang = "INSERT INTO partner_languages (partner_id, language, ProficiencyLevel) VALUES (?, ?, ?)";
-            $stmtLang = $pdo->prepare($sqlLang);
+        // Validate languages and proficiency 
+        if (empty($languages) || empty($proficiencyLevels)) {
+            echo "<script>alert('Please select at least one language and proficiency level.'); window.location.href='signuppartner.html';</script>";
+            exit;
+        }
 
-            foreach ($languages as $index => $language) {
-                if (isset($proficiencyLevels[$index]) && !empty($proficiencyLevels[$index])) {
-                    $stmtLang->execute([$pdo->lastInsertId(), $language, $proficiencyLevels[$index]]);
-                }
+        if (count($languages) !== count($proficiencyLevels)) {
+            echo "<script>alert('Each selected language must have a corresponding proficiency level.'); window.location.href='signuppartner.html';</script>";
+            exit;
+        }
+
+        // Insert languages and proficiency levels
+        $sqlLang = "INSERT INTO partner_languages (partner_id, language, ProficiencyLevel) VALUES (?, ?, ?)";
+        $stmtLang = $pdo->prepare($sqlLang);
+        foreach ($languages as $index => $language) {
+            if (isset($proficiencyLevels[$index]) && !empty($proficiencyLevels[$index])) {
+                $stmtLang->execute([$partner_id, $language, $proficiencyLevels[$index]]);
             }
         }
 
+        $pdo->commit();
         echo "<script>alert('Registration successful!'); window.location.href='loginpartner.html';</script>";
     } catch (PDOException $e) {
-        die("Could not connect to the database :" . $e->getMessage());
+        $pdo->rollBack();
+        die("Error during registration: " . $e->getMessage());
     }
 } else {
     echo "Invalid request method.";
