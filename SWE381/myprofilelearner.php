@@ -149,23 +149,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 <body> 
   <!-- ======= Header ======= --> 
   <header id="header" class="fixed-top header-inner-pages"> 
-    <div class="container d-flex align-items-center"> 
-      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" 
-          class="img-fluid"></a> 
-    </div> 
-    <nav id="navbar" class="navbar"> 
-      <ul> 
-        <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-                
-      </ul> 
- 
-    </nav> 
-  </header> 
+  <div class="container d-flex align-items-center"> 
+    <a href="index.html" class="logo me-auto">
+      <!-- Assuming $photo contains the path to the user's profile image -->
+      <img src="<?php echo htmlspecialchars($photo); ?>" alt="User Profile Image" class="img-fluid profile-image">
+    </a> 
+  </div> 
+  <nav id="navbar" class="navbar"> 
+    <ul> 
+      <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+      <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+      <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+      <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+      <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+      <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+    </ul> 
+  </nav> 
+</header> 
   <!-- End Header --> 
   \ 
   <section id="signuplearner" class="signuplearner section-bg"> 
@@ -203,7 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             </div> 
             <div class="form-group"> 
               <label>Upload Photo</label> 
-              <input type="file" class="form-control" name="photo" id="photo" value="<?php echo htmlspecialchars($target_file); ?>"> 
+              <input type="file" class="form-control" name="photo" id="photo" > 
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
