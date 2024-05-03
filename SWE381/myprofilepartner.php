@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
   $password = $_POST['password']; // Assuming the password is not hashed for simplicity 
-  $city = $connection->real_escape_string($_POST['city']); 
+
   $location = $connection->real_escape_string($_POST['location']); 
   $age = $connection->real_escape_string($_POST['age']); 
   $gender = $connection->real_escape_string($_POST['gender']); 
@@ -124,6 +124,7 @@ function isLanguageSelected($language, $userLanguages) {
   $education = $userData['Education']; 
   $experience = $userData['Experience']; 
   $pricePerSession = $userData['PricePerSession']; 
+  
 } else { 
   // User not found, handle the error
 } 
