@@ -151,7 +151,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
 </div>
     <div class="evaluationfeedback">
         <h4>Feedback:</h4>
-        <textarea name="Feedback" rows="10" cols="40" placeholder="Write your feedback here"></textarea>
+        <textarea name="Feedback" rows="10" cols="40" placeholder="Write your feedback here"required></textarea>
     </div>
 </div>
                     <div class="text-center"><input type="submit" class="btn-log" style="margin-left:680px"></div>
