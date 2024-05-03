@@ -1,28 +1,42 @@
 <?php
-$partnerID = $_POST['PID'];
+
+define("DBHOST", "localhost");
+define("DBUSER", "root");
+define("DBPWD", "");
+define("DBNAME", "lingo");
+
+$learnerID = $_POST['LID'];
 $requestID = $_POST['REQID'];
+$partnerID = $_GET['PID'];
 
-define("DBHOST","localhost");
-define("DBUSER","root");
-define("DBPWD","");
-define("DBNAME","lingo");
-
-$con = mysqli_connect(DBHOST,DBUSER,DBPWD,DBNAME);
-echo mysqli_connect_error();
-
-if (!$con) {
-    die('Could not connect: ' . mysqli_error($con));
+if ($requestID === null) {
+    echo "Error: Missing REQID parameter";
+    exit(); // Terminate the script
 }
 
-$declineQuery = "UPDATE requests_partner SET Status = 'Declined' WHERE partnerID = '".$partnerID."' AND requestID = '".$requestID."';";
-$decliningResult = mysqli_query($con, $declineQuery); 
+try {
+    $pdo = new PDO("mysql:host=" . DBHOST . ";dbname=" . DBNAME, DBUSER, DBPWD);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-if (!$decliningResult) {
-    echo "Error: " . mysqli_error($con);
-    echo "<br>Decline Query: " . $declineQuery;
-} else {
-    echo "<script>alert('suceess')</script>";
+    // Update requests_partner table
+    $declineQuery = "UPDATE requests_partner SET Status = 'Declined' WHERE learnerID = :learnerID AND requestID = :requestID";
+    $stmt = $pdo->prepare($declineQuery);
+    $stmt->bindParam(':learnerID', $learnerID);
+    $stmt->bindParam(':requestID', $requestID);
+    $stmt->execute();
+
+    // Update requests_learner table
+    $declineQueryLearner = "UPDATE requests_learner SET Status = 'Declined' WHERE RequestID = :requestID AND PartnerID = :partnerID";
+    $stmtLearner = $pdo->prepare($declineQueryLearner);
+    $stmtLearner->bindParam(':requestID', $requestID);
+    $stmtLearner->bindParam(':partnerID', $partnerID);
+    $stmtLearner->execute();
+
+    echo "success"; // Return a simple string indicating success
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
 }
 
-mysqli_close($con);
+$pdo = null;
+
 ?>

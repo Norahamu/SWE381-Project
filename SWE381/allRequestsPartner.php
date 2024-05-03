@@ -43,6 +43,7 @@ if (!$result) {
   <link href="assets/img/Lingoblue.png" rel="icon" >
 
   <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
  
 
   <!-- Vendor CSS Files -->
@@ -66,12 +67,13 @@ $(document).ready(function(){
         console.log("Button clicked");
         var learnerId = $(this).data('learner-id');
         var requestID = $(this).data('req-id');
+        var partnerId = $(this).data('partner-id');
         console.log(requestID);
 
         $.ajax({
             url: "declineRequest.php",
             method: "POST",
-            data: { LID: learnerId, REQID: requestID },
+            data: { LID: learnerId, REQID: requestID , PID:partnerId },
             success: function(response) {
                 if (response.trim() === "success") {
                     window.location.reload();
@@ -87,148 +89,95 @@ $(document).ready(function(){
     });
     
     
+$("#button1").click(function(){
+    var partnerId = $(this).data('partner-id');
+    var requestID = $(this).data('req-id');
+    var learnerID = $(this).data('learner-id');
+    var RSch = $(this).data('req-sch');
+    var RDur = $(this).data('req-dur');
 
-    $("#button1").click(function(){
-        var partnerId = $(this).data('partner-id');
-        var requestID = $(this).data('req-id');
-        var learnerID = $(this).data('learner-id');
-        var RSch = $(this).data('req-sch');
-        var RDur = $(this).data('req-dur');
+    // Convert requested schedule to Date object
+    var requested_date = new Date(RSch);
+    var requested_year = requested_date.getFullYear();
+    var requested_month = requested_date.getMonth() + 1;
+    var requested_day = requested_date.getDate();
+    var requested_hour = requested_date.getHours();
+    var requested_minute = requested_date.getMinutes();
+    var requDate = requested_year + "-" + requested_month + "-" + requested_day;
+    var requTime = requested_hour + ":" + requested_minute + ":00";
 
-        // Convert requested schedule to Date object
-        var requested_date = new Date(RSch);
-        var requested_year = requested_date.getFullYear();
-        var requested_month = requested_date.getMonth() + 1;
-        var requested_day = requested_date.getDate();
-        var requested_hour = requested_date.getHours();
-        var requested_minute = requested_date.getMinutes();
-        var requDate = requested_year + "-" + requested_month + "-" + requested_day;
-        var requTime = requested_hour + ":" + requested_minute+":00";
-
-        // Check for overlapping sessions before accepting the request
-        // Check for overlapping sessions before accepting the request
-$.getJSON("partnerSessions.php?PID=" + partnerId, function(response) {
-    console.log("Button1 after partnerSessions");
-})
-.done(function(response) {
-    var overlap = false;
-    response.forEach(function(session) {
-        // Parse session date and time
-        
-        // Convert session start and end times to milliseconds
-        var session_start = session.session_time;
-        var session_duration_m = session.session_duration * 60 ;
-        var session_end = session_start + session_duration_m;
-        
-        console.log("session_start: ", session_start);
-        console.log("session_duration_m: ", session_duration_m);
-        console.log("session_end: ", session_end);
-
-        // Convert requested start and end times to milliseconds
-        var requested_start = new Date(RSch).getTime();
-        var requested_end = requested_start + (RDur * 60 );
-        console.log("requested_start: ", requested_start);
-        console.log("requested_end: ", requested_end);
-
-        // Check for overlap, considering session durations
-        if ((requested_start <= session_end && requested_end >= session_start) ||
-            (requested_end >= session_start && requested_start <= session_end)) {
-            // Overlapping sessions
-            overlap = true;
-            console.log("Sessions overlap");
-        }
-    });
-
-
+    // Check for overlapping sessions before accepting the request
+    $.getJSON("partnerSessions.php?PID=" + partnerId, function(response) {
+        console.log("Button1 after partnerSessions");
+    }).done(function(response) {
+        var overlap = false;
+        response.forEach(function(session) {
+            // Convert session date and time to JavaScript Date objects
+            var session_start = new Date(session.session_date + 'T' + session.session_time);
             
-            if (!overlap) {
-                console.log("no overlap");
-                $.get("acceptRequest.php", { 
-                    LID: learnerID, 
-                    PID: partnerId,
-                    REQID: requestID, 
-                    reqDate: requDate,
-    				reqTime: requTime, 
-    				reqDuration: RDur 
-                }, function(response) {
-                    if (response.success) {
-                        window.location.reload();
-                        alert("Booking accepted successfully!");
-                    }
-                })
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    console.error("Error accepting request:", textStatus, errorThrown);
-                    alert("An error occurred while accepting the booking. Please try again later.");
-                });
-            }else{
-            alert("you have an existing session that overlaps this session time!");
+            // Calculate session end time based on start time and duration
+            var session_end = new Date(session_start.getTime() + session.duration * 3600000); // Convert hours to milliseconds
+
+            // Convert requested date and time to JavaScript Date objects
+            var requested_start = new Date(RSch);
+            var requested_end = new Date(requested_start.getTime() + RDur * 3600000); // Convert hours to milliseconds
+            
+            console.log("session_date:", session.session_date);
+    		console.log("session_time:", session.session_time);
+    		console.log("session_duration:", session.session_duration);
+            console.log("session_start");
+            console.log(session_start);
+            console.log("session_end");
+            console.log(session_end);
+            console.log("requested_start");
+            console.log(requested_start);
+            console.log("requested_end");
+            console.log(requested_end);
+
+            // Check for overlap between session and requested time
+            if (requested_start < session_end && requested_end > session_start) {
+                overlap = true;
+                console.log("Sessions overlap");
+                // You might want to break the loop here if you only need to check for any overlap
             }
         });
-    });
-$("#all").click(function(event){
-    event.preventDefault();
-    var partnerId = $(this).data('partner-id');
-    var txt="";
-    $.getJSON("QueryAllRequest.php?PID="+partnerId, function(response){
-        for (var x in response) {
-            console.log("inside for all ");
-            txt += "<div class='session'> <img src='" + response[x].learner_photo + "' alt='" + response[x].FirstName + " photo' class='image--cover'> <a href='#' class='TPName' id='partnerName' data-learner-id='" + response[x].learnerID + "'>" + response[x].learner_first_name + response[x].learner_last_name + "</a><br>";
-            txt += "<h6 class='text2'>" + response[x].RStatus + "</h6>";
-            if ( response[x].RStatus == "Pending" ){
-                txt+="<div class='button-container'>";
-                txt+="<button type='button' class='button1' id='button1' data-partner-id='"+partnerId+"' data-learner-id='"+response[x].learnerID+"' data-req-ID='" +response[x].REQID +"' data-req-sch='" +  response[x].REQSchedule+ "' data-req-dur='"+ response[x].REQsession_Duration + "' >Accept</button>";
-                txt+="<button type='button' class='button2' id='button2'  data-partner-id='"+ partnerId+"' data-req-ID='"+response[x].REQID+"' >Decline</button> </div>";
-            }
+
+        // After looping through all sessions, check if there was any overlap
+        if (!overlap) {
+            console.log("no overlap");
+            $.get("acceptRequest.php", { 
+                LID: learnerID, 
+                PID: partnerId,
+                REQID: requestID, 
+                reqDate: requDate,
+                reqTime: requTime, 
+                reqDuration: RDur 
+            }, function(response) {
+                console.log(response); // Log the response to see its structure
+                try {
+                    var jsonResponse = JSON.parse(response); // Parse JSON response
+                    if (jsonResponse.success) {
+                        window.location.reload();
+                        alert("Booking accepted successfully!");
+                    } else {
+                        console.error("Error message from server:", jsonResponse.message);
+                        alert("An error occurred while accepting the booking: " + jsonResponse.message);
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                    alert("An error occurred while parsing the server response.");
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Error accepting request:", textStatus, errorThrown);
+                alert("An error occurred while accepting the booking. Please try again later.");
+            });
+        } else {
+            alert("you have an existing session that overlaps this session time!");
         }
-        document.getElementById("site").innerHTML = txt;
     });
 });
-
-$("#accepted").click(function(event){
-    event.preventDefault();
-    var partnerId = $(this).data('partner-id');
-    var txt="";
-    $.getJSON("QueryAcceptedRequest.php?PID="+partnerId, function(response){
-        for (var x in response) {
-            txt += "<div class='session'> <img src='" + response[x].learner_photo + "' alt='" + response[x].FirstName + " photo' class='image--cover'> <a href='#' class='TPName' id='partnerName' data-learner-id='" + response[x].learnerID + "'>" + response[x].learner_first_name + response[x].learner_last_name + "</a><br>";
-            txt += "<h6 class='text2'>" + response[x].RStatus + "</h6>";
-        }
-        document.getElementById("site").innerHTML = txt;
-    });
-});
-
-$("#declined").click(function(event){
-    event.preventDefault();
-    var partnerId = $(this).data('partner-id');
-    var txt="";
-    $.getJSON("QueryDeclinedRequest.php?PID="+partnerId, function(response){
-        for (var x in response) {
-            txt += "<div class='session'> <img src='" + response[x].learner_photo + "' alt='" + response[x].FirstName + " photo' class='image--cover'> <a href='#' class='TPName' id='partnerName' data-learner-id='" + response[x].learnerID + "'>" + response[x].learner_first_name + response[x].learner_last_name + "</a><br>";
-            txt += "<h6 class='text2'>" + response[x].RStatus + "</h6>";
-        }
-        document.getElementById("site").innerHTML = txt;
-    });
-});
-
-
-$("#pending").click(function(event){
-    event.preventDefault();
-    var partnerId = $(this).data('partner-id');
-    var txt="";
-    console.log("before call");
-    $.getJSON("QueryPendingRequest.php?PID="+partnerId, function(response){
-        console.log("inside call");
-        for (var x in response) {
-            console.log("inside for");
-            txt += "<div class='session'> <img src='" + response[x].learner_photo + "' alt='" + response[x].FirstName + " photo' class='image--cover'> <a href='#' class='TPName' id='partnerName' data-learner-id='" + response[x].learnerID + "'>" + response[x].learner_first_name + response[x].learner_last_name + "</a><br>";
-            txt += "<h6 class='text2'>" + response[x].RStatus + "</h6>";
-            txt+="<div class='button-container'>";
-            txt+="<button type='button' class='button1' id='button1' data-partner-id='"+partnerId+"' data-learner-id='"+response[x].learnerID+"' data-req-ID='" +response[x].REQID +"' data-req-sch='" +  response[x].REQSchedule+ "' data-req-dur='"+ response[x].REQsession_Duration + "' >Accept</button>";
-            txt+="<button type='button' class='button2' id='button2'  data-partner-id='"+ partnerId+"' data-req-ID='"+response[x].REQID+"' >Decline</button> </div>";
-        }
-        document.getElementById("site").innerHTML = txt;
-    });
-});
+    
+    
 
 
 });
@@ -266,10 +215,11 @@ $("#pending").click(function(event){
 <br>
 
 <div class="menu">
-  <a href="allRequestsPartner.php" class="menu-item" id="all" data-partner-id='<?php echo $row['partnerID']; ?>'>All</a>
-  <a href="allRequestsPartner.php" class="menu-item" id="accepted" data-partner-id='<?php echo $row['partnerID']; ?>'>Accepted</a>
-  <a href="allRequestsPartner.php" class="menu-item" id="pending" data-partner-id='<?php echo $row['partnerID']; ?>'>Pending</a>
-  <a href="allRequestsPartner.php" class="menu-item" id="declined" data-partner-id='<?php echo $row['partnerID']; ?>'>Declined</a>
+
+  <a href="allRequestsPartner.php" class="selected">All</a>
+  <a href="acceptedRequestsPartner.php">Accepted</a>
+  <a href="pendingRequestsPartner.php">Pending</a>
+  <a href="declinedRequestsPartner.php">Declined</a>
 </div>
 
 <div id="site">
@@ -284,7 +234,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     if ($row['RStatus'] == 'Pending') {
         echo '<div class="button-container">';
         echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
-        echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>Decline</button>";
+        echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
 
 
         echo '</div>';

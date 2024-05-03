@@ -10,23 +10,19 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$learner_id = $_GET['learnerID']; 
-$request_id = $_GET['requestID'];
-$partner_id = $_GET['partnerId'];
+$partner_id =  123456790;
 
 $query = "SELECT L.first_name AS learner_first_name, 
                  L.last_name AS learner_last_name, 
-                 L.photo AS learner_photo, 
-                 L.city AS learner_city,
-                 L.location AS learner_location,
-                 PR.Language AS learning_language,
-                 PR.ProficiencyLevel AS Proficiency_Level,
-                 PR.SessionDuration AS Session_Duration,
-                 PR.preferred_schedule AS preferred_schedule
+                 L.photo AS learner_photo,
+                 L.learner_id AS learnerID, 
+                 PR.Status AS RStatus,
+                 PR.SessionDuration AS REQsession_Duration,
+                 PR.preferred_schedule AS REQSchedule,
+                 PR.RequestID AS REQID
           FROM requests_partner AS PR
-          JOIN learners AS L ON L.learner_ID = PR.LearnerID
-          WHERE L.learner_ID = $learner_id AND PR.RequestID=$request_id";
-
+          JOIN learners AS L ON PR.learnerID = L.learner_ID
+          WHERE PR.partnerID = $partner_id AND PR.Status='Pending'";
 
 $result = mysqli_query($conn, $query);
 
@@ -41,7 +37,7 @@ if (!$result) {
  <meta charset="UTF-8"> <!-- character encoding-->
  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewport settings-->
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
-<title>Learner Card</title>
+<title>partner declined Requests</title>
    <!-- icon -->
   <link href="assets/img/Lingoblue.png" rel="icon" >
 
@@ -61,9 +57,7 @@ if (!$result) {
   <link href="style.css" rel="stylesheet">
   <link href="sessionsStyle.css" rel="stylesheet">
   <link href="buttons.css" rel="stylesheet">
-  <link rel="stylesheet" href="cards.css">
   
-    
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
@@ -71,7 +65,6 @@ $(document).ready(function(){
         console.log("Button clicked");
         var learnerId = $(this).data('learner-id');
         var requestID = $(this).data('req-id');
-        console.log(requestID);
 
         $.ajax({
             url: "declineRequest.php",
@@ -80,8 +73,7 @@ $(document).ready(function(){
             success: function(response) {
                 if (response.trim() === "success") {
                     alert("Request declined successfully");
-                    const url = allRequestsPartner.php?pId=${partnerId}
-                    window.location.href = url;
+                    window.location.reload();
                 } else {
                     console.error("Error declining request:", response);
                 }
@@ -180,12 +172,16 @@ $("#button1").click(function(){
         }
     });
 });
+    
+    
+
 
 });
 
 
 
 </script>
+  
   
   
 </head>
@@ -212,71 +208,39 @@ $("#button1").click(function(){
 <section class="section-bg">
  <div class="section-title">
 <h2>Language Learning Requests</h2> </div>
-<br>
-<div class="menu">
 
-  <a href="AllReq.html" class="selected">All</a>
-  <a href="accepted.html">Accepted</a>
-  <a href="pending.html">Pending</a>
-  <a href="declined.html">Declined</a>
+<div class="menu">
+  <a href="allRequestsPartner.php" >All</a>
+  <a href="acceptedRequestsPartner.php" >Accepted</a>
+  <a href="pendingRequestsPartner.php"  class="selected">Pending</a>
+  <a href="declinedRequestsPartner.php">Declined</a>
 </div>
+
+
 <div id="site">
+            <?php        
           
-  <div id="drag" class="cv instaFade wrap">
-    <div class="mainDetails">
-      <div id="headshot" class="">
-          
-          
-          <?php
-          while ($row = mysqli_fetch_assoc($result)) {
-              echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo'>";
-              echo "</div>";
-              echo "<div id='name'>";
-              echo "<h1 class='quickFade delayTwo'>{$row['learner_first_name']} {$row['learner_last_name']}</h1>";
-              echo "<div class='tooltip-container' style=''>";
-              echo "<a href='mailto:{$row['learner_first_name']}@gmail.com'>@</a>";
-              echo "</div>";
-              echo "</div>";
-              echo "<div class='clear'></div>";
-              echo "</div>";
-              echo "<div id='mainArea' class='quickFade delayFive'>";
-              echo "<section>";
-              echo "<article>";
-              echo "<div class='sectionTitle'>";
-              echo "<h1>Personal Profile</h1>";
-              echo "</div>";
-              echo "<div class='sectionContent'>";
-              echo "<p> City: {$row['learner_city']} </p>";
-              echo "<p> Location: {$row['learner_location']} </p>";
-              echo "</div>";
-              echo "</article>";
-              echo "<div class='clear'></div>";
-              echo "</section>";
-              echo "<div class='clear'></div>";
-              echo "<section>";
-              echo "<div class='sectionTitle'>";
-              echo "<h1>Request Details</h1>";
-              echo "</div>";
-              echo "<div class='sectionContent'>";
-              echo "<p>Language: {$row['learning_language']}.<br>";
-              echo "Proficiency Level: {$row['Proficiency_Level']}.<br>";
-              echo "Session Duration: {$row['Session_Duration']} hour.<br>";
-              $datetime = '2024-05-23T08:00';
-              $formatted_datetime = date('Y-m-d \a\t H:i', strtotime($datetime));
-              echo "Preferred Schedule: ".$formatted_datetime;
-       		  echo '<div class="button-container">';
-        	  echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='$learner_id'  data-req-id='$$request_id'    data-req-sch='{$row['preferred_schedule']}'   data-req-dur='{$row['Session_Duration']}' >Accept</button>";
-        	  echo "<button type='button' class='button2' id='button2' data-learner-id='$learner_id' data-req-id='$request_id'>Decline</button>";
-        	  echo '</div>';             
-              echo "</div>";
-              echo "</section>";
-              echo "</div>";
-          }
-          ?>
-          </div>
-        </section>
+while ($row = mysqli_fetch_assoc($result)) {
+    echo "<div class='session'>";
+    echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
+    echo "<a href='#' class='TPName' id='partnerName' data-learner-id='{$row['learnerID']}' data-partner-id='$partner_id'  data-req-id='{$row['REQID']}' >{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
+    echo "<h6 class='text2'>{$row['RStatus']}</h6>"; 
+              
+    if ($row['RStatus'] == 'Pending') {
+        echo '<div class="button-container">';
+        echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
+        echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>Decline</button>";
+
+
+        echo '</div>';
+    }
+
+    echo "</div>";
+}
+
+?>
       </div>
-    </div>
+    </section>
   </div>
      <!-- ======= Footer ======= -->
   <footer id="footer">
@@ -320,5 +284,30 @@ $("#button1").click(function(){
       <div class="credits"></div>
     </div>
   </footer>
+  
+  <script>    
+  	const partnerNameElement = document.getElementById('partnerName');
+    partnerNameElement.addEventListener("click", redirectToLearnerPage);
+
+    function redirectToLearnerPage(event) {
+        event.preventDefault();
+        const partnerId = $(this).data('partner-id');
+    	const requestID = $(this).data('req-id');
+    	const learnerID = $(this).data('learner-id');
+        const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`;
+        window.location.href = url;
+    }
+   </script> 
+   
+   
+   <?php
+          // Free result set
+          mysqli_free_result($result);
+
+          // Close connection
+          mysqli_close($conn);
+          ?>
+          
+          
 </body>
 </html>
