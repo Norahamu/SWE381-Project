@@ -56,6 +56,8 @@ if ($result->num_rows > 0) {
 }
 
 $stmt->close();
+
+$connection->close(); 
 } 
 }
 
