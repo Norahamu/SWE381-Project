@@ -27,16 +27,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $oldPhoto=$userData['photo'];
 
   echo  $photo;
-  
+
 if ($photo== null){
 
 $photo=$oldPhoto;
 
+
+
 }
-*/
+*/print_r($_FILES['photo']['size']);
+/*
 if($_FILES['photo']['size']==0||$_FILES['photo']['error']==0||$_FILES['photo']['error']==4){
   $photo=$oldPhoto;
-}
+}*/
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
