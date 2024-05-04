@@ -82,7 +82,7 @@ if ($result->num_rows > 0) {
     if (isset($_FILES['photo'])) {
         // New photo uploaded, update the photo field in the database
         $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-        $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+        $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $photo, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
     } else {
         // No new photo uploaded, don't update the photo field in the database
         $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
