@@ -1,48 +1,40 @@
-<?php
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $servername = "localhost";
-  $username = "root";
-  $dbPassword = "";
-  $database = "lingo";
-  $connection = new mysqli($servername, $username, $dbPassword, $database);
-
-  if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
-  }
-
-  $firstName = $connection->real_escape_string($_POST['first_name']);
-  $lastName = $connection->real_escape_string($_POST['last_name']);
-  $email = $connection->real_escape_string($_POST['email']);
-  $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity
-  $city = $connection->real_escape_string($_POST['city']);
-  $location = $connection->real_escape_string($_POST['location']);
-
-  // Check if a new photo was uploaded
+<?php 
+session_start(); 
+ 
+if ($_SERVER["REQUEST_METHOD"] == "POST") { 
+  $servername = "localhost"; 
+  $username = "root"; 
+  $dbPassword = ""; 
+  $database = "lingo"; 
+  $connection = new mysqli($servername, $username, $dbPassword, $database); 
+ 
+  if ($connection->connect_error) { 
+    die("Connection failed: " . $connection->connect_error); 
+  } 
+ 
+  $firstName = $connection->real_escape_string($_POST['first_name']); 
+  $lastName = $connection->real_escape_string($_POST['last_name']); 
+  $email = $connection->real_escape_string($_POST['email']); 
+  $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
+  $city = $connection->real_escape_string($_POST['city']); 
+  $location = $connection->real_escape_string($_POST['location']); 
+  $photo = $_POST['photo']; // Initialize with the existing photo
+ 
+  $target_file = "assets/img/OIP.jpg";
+  // Check if file is uploaded
   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-    $fileTmpPath = $_FILES['photo']['tmp_name'];
-    $fileName = $_FILES['photo']['name'];
-    $photo = "assets/img/";
-    $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-    $newFileName = $firstName . $lastName . "." . $fileExt;
-    $target_file = $photo . $newFileName;
-
-    if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-      echo "Sorry, there was an error uploading your file.";
-      exit;
-    }
-  } else {
-    // If no photo was uploaded, use the existing photo from the database
-    $stmtFetchPhoto = $connection->prepare("SELECT photo FROM learners WHERE learner_id = ?");
-    $stmtFetchPhoto->bind_param("i", $_SESSION['learner_id']);
-    $stmtFetchPhoto->execute();
-    $resultFetchPhoto = $stmtFetchPhoto->get_result();
-    $photoData = $resultFetchPhoto->fetch_assoc();
-    $photo = $photoData['photo'];
-    $stmtFetchPhoto->close();
+      $fileTmpPath = $_FILES['photo']['tmp_name'];
+      $fileName = $_FILES['photo']['name'];
+      $photo = "assets/img/";
+      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+      $newFileName = $firstName . $lastName . "." . $fileExt;
+      $target_file = $photo . $newFileName;
+  
+      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+          echo "Sorry, there was an error uploading your file.";
+          exit;
+      }
   }
-
  
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
@@ -122,6 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
  
 ?> 
+
 
  
 <!DOCTYPE html> 
