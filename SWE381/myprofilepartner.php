@@ -55,19 +55,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Handle file upload
-    $target_file = "assets/img/OIP.jpg";
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['photo']['tmp_name'];
-        $fileName = $_FILES['photo']['name'];
-        $photo = "assets/img/";
-        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-        $newFileName = $firstName . $lastName . "." . $fileExt;
-        $target_file = $photo . $newFileName;
-
-        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-            echo "Sorry, there was an error uploading your file.";
-            exit;
-        }
+     $target_file = "assets/img/OIP.jpg";
+  // Check if file is uploaded
+  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+      $fileTmpPath = $_FILES['photo']['tmp_name'];
+      $fileName = $_FILES['photo']['name'];
+      $photo = "assets/img/";
+      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+      $newFileName = $firstName . $lastName . "." . $fileExt;
+      $target_file = $photo . $newFileName;
+  
+      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+          echo "Sorry, there was an error uploading your file.";
+          exit;
+      }
     }
 
     
@@ -152,7 +153,7 @@ if ($resultFetch->num_rows > 0) {
     $education = $userData['Education'];
     $experience = $userData['Experience'];
     $pricePerSession = $userData['PricePerSession'];
-     $photo = $userData['photo']; 
+    $photo = $userData['photo']; 
 } else {
     // User not found, handle the error
 }
