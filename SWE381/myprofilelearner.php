@@ -53,7 +53,7 @@ if(isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
  
 } else {
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?,  city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $city, $location, $_SESSION['learner_id']); 
+  $stmt->bind_param("ssssssi", $firstName, $lastName, $email, $password, $city, $location, $_SESSION['learner_id']); 
  
 }
 
