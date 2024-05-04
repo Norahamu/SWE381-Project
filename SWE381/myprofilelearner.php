@@ -187,11 +187,10 @@ $(document).ready(function() {
       <div class="section-title"> 
         <h2>My Profile</h2> 
         <?php 
-      if ($photo == null) {
-                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
-                        } else {
+     
+                   
                             echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
-                        }
+                       
                         ?>
       </div> 
       <div class="row"> 
