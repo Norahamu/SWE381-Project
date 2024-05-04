@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
@@ -10,7 +12,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$partner_id =  123456790;
+if(isset($_SESSION['partner_id'])){
+    $partner_id = $_SESSION['partner_id'];
 
 $query = "SELECT L.first_name AS learner_first_name, 
                  L.last_name AS learner_last_name, 
@@ -28,6 +31,7 @@ $result = mysqli_query($conn, $query);
 
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
+}
 }
 ?>
 
@@ -219,23 +223,24 @@ $("#button1").click(function(){
 
 <div id="site">
             <?php        
-          
+if (!isset($result) || mysqli_num_rows($result) == 0) {
+    echo "<br> <h3 class='sessions'>No requests available.</h3>";
+} else {           
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
     echo "<a href='#' class='TPName' id='partnerName' data-learner-id='{$row['learnerID']}' data-partner-id='$partner_id'  data-req-id='{$row['REQID']}' >{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
-    echo "<h6 class='text2'>{$row['RStatus']}</h6>"; 
+    echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>"; 
               
     if ($row['RStatus'] == 'Pending') {
         echo '<div class="button-container">';
         echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
         echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>Decline</button>";
-
-
         echo '</div>';
     }
 
     echo "</div>";
+}
 }
 
 ?>

@@ -94,14 +94,14 @@ if(isset($_SESSION['learner_id'])){
           <?php
           
           if (!isset($result) || mysqli_num_rows($result) == 0) {
-       			echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+       			echo "<br> <h3 class='sessions'>No requests available.</h3>";
     	   } else {
           // Fetch and display session details
           while ($row = mysqli_fetch_assoc($result)) {
               echo "<div class='session'>";
               echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
               echo "<strong class='TPName'>{$row['learner_first_name']} {$row['learner_last_name']}</strong><br>";           
-              echo "<h6 class='text2'>{$row['RStatus']}</h6>";
+              echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>";
               echo "</div>";
           }
           }
@@ -160,5 +160,18 @@ if(isset($_SESSION['learner_id'])){
       <div class="credits"></div>
     </div>
   </footer>
+  
+  <script>    
+  	const partnerNameElement = document.getElementById('partnerName');
+    partnerNameElement.addEventListener("click", redirectToLearnerPage);
+
+    function redirectToLearnerPage(event) {
+        event.preventDefault();
+        const learnerId = this.getAttribute('data-learner-id');
+        const url = `learnerCard.php?id=${learnerId}`;
+        window.location.href = url;
+    }
+   </script>
+  
 </body>
 </html>

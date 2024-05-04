@@ -12,7 +12,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-if(isset($_SESSION['learner_id'])){
+if(isset($_SESSION['partner_id'])){
     $partner_id = $_SESSION['partner_id'];
 
 $query1 = "SELECT L.first_name AS learner_first_name, 
@@ -212,7 +212,7 @@ $("#button1").click(function(){
 <div id="site">
   <?php        
 if (!isset($result) || mysqli_num_rows($result) == 0) {
-    echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+    echo "<br> <h3 class='sessions'>No requests available.</h3>";
 } else {          
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
@@ -226,9 +226,10 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
         echo '</div>';
     }
- }
+ 
 
     echo "</div>";
+}
 }
 
 ?>
@@ -282,9 +283,6 @@ while ($row = mysqli_fetch_assoc($result)) {
   <script>    
   	const partnerNameElement = document.getElementById('partnerName');
     partnerNameElement.addEventListener("click", redirectToLearnerPage);
-
-
-
 
     function redirectToLearnerPage(event) {
         event.preventDefault();
