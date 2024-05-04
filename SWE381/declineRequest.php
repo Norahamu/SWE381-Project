@@ -7,19 +7,8 @@ define("DBNAME", "lingo");
 
 $learnerID = $_POST['LID'];
 $requestID = $_POST['REQID'];
+$partnerID = $_POST['PID'];
 
-// Check if PID is set in the $_GET array
-if (!isset($_GET['PID'])) {
-    echo "Error: Missing PID parameter";
-    exit(); // Terminate the script
-}
-
-$partnerID = $_GET['PID'];
-
-if ($requestID === null) {
-    echo "Error: Missing REQID parameter";
-    exit(); // Terminate the script
-}
 
 try {
     $pdo = new PDO("mysql:host=" . DBHOST . ";dbname=" . DBNAME, DBUSER, DBPWD);

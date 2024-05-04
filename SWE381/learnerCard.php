@@ -14,21 +14,24 @@ $learner_id = $_GET['learnerID'];
 $request_id = $_GET['requestID'];
 $partner_id = $_GET['partnerId'];
 
+
 $query = "SELECT L.first_name AS learner_first_name, 
                  L.last_name AS learner_last_name, 
                  L.photo AS learner_photo, 
                  L.city AS learner_city,
                  L.location AS learner_location,
                  L.email As learner_email,
+                 L.learner_id AS learnerID,
                  PR.Language AS learning_language,
                  PR.ProficiencyLevel AS Proficiency_Level,
                  PR.SessionDuration AS Session_Duration,
                  PR.Status AS RStatus,
+                 PR.RequestID AS REQID,
                  PR.preferred_schedule AS preferred_schedule
           FROM requests_partner AS PR
           JOIN learners AS L ON L.learner_ID = PR.LearnerID
           WHERE L.learner_ID = $learner_id AND PR.RequestID=$request_id";
-
+         
 
 $result = mysqli_query($conn, $query);
 
@@ -67,8 +70,7 @@ if (!$result) {
   
     
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
+<script>$(document).ready(function(){
     $("#button2").click(function() {
         console.log("Button clicked");
         var learnerId = $(this).data('learner-id');
@@ -82,7 +84,7 @@ $(document).ready(function(){
             success: function(response) {
                 if (response.trim() === "success") {
                     alert("Request declined successfully");
-                    const url = allRequestsPartner.php?pId=${partnerId}
+                    const url = "allRequestsPartner.php?pId=" + partnerId;
                     window.location.href = url;
                 } else {
                     console.error("Error declining request:", response);
@@ -174,8 +176,6 @@ $("#button1").click(function(){
 
 });
 
-
-
 </script>
   
   
@@ -191,10 +191,9 @@ $("#button1").click(function(){
       <ul> 
    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
                     <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="allRequestsPartner.php">Manage Language Learning Request</a></li>
                     <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
                 
       </ul>
 
@@ -258,7 +257,7 @@ $("#button1").click(function(){
               echo "Preferred Schedule: ".$formatted_datetime;
 			  if ($row['RStatus'] == 'Pending') {
 			      echo '<div class="button-container">';
-        		  echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
+        		  echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['preferred_schedule']}'   data-req-dur='{$row['Session_Duration']}' >Accept</button>";
  			      echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
         		  echo '</div>';
     		  }             
