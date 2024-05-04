@@ -18,20 +18,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
-  $photo = $_POST['photo']; // Initialize with the existing photo
+  $photo = $_POST['photo'];
  
-
+  $target_file = "assets/img/OIP.jpg";
+  // Check if file is uploaded
+  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+      $fileTmpPath = $_FILES['photo']['tmp_name'];
+      $fileName = $_FILES['photo']['name'];
+      $photo = "assets/img/";
+      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+      $newFileName = $firstName . $lastName . "." . $fileExt;
+      $target_file = $photo . $newFileName;
+  
+      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+          echo "Sorry, there was an error uploading your file.";
+          exit;
+      }
+  }
+ 
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
-// Check if a file was uploaded
-if(isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
-  // File was uploaded, handle it
-  $photo = $_FILES['photo']['name']; // Assuming you want to store the file name in the database
-} else {
-  // No file was uploaded, keep the existing photo
-  $photo = $userData['photo']; // Use the existing photo
-}
 
 if ($result->num_rows > 0) {
   // Email address is already registered for another user
@@ -107,7 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
  
 ?> 
-
  
 <!DOCTYPE html> 
 <html lang="en"> 
@@ -307,7 +313,7 @@ $(document).ready(function() {
     }
 
     // Add event listeners to input fields
-    var inputFields = document.querySelectorAll('input, textarea, select, , input[type="checkbox"]');
+    var inputFields = document.querySelectorAll('input, textarea, select, , input[type="checkbox"]'');
     inputFields.forEach(function(input) {
         input.addEventListener('input', handleInputChange);
         input.addEventListener('change', handleInputChange); // Adding change event listener
