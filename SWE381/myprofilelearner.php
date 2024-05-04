@@ -24,6 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
+// Check if a file was uploaded
+if(isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
+  // File was uploaded, handle it
+  $photo = $_FILES['photo']['name']; // Assuming you want to store the file name in the database
+} else {
+  // No file was uploaded, keep the existing photo
+  $photo = $userData['photo']; // Use the existing photo
+}
 
 if ($result->num_rows > 0) {
   // Email address is already registered for another user
