@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
     $languages = isset($_POST['languages']) ? $_POST['languages'] : [];
     $proficiencyLevels = isset($_POST['proficiency_levels']) ? $_POST['proficiency_levels'] : [];
+    $photo = $_POST['photo']; // Initialize with the existing photo
 
     // Validate languages and proficiency
     if (empty($languages) || empty($proficiencyLevels)) {
@@ -69,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Check if the provided email already exists for another user
+    
     // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
 $result = $connection->query($checkEmailQuery);
@@ -151,6 +152,7 @@ if ($resultFetch->num_rows > 0) {
     $education = $userData['Education'];
     $experience = $userData['Experience'];
     $pricePerSession = $userData['PricePerSession'];
+    $photo = $userData['photo']; 
 } else {
     // User not found, handle the error
 }
