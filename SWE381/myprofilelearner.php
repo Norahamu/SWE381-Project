@@ -20,7 +20,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo'];
  
- 
+  $target_file = "assets/img/OIP.jpg";
+  // Check if file is uploaded
+  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+      $fileTmpPath = $_FILES['photo']['tmp_name'];
+      $fileName = $_FILES['photo']['name'];
+      $photo = "assets/img/";
+      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+      $newFileName = $firstName . $lastName . "." . $fileExt;
+      $target_file = $photo . $newFileName;
+  
+      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+          echo "Sorry, there was an error uploading your file.";
+          exit;
+      }
+  }
  
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
@@ -31,32 +45,20 @@ if ($result->num_rows > 0) {
   $_SESSION['email_already_registered'] = true;
 } else {
 
-// Check if file is uploaded
-if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-  $fileTmpPath = $_FILES['photo']['tmp_name'];
-  $fileName = $_FILES['photo']['name'];
-  $photo = "assets/img/";
-  $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-  $newFileName = $firstName . $lastName . "." . $fileExt;
-  $target_file = $photo . $newFileName;
 
-  // Move the uploaded file to the desired directory
-  if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-      echo "Sorry, there was an error uploading your file.";
-      exit;
-  }
+  // Check if a file was uploaded
+if(isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+    // File was uploaded, handle it
+    $photo = $_FILES['photo']['name']; // Assuming you want to store the file name in the database
+} else {
+    // No file was uploaded, keep the existing photo
+    $photo = $userData['photo']; // Use the existing photo
+}
 
-  // Update the photo field in the database
+     //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
   $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
  
-} else {
-  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?,  city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("ssssssi", $firstName, $lastName, $email, $password, $city, $location, $_SESSION['learner_id']); 
- 
-}
-     //UPDATE
-  
   if ($stmt->execute()) {
     // Store success message in session variable
     $_SESSION['profile_updated_success'] = true;
