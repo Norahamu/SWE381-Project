@@ -11,63 +11,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if ($connection->connect_error) { 
     die("Connection failed: " . $connection->connect_error); 
   } 
- $user_id=$_SESSION['learner_id'];
  
-
   $firstName = $connection->real_escape_string($_POST['first_name']); 
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
   $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
- // $photo = $_POST['photo']; // Initialize with the existing photo
+  $photo = $_POST['photo']; // Initialize with the existing photo
+ 
 
-   // Handle file upload
-   $target_file = "assets/img/OIP.jpg";
-   // Check if file is uploaded
-   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-       $fileTmpPath = $_FILES['photo']['tmp_name'];
-       $fileName = $_FILES['photo']['name'];
-       $photo = "assets/img/";
-       $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-       $newFileName = $firstName . $lastName . "." . $fileExt;
-       $target_file = $photo . $newFileName;
-   
-       if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-           echo "Sorry, there was an error uploading your file.";
-           exit;
-       }
-   }
-
-$sql="select * from learners where learner_id='$user_id'";
-$user_info=$connection->query($sql);
-$oldphoto='';
-if($user_info->num_rows>0){
-  while($row=$user_info->fetch_assoc()){
-$oldPhoto=$row['photo'];
-  }
-}
- //$oldPhoto=$user_info['photo']; 
-/*
-  $oldPhoto=$userData['photo'];
-
-  echo  $photo;
-
-if ($photo== null){
-
-$photo=$oldPhoto;
-
-Warning: Undefined array key "photo" in C:\xampp\htdocs\SWE381-Project\SWE381\myprofilelearner.php on line 23
-Array ( [name] => BenG.png [full_path] => BenG.png [type] => image/png [tmp_name] => C:\xampp\tmp\phpB7D9.tmp [error] => 0 [size] => 9828 )
-
-
-
-}
-*///print_r($_FILES['photo']);
-
-if($_FILES['photo']['size']==0||$_FILES['photo']['error']==0||$_FILES['photo']['error']==4){
-  $photo=$oldPhoto;
-}
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
@@ -229,7 +182,7 @@ $(document).ready(function() {
       <div class="row"> 
  
         <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
-          <form action="#" method="post" class="php-email-form" enctype="multipart/form-data"> 
+          <form action="#" method="post" class="php-email-form"> 
             <div class="row"> 
               <div class="form-group col-md-6"> 
  
