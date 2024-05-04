@@ -23,9 +23,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $location = $connection->real_escape_string($_POST['location']);
     $age = $connection->real_escape_string($_POST['age']);
     $gender = $connection->real_escape_string($_POST['gender']);
-    $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']);
-    $education = $connection->real_escape_string($_POST['Education']);
-    $experience = $connection->real_escape_string($_POST['Experience']);
+    $culturalKnowledge = addslashes($connection->real_escape_string($_POST['cultural_knowledge']));
+$education = addslashes($connection->real_escape_string($_POST['Education']));
+$experience = addslashes($connection->real_escape_string($_POST['Experience']));
     $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
     $languages = isset($_POST['languages']) ? $_POST['languages'] : [];
     $proficiencyLevels = isset($_POST['proficiency_levels']) ? $_POST['proficiency_levels'] : [];
