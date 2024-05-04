@@ -22,6 +22,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
  // $photo = $_POST['photo']; // Initialize with the existing photo
 
+   // Handle file upload
+   $target_file = "assets/img/OIP.jpg";
+   // Check if file is uploaded
+   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+       $fileTmpPath = $_FILES['photo']['tmp_name'];
+       $fileName = $_FILES['photo']['name'];
+       $photo = "assets/img/";
+       $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+       $newFileName = $firstName . $lastName . "." . $fileExt;
+       $target_file = $photo . $newFileName;
+   
+       if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+           echo "Sorry, there was an error uploading your file.";
+           exit;
+       }
+   }
+
 $sql="select * from learners where learner_id='$user_id'";
 $user_info=$connection->query($sql);
 $oldphoto='';
