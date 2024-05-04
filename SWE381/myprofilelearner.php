@@ -40,14 +40,17 @@ if ($photo== null){
 
 $photo=$oldPhoto;
 
+Warning: Undefined array key "photo" in C:\xampp\htdocs\SWE381-Project\SWE381\myprofilelearner.php on line 23
+Array ( [name] => BenG.png [full_path] => BenG.png [type] => image/png [tmp_name] => C:\xampp\tmp\phpB7D9.tmp [error] => 0 [size] => 9828 )
+
 
 
 }
-*/print_r($_FILES['photo']);
-/*
+*///print_r($_FILES['photo']);
+
 if($_FILES['photo']['size']==0||$_FILES['photo']['error']==0||$_FILES['photo']['error']==4){
   $photo=$oldPhoto;
-}*/
+}
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
