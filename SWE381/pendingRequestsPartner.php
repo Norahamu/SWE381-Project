@@ -299,7 +299,8 @@ while ($row = mysqli_fetch_assoc($result)) {
         const partnerId = $(this).data('partner-id');
     	const requestID = $(this).data('req-id');
     	const learnerID = $(this).data('learner-id');
-        const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`;
+    	
+		const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`;
         window.location.href = url;
     }
    </script> 
