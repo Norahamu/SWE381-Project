@@ -137,7 +137,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
 <div style="display: flex; align-items: center; gap:0;">
   <h4 style=" margin: 0px;">Rate:</h4>
   <div class="rate">
-    <input type="radio" id="star5" name="rate" value="5" />
+    <input type="radio" id="star5" name="rate" value="5" required />
     <label for="star5" title="text">5 stars</label>
     <input type="radio" id="star4" name="rate" value="4" />
     <label for="star4" title="text">4 stars</label>
