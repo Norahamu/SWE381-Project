@@ -20,9 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo']; // Initialize with the existing photo
 
-  $oldPhoto=$_POST['photo'];
-  
-if ($photo==null){
+  $oldPhoto=$userData['photo'];
+
+if ($photo== null){
 $photo=$oldPhoto;
 
 }
