@@ -22,7 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $oldPhoto=$userData['photo'];
 
+  echo  "$photo";
 if ($photo== null){
+
 $photo=$oldPhoto;
 
 }
