@@ -230,6 +230,7 @@ $(document).ready(function() {
               </div>
           </div>  
 
+          <input type="hidden" name="current_photo" value="<?php echo htmlspecialchars($photo); ?>">
 
             <div class="form-group"> 
               <label>Upload Photo</label> 
