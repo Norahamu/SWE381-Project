@@ -196,6 +196,7 @@ $("#button1").click(function(){
     </nav>
   </header>
   <!-- End Header -->
+
 <section class="section-bg">
  <div class="section-title">
 <h2>Language Learning Requests</h2> </div>
@@ -217,7 +218,7 @@ if (!isset($result) || mysqli_num_rows($result) == 0) {
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
-    echo "<a href='#' class='TPName' id='partnerName' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
+    echo "<a href='#' class='PName partnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
     echo "<h6 class='text2'>{$row['RStatus']}</h6>"; 
               
     if ($row['RStatus'] == 'Pending') {
@@ -281,19 +282,25 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
   </footer>
    <script>    
-  	const partnerNameElement = document.getElementById('partnerName');
-    partnerNameElement.addEventListener("click", redirectToLearnerPage);
+    // Select all elements with the class 'partnerName'
+    const partnerNameElements = document.querySelectorAll('.partnerName');
+
+    // Loop through each element and attach event listener
+    partnerNameElements.forEach(function(element) {
+        element.addEventListener("click", redirectToLearnerPage);
+    });
 
     function redirectToLearnerPage(event) {
         event.preventDefault();
-        const partnerId = $(this).data('partner-id');
-    	const requestID = $(this).data('req-id');
-    	const learnerID = $(this).data('learner-id');
-    	
+        const partnerId = this.getAttribute('data-partner-id');
+        const requestID = this.getAttribute('data-req-id');
+        const learnerID = this.getAttribute('data-learner-id');
+
         const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`;
         window.location.href = url;
     }
-   </script> 
+</script>
+
 
 <?php
           // Free result set

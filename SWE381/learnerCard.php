@@ -200,6 +200,7 @@ $("#button1").click(function(){
     </nav>
   </header>
   <!-- End Header -->
+    <br>
 <section class="section-bg">
  <div class="section-title">
  
