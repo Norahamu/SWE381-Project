@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
-  $photo = $_POST['photo']; // Initialize with the existing photo
+ // $photo = $_POST['photo']; // Initialize with the existing photo
 
 $sql="select * from learners where learner_id='$user_id'";
 $user_info=$connection->query($sql);
