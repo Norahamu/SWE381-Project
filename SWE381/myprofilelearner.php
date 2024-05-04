@@ -20,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo']; // Initialize with the existing photo
  
- 
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
@@ -46,7 +45,6 @@ $connection->close();
 } 
 }
 
- 
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
 $username = "root"; 
