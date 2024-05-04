@@ -313,7 +313,7 @@ $(document).ready(function() {
     }
 
     // Add event listeners to input fields
-    var inputFields = document.querySelectorAll('input, textarea, select, , input[type="checkbox"]'');
+    var inputFields = document.querySelectorAll('input, textarea, select, ');
     inputFields.forEach(function(input) {
         input.addEventListener('input', handleInputChange);
         input.addEventListener('change', handleInputChange); // Adding change event listener
