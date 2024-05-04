@@ -43,11 +43,11 @@ $photo=$oldPhoto;
 
 
 }
-*/print_r($_FILES['photo']['size']);
-
+*/print_r($_FILES['photo']);
+/*
 if($_FILES['photo']['size']==0||$_FILES['photo']['error']==0||$_FILES['photo']['error']==4){
   $photo=$oldPhoto;
-}
+}*/
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
@@ -209,7 +209,7 @@ $(document).ready(function() {
       <div class="row"> 
  
         <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
-          <form action="#" method="post" class="php-email-form"> 
+          <form action="#" method="post" class="php-email-form" enctype="multipart/form-data"> 
             <div class="row"> 
               <div class="form-group col-md-6"> 
  
