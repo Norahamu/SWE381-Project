@@ -19,8 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo']; // Initialize with the existing photo
- 
- 
+
+  $oldPhoto=$_POST['photo'];
+  
+if ($photo==null){
+$photo=$oldPhoto;
+
+}
+
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
