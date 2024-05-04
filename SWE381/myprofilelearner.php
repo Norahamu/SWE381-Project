@@ -45,16 +45,7 @@ if ($result->num_rows > 0) {
   $_SESSION['email_already_registered'] = true;
 } else {
 
-
-  // Check if a file was uploaded
-if(isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-    // File was uploaded, handle it
-    $photo = $_FILES['photo']['name']; // Assuming you want to store the file name in the database
-} else {
-    // No file was uploaded, keep the existing photo
-    $photo = $userData['photo']; // Use the existing photo
-}
-
+  
      //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
   $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
