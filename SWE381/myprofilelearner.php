@@ -11,7 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if ($connection->connect_error) { 
     die("Connection failed: " . $connection->connect_error); 
   } 
- 
+ $user_id=$_SESSION['learner_id'];
+ echo $user_id;
   $firstName = $connection->real_escape_string($_POST['first_name']); 
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
@@ -20,6 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo']; // Initialize with the existing photo
 
+
+  
+/*
   $oldPhoto=$userData['photo'];
 
   echo  $photo;
@@ -29,7 +33,10 @@ if ($photo== null){
 $photo=$oldPhoto;
 
 }
-
+*/
+if($_FILES['photo']['size']==0||$_FILES['photo']['error']==0||$_FILES['photo']['error']==4){
+  $photo=$oldPhoto;
+}
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
