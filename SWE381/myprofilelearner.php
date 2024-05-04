@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
-  $photo = $_POST['photo'];
+  $photo = $_POST['photo']; // Initialize with the existing photo
  
   $target_file = "assets/img/OIP.jpg";
   // Check if file is uploaded
@@ -114,6 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
  
 ?> 
+
  
 <!DOCTYPE html> 
 <html lang="en"> 

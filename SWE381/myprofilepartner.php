@@ -1,174 +1,178 @@
-<?php 
-session_start(); 
+<?php
+session_start();
 
 // Define variables
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") { 
-  $servername = "localhost"; 
-  $username = "root"; 
-  $dbPassword = ""; 
-  $database = "lingo"; 
-  $connection = new mysqli($servername, $username, $dbPassword, $database); 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $servername = "localhost";
+    $username = "root";
+    $dbPassword = "";
+    $database = "lingo";
+    $connection = new mysqli($servername, $username, $dbPassword, $database);
 
-  if ($connection->connect_error) { 
-    die("Connection failed: " . $connection->connect_error); 
-  } 
+    if ($connection->connect_error) {
+        die("Connection failed: " . $connection->connect_error);
+    }
 
-   // Retrieve and sanitize form data
-   $firstName = $connection->real_escape_string($_POST['first_name']);
-   $lastName = $connection->real_escape_string($_POST['last_name']);
-   $email = $connection->real_escape_string($_POST['email']);
-   $password = $connection->real_escape_string($_POST['password']); // Hash the password for security
-   $location = $connection->real_escape_string($_POST['location']);
-   $age = $connection->real_escape_string($_POST['age']);
-   $gender = $connection->real_escape_string($_POST['gender']);
-   $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']);
-   $education = $connection->real_escape_string($_POST['Education']);
-   $experience = $connection->real_escape_string($_POST['Experience']);
-   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
-   $photo = $_POST['photo'];
+    // Retrieve and sanitize form data
+    $firstName = $connection->real_escape_string($_POST['first_name']);
+    $lastName = $connection->real_escape_string($_POST['last_name']);
+    $email = $connection->real_escape_string($_POST['email']);
+    $password = $connection->real_escape_string($_POST['password']); // Hash the password for security
+    $location = $connection->real_escape_string($_POST['location']);
+    $age = $connection->real_escape_string($_POST['age']);
+    $gender = $connection->real_escape_string($_POST['gender']);
+    $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']);
+    $education = $connection->real_escape_string($_POST['Education']);
+    $experience = $connection->real_escape_string($_POST['Experience']);
+    $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
+    $languages = isset($_POST['languages']) ? $_POST['languages'] : [];
+    $proficiencyLevels = isset($_POST['proficiency_levels']) ? $_POST['proficiency_levels'] : [];
+    $photo = $_POST['photo']; // Initialize with the existing photo
 
-// Process proficiency levels for languages
-if (isset($_POST['languages'])) {
-  $languages = $_POST['languages'];
+    // Validate languages and proficiency
+    if (empty($languages) || empty($proficiencyLevels)) {
+        echo "<script>alert('Please select at least one language and proficiency level.'); window.location.href='signuppartner.html';</script>";
+        exit;
+    }
 
-  // Process proficiency levels for languages
-  foreach ($languages as $language) {
-      // Check if the proficiency level for the current language is set
-      if (isset($_POST[$language . '_proficiency'])) {
-          $proficiencyLevel = $connection->real_escape_string($_POST[$language . '_proficiency']);
+    if (count($languages) !== count($proficiencyLevels)) {
+        echo "<script>alert('Each selected language must have a corresponding proficiency level.'); window.location.href='signuppartner.html';</script>";
+        exit;
+    }
 
-          // Perform SQL update for each language's proficiency level
-          $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
-          $connection->query($updateProficiencyQuery);
-      }
-  }
-}
+    // Process proficiency levels for languages
+    foreach ($languages as $language) {
+        // Check if the proficiency level for the current language is set
+        if (isset($_POST[$language . '_proficiency'])) {
+            $proficiencyLevel = $connection->real_escape_string($_POST[$language . '_proficiency']);
 
+            // Perform SQL update for each language's proficiency level
+            $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+            $connection->query($updateProficiencyQuery);
+        }
+    }
 
+    // Handle file upload
+    $target_file = "assets/img/OIP.jpg";
+    // Check if file is uploaded
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['photo']['tmp_name'];
+        $fileName = $_FILES['photo']['name'];
+        $photo = "assets/img/";
+        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+        $newFileName = $firstName . $lastName . "." . $fileExt;
+        $target_file = $photo . $newFileName;
+    
+        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+            echo "Sorry, there was an error uploading your file.";
+            exit;
+        }
+    }
 
-  
-
- 
-
-  $target_file = "assets/img/OIP.jpg";
-  // Check if file is uploaded
-  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-      $fileTmpPath = $_FILES['photo']['tmp_name'];
-      $fileName = $_FILES['photo']['name'];
-      $photo = "assets/img/";
-      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-      $newFileName = $firstName . $lastName . "." . $fileExt;
-      $target_file = $photo . $newFileName;
-  
-      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-          echo "Sorry, there was an error uploading your file.";
-          exit;
-      }
-  }
-
-// Check if the provided email already exists for another user
+    
+    // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
 $result = $connection->query($checkEmailQuery);
 
 if ($result->num_rows > 0) {
-  // Email address is already registered for another user
-  $_SESSION['email_already_registered'] = true;
+    // Email address is already registered for another user
+    $_SESSION['email_already_registered'] = true;
 } else {
-  // UPDATE
-  $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?,cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-  $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $photo,  $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+    //UPDATE
+   
+        // New photo uploaded, update the photo field in the database
+        $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+        $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $photo, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+   
 
-  if ($stmt->execute()) {
-      // Store success message in session variable
-      $_SESSION['profile_updated_success'] = true;
-  } else {
-      echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
-  }
+    if ($stmt->execute()) {
+        // Store success message in session variable
+        $_SESSION['profile_updated_success'] = true;
+    } else {
+        echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+    }
 
-  $stmt->close();
-  $connection->close(); 
+    $stmt->close();
 }
+
+$connection->close(); 
 }
-
-
-
-
-// Fetch user data for pre-filling the profile form 
-$servername = "localhost"; 
-$username = "root"; 
-$dbPassword = ""; 
-$database = "lingo"; 
-$connection = new mysqli($servername, $username, $dbPassword, $database); 
+// Fetch user data for pre-filling the profile form
+$servername = "localhost";
+$username = "root";
+$dbPassword = "";
+$database = "lingo";
+$connection = new mysqli($servername, $username, $dbPassword, $database);
 
 $stmtFetch = $connection->prepare("SELECT * FROM partners WHERE partner_id = ?");
-$stmtFetch->bind_param("i", $_SESSION['partner_id']); 
-$stmtFetch->execute(); 
-$resultFetch = $stmtFetch->get_result(); 
+$stmtFetch->bind_param("i", $_SESSION['partner_id']);
+$stmtFetch->execute();
+$resultFetch = $stmtFetch->get_result();
 
 // Fetch user data
-if ($resultFetch->num_rows > 0) { 
-  $userData = $resultFetch->fetch_assoc(); 
+if ($resultFetch->num_rows > 0) {
+    $userData = $resultFetch->fetch_assoc();
 
-  
-  // Fetch languages and proficiency levels for the partner
-  $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
-  $stmtLanguages->bind_param("i", $_SESSION['partner_id']); 
-  $stmtLanguages->execute(); 
-  $resultLanguages = $stmtLanguages->get_result(); 
+    // Fetch languages and proficiency levels for the partner
+    $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
+    $stmtLanguages->bind_param("i", $_SESSION['partner_id']);
+    $stmtLanguages->execute();
+    $resultLanguages = $stmtLanguages->get_result();
 
-  $languages = array();
-  $ProficiencyLevel= array();
+    $languages = array();
+    $ProficiencyLevel = array();
 
-  // Fetch languages and proficiency levels
-  while ($row = $resultLanguages->fetch_assoc()) {
-    $languages[] = $row['language'];
-    $ProficiencyLevel[] = $row['ProficiencyLevel'];
-  }
+    // Fetch languages and proficiency levels
+    while ($row = $resultLanguages->fetch_assoc()) {
+        $languages[] = $row['language'];
+        $ProficiencyLevel[] = $row['ProficiencyLevel'];
+    }
 
-// Check if a language is selected for the user
-function isLanguageSelected($language, $userLanguages) {
-  return in_array($language, $userLanguages);
+    // Check if a language is selected for the user
+    function isLanguageSelected($language, $userLanguages)
+    {
+        return in_array($language, $userLanguages);
+    }
+
+    // Assign user data to variables for pre-filling the form
+    $firstName = $userData['first_name'];
+    $lastName = $userData['last_name'];
+    $email = $userData['email'];
+    $password = $userData['password'];
+    $location = $userData['location'];
+    $photo = $userData['photo'];
+    $age = $userData['age'];
+    $gender = $userData['gender'];
+    $culturalKnowledge = $userData['cultural_knowledge'];
+    $education = $userData['Education'];
+    $experience = $userData['Experience'];
+    $pricePerSession = $userData['PricePerSession'];
+    $photo = $userData['photo']; 
+} else {
+    // User not found, handle the error
 }
-  // Assign user data to variables for pre-filling the form 
-  $firstName = $userData['first_name']; 
-  $lastName = $userData['last_name']; 
-  $email = $userData['email']; 
-  $password = $userData['password']; 
-  $location = $userData['location']; 
-  $photo = $userData['photo']; 
-  $age = $userData['age']; 
-  $gender = $userData['gender']; 
-  $culturalKnowledge = $userData['cultural_knowledge']; 
-  $education = $userData['Education']; 
-  $experience = $userData['Experience']; 
-  $pricePerSession = $userData['PricePerSession']; 
-  
-} else { 
-  // User not found, handle the error
-} 
 
-$stmtFetch->close(); 
-$connection->close(); 
+$stmtFetch->close();
+$connection->close();
 
-// Handle form submission (delete profile) 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
-  $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
-  $stmtDelete->bind_param("i", $_SESSION['partner_id']); 
-  if ($stmtDelete->execute()) { 
-    header("Location: signuppartner.html"); 
-    exit(); 
-  } else { 
-    echo "<div class='error-message'>Error: " .
-      $stmtDelete->error . "</div>"; 
-  } 
-  $stmtDelete->close(); 
-  $connection->close(); 
-} 
-
-?> 
+// Handle form submission (delete profile)
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
+    $connection = new mysqli($servername, $username, $dbPassword, $database);
+    $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
+    $stmtDelete->bind_param("i", $_SESSION['partner_id']);
+    if ($stmtDelete->execute()) {
+        header("Location: signuppartner.html");
+        exit();
+    } else {
+        echo "<div class='error-message'>Error: " .
+            $stmtDelete->error . "</div>";
+    }
+    $stmtDelete->close();
+    $connection->close();
+}
+?>
 
 <!DOCTYPE html> 
 <html lang="en"> 

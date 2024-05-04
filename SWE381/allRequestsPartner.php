@@ -12,7 +12,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-if(isset($_SESSION['learner_id'])){
+if(isset($_SESSION['partner_id'])){
     $partner_id = $_SESSION['partner_id'];
 
 $query1 = "SELECT L.first_name AS learner_first_name, 
@@ -212,23 +212,24 @@ $("#button1").click(function(){
 <div id="site">
   <?php        
 if (!isset($result) || mysqli_num_rows($result) == 0) {
-    echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+    echo "<br> <h3 class='sessions'>No requests available.</h3>";
 } else {          
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
-    echo "<a href='#' class='TPName' id='partnerName' data-learner-id='{$row['learnerID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
+    echo "<a href='#' class='TPName' id='partnerName' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
     echo "<h6 class='text2'>{$row['RStatus']}</h6>"; 
               
     if ($row['RStatus'] == 'Pending') {
         echo '<div class="button-container">';
         echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
-        echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
+        echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>Decline</button>";
         echo '</div>';
     }
- }
+     
 
     echo "</div>";
+}
 }
 
 ?>
@@ -279,17 +280,17 @@ while ($row = mysqli_fetch_assoc($result)) {
       <div class="credits"></div>
     </div>
   </footer>
-  <script>    
+   <script>    
   	const partnerNameElement = document.getElementById('partnerName');
     partnerNameElement.addEventListener("click", redirectToLearnerPage);
 
-
-
-
     function redirectToLearnerPage(event) {
         event.preventDefault();
-        const learnerId = this.getAttribute('data-learner-id');
-        const url = `learnerCard.php?id=${learnerId}`;
+        const partnerId = $(this).data('partner-id');
+    	const requestID = $(this).data('req-id');
+    	const learnerID = $(this).data('learner-id');
+    	
+        const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`;
         window.location.href = url;
     }
    </script> 
