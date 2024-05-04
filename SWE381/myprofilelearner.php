@@ -24,8 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $sql="select * from learners where learner_id='$user_id'";
 $user_info=$connection->query($sql);
-
- $oldPhoto=$user_info['photo']; 
+$oldphoto='';
+if($user_info->num_rows>0){
+  while($row=$user_info->fetch_assoc()){
+$oldPhoto=$row['photo'];
+  }
+}
+ //$oldPhoto=$user_info['photo']; 
 /*
   $oldPhoto=$userData['photo'];
 
