@@ -23,9 +23,9 @@ $old_image=$_POST['image_old'];
 $photo=$_FILES['photo']['name'];
 
 
-if($new_image!=null){
+if($photo!=null){
 
-  $update_filename=$new_image;
+  $update_filename=$photo;
 }
 
 else{
@@ -61,7 +61,7 @@ if ($result->num_rows > 0) {
   
      //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $$update_filename, $city, $location, $_SESSION['learner_id']); 
  
   if ($stmt->execute()) {
     // Store success message in session variable
