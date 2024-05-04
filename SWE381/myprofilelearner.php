@@ -20,14 +20,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo']; // Initialize with the existing photo
 
-  $photoUploaded = isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE;
+  $oldPhoto=$userData['photo'];
 
-$oldPhoto=$userData['photo']; 
+  echo  "$photo";
+  
+if ($photo== null){
 
-if (!$photoUploaded) {
-  $photo=$oldPhoto;
+$photo=$oldPhoto;
+
 }
-
 
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
