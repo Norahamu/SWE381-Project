@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
   
-$old_image=$_POST('image_old');
+$old_image=$_POST['image_old'];
 $photo=$_FILES['photo']['name'];
 
 
