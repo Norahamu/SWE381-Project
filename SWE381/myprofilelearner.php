@@ -20,8 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo'];
  
-  $target_file = "assets/img/OIP.jpg";
-
+ 
  
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
@@ -32,9 +31,22 @@ if ($result->num_rows > 0) {
   $_SESSION['email_already_registered'] = true;
 } else {
 
+// Check if file is uploaded
+if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+  $fileTmpPath = $_FILES['photo']['tmp_name'];
+  $fileName = $_FILES['photo']['name'];
+  $photo = "assets/img/";
+  $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+  $newFileName = $firstName . $lastName . "." . $fileExt;
+  $target_file = $photo . $newFileName;
 
-  // Check if a file was uploaded
-if(isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+  // Move the uploaded file to the desired directory
+  if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+      echo "Sorry, there was an error uploading your file.";
+      exit;
+  }
+
+  // Update the photo field in the database
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
   $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
  
@@ -43,8 +55,6 @@ if(isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
   $stmt->bind_param("ssssssi", $firstName, $lastName, $email, $password, $city, $location, $_SESSION['learner_id']); 
  
 }
-
-
      //UPDATE
   
   if ($stmt->execute()) {
