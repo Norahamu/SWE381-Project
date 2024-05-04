@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo'];
  
-  $target_file = "assets/img/OIP.jpg";
+ 
   // Check if file is uploaded
   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
       $fileTmpPath = $_FILES['photo']['tmp_name'];

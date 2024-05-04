@@ -28,7 +28,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $experience = $connection->real_escape_string($_POST['Experience']);
    $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
    $photo = $_POST['photo'];
+   $languages = isset($_POST['languages']) ? $_POST['languages'] : [];
+   $proficiencyLevels = isset($_POST['proficiency_levels']) ? $_POST['proficiency_levels'] : [];
 
+
+
+   
+        // Validate languages and proficiency 
+        if (empty($languages) || empty($proficiencyLevels)) {
+          echo "<script>alert('Please select at least one language and proficiency level.'); window.location.href='signuppartner.html';</script>";
+          exit;
+      }
+
+      if (count($languages) !== count($proficiencyLevels)) {
+          echo "<script>alert('Each selected language must have a corresponding proficiency level.'); window.location.href='signuppartner.html';</script>";
+          exit;
+      }
 // Process proficiency levels for languages
 if (isset($_POST['languages'])) {
   $languages = $_POST['languages'];
@@ -52,7 +67,7 @@ if (isset($_POST['languages'])) {
 
  
 
-  $target_file = "assets/img/OIP.jpg";
+  
   // Check if file is uploaded
   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
       $fileTmpPath = $_FILES['photo']['tmp_name'];
