@@ -91,13 +91,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
   
       if ($stmt->execute()) {
-          // Store success message in session variable
-          $_SESSION['profile_updated_success'] = true;
-          echo "Profile updated successfully."; // Debug statement
-      } else {
-          echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
-      }
-  
+        // Store success message in session variable
+        $_SESSION['profile_updated_success'] = true;
+        echo "Profile updated successfully."; // Debug statement
+    } else {
+        echo "<div class='error-message'>Error executing SQL update query: " . $stmt->error . "</div>"; // Debug statement
+    }
+    
       $stmt->close();
       $connection->close(); 
   }
