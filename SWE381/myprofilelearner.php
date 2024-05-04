@@ -31,12 +31,12 @@ if ($result->num_rows > 0) {
   // UPDATE
   if (isset($_FILES['photo'])) {
       // New photo uploaded, update the photo field in the database
-      echo "New photo uploaded. Target file: $target_file"; // Debug statement
+     
       $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?");
-      $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $target_file, $city, $location, $_SESSION['learner_id']);
+      $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']);
   } else {
       // No new photo uploaded, don't update the photo field in the database
-      echo "No new photo uploaded."; // Debug statement
+      
       $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, city=?, location=? WHERE learner_id=?");
       $stmt->bind_param("ssssssi", $firstName, $lastName, $email, $password, $city, $location, $_SESSION['learner_id']);
   }
@@ -44,7 +44,7 @@ if ($result->num_rows > 0) {
   if ($stmt->execute()) {
       // Store success message in session variable
       $_SESSION['profile_updated_success'] = true;
-      echo "Profile updated successfully."; // Debug statement
+     
   } else {
       echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
   }
