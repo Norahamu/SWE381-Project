@@ -19,24 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
   $photo = $_POST['photo']; // Initialize with the existing photo
-
-  
-    // Handle file upload
-    $target_file = "assets/img/OIP.jpg";
-    // Check if file is uploaded
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['photo']['tmp_name'];
-        $fileName = $_FILES['photo']['name'];
-        $photo = "assets/img/";
-        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-        $newFileName = $firstName . $lastName . "." . $fileExt;
-        $target_file = $photo . $newFileName;
-    
-        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-            echo "Sorry, there was an error uploading your file.";
-            exit;
-        }
-    }
+ 
  
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
@@ -46,32 +29,24 @@ if ($result->num_rows > 0) {
   // Email address is already registered for another user
   $_SESSION['email_already_registered'] = true;
 } else {
-  // UPDATE
-  if (isset($_FILES['photo'])) {
-      // New photo uploaded, update the photo field in the database
-     
-      $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?");
-      $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']);
-  } else {
-      // No new photo uploaded, don't update the photo field in the database
-      
-      $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, city=?, location=? WHERE learner_id=?");
-      $stmt->bind_param("ssssssi", $firstName, $lastName, $email, $password, $city, $location, $_SESSION['learner_id']);
-  }
-
+     //UPDATE
+  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
+ 
   if ($stmt->execute()) {
-      // Store success message in session variable
-      $_SESSION['profile_updated_success'] = true;
-     
-  } else {
-      echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
-  }
+    // Store success message in session variable
+    $_SESSION['profile_updated_success'] = true;
+} else {
+    echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+}
 
-  $stmt->close();
-  $connection->close(); 
+$stmt->close();
+
+$connection->close(); 
 } 
 }
 
+ 
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
 $username = "root"; 
