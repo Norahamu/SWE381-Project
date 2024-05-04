@@ -34,6 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           echo "Sorry, there was an error uploading your file.";
           exit;
       }
+  } else {
+      // No new photo uploaded, keep the existing photo
+      $photo = $_POST['current_photo']; // Assuming you pass the current photo path as a hidden input field
   }
  
 // Check if the provided email already exists for another user
