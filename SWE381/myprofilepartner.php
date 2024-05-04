@@ -74,40 +74,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $connection->query($checkEmailQuery);
 
     if ($result->num_rows > 0) {
-      // Email address is already registered for another user
-      $_SESSION['email_already_registered'] = true;
-  } else {
-      // UPDATE
-      if (isset($_FILES['photo'])) {
-          // New photo uploaded, update the photo field in the database
-          echo "New photo uploaded. Target file: $target_file"; // Debug statement
-          $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-          $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
-      } else {
-          // No new photo uploaded, don't update the photo field in the database
-          echo "No new photo uploaded."; // Debug statement
-          $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-          $stmt->bind_param("sssssssssssi", $firstName, $lastName, $email, $password, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
-      }
-  
-      if ($stmt->execute()) {
-        // Store success message in session variable
-        $_SESSION['profile_updated_success'] = true;
-        echo "Profile updated successfully."; // Debug statement
+        // Email address is already registered for another user
+        $_SESSION['email_already_registered'] = true;
     } else {
-        echo "<div class='error-message'>Error executing SQL update query: " . $stmt->error . "</div>"; // Debug statement
+        // UPDATE
+        if (isset($_FILES['photo'])) {
+            // New photo uploaded, update the photo field in the database
+            $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+            $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $target_file, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+        } else {
+            // No new photo uploaded, don't update the photo field in the database
+            $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+            $stmt->bind_param("sssssssssssi", $firstName, $lastName, $email, $password, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+        }
+
+        if ($stmt->execute()) {
+            // Store success message in session variable
+            $_SESSION['profile_updated_success'] = true;
+        } else {
+            echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+        }
+
+        $stmt->close();
     }
-    
-      $stmt->close();
-      $connection->close(); 
-  }
-  
-  // Debug statements for file path and file existence
-  echo "Target file: $target_file<br>";
-  echo "File exists: " . (file_exists($target_file) ? 'Yes' : 'No') . "<br>";
-// Debug statements for file path and file existence
-echo "Target file: $target_file<br>";
-echo "File exists: " . (file_exists($target_file) ? 'Yes' : 'No') . "<br>";}
+
+    $connection->close();
+}
 
 // Fetch user data for pre-filling the profile form
 $servername = "localhost";
