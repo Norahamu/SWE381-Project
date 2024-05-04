@@ -56,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Handle file upload
     $target_file = "assets/img/OIP.jpg";
+    // Check if file is uploaded
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['photo']['tmp_name'];
         $fileName = $_FILES['photo']['name'];
@@ -63,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
         $newFileName = $firstName . $lastName . "." . $fileExt;
         $target_file = $photo . $newFileName;
-
+    
         if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
             echo "Sorry, there was an error uploading your file.";
             exit;
@@ -80,15 +81,11 @@ if ($result->num_rows > 0) {
     $_SESSION['email_already_registered'] = true;
 } else {
     //UPDATE
-    if (isset($_FILES['photo'])) {
+   
         // New photo uploaded, update the photo field in the database
         $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
         $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $photo, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
-    } else {
-        // No new photo uploaded, don't update the photo field in the database
-        $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-        $stmt->bind_param("sssssssssssi", $firstName, $lastName, $email, $password, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
-    }
+   
 
     if ($stmt->execute()) {
         // Store success message in session variable
