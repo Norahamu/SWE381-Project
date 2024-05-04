@@ -18,7 +18,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
-  $photo = $_POST['photo'];
+  
+$old_image=$_POST('image_old');
+$photo=$_FILES['photo']['name'];
+
+
+if($new_image!=null){
+
+  $update_filename=$new_image;
+}
+
+else{
+  $update_filename=$old_image;
+
+}
  
   $target_file = "assets/img/OIP.jpg";
   // Check if file is uploaded
@@ -47,12 +60,9 @@ if ($result->num_rows > 0) {
 
   
      //UPDATE
-     $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, city=?, location=?  
-     " . (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK ? ", photo=? " : "") . "
-     WHERE learner_id=?");
-   
-   $stmt->bind_param("ssssssssi", $firstName, $lastName, $email, $password, $city, $location, (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK ? $photo : null), $_SESSION['learner_id']);
-   
+  $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
+ 
   if ($stmt->execute()) {
     // Store success message in session variable
     $_SESSION['profile_updated_success'] = true;
@@ -66,7 +76,7 @@ $connection->close();
 } 
 }
 
- 
+
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
 $username = "root"; 
@@ -201,7 +211,7 @@ $(document).ready(function() {
       <div class="row"> 
  
         <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
-          <form action="#" method="post" class="php-email-form"> 
+          <form action="#" method="post" class="php-email-form" enctype="multipart/form-data"> 
             <div class="row"> 
               <div class="form-group col-md-6"> 
  
@@ -235,6 +245,7 @@ $(document).ready(function() {
             <div class="form-group"> 
               <label>Upload Photo</label> 
               <input type="file" class="form-control" name="photo" id="photo" > 
+              <input type=hidden name="image_old" value="<?php echo $photo;?>">
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
