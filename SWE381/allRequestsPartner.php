@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'checkpartner';
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
@@ -67,10 +67,12 @@ if (!$result) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
-    $("#button2").click(function() {
+    $(".button2").click(function() {
         var learnerId = $(this).data('learner-id');
         var requestID = $(this).data('req-id');
         var partnerId = $(this).data('partner-id');
+        
+        console.log("partnerId:", partnerId);
 
         $.ajax({
             url: "declineRequest.php",
@@ -91,7 +93,7 @@ $(document).ready(function(){
     });
     
     
-$("#button1").click(function(){
+$(".button1").click(function(){
     var partnerId = $(this).data('partner-id');
     var requestID = $(this).data('req-id');
     var learnerID = $(this).data('learner-id');
@@ -219,15 +221,14 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
     echo "<a href='#' class='PName partnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
-    echo "<h6 class='text2'>{$row['RStatus']}</h6>"; 
-              
+    echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>"; 
+
     if ($row['RStatus'] == 'Pending') {
         echo '<div class="button-container">';
-        echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['REQSchedule']}'   data-req-dur='{$row['REQsession_Duration']}' >Accept</button>";
-        echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>Decline</button>";
+        echo "<button type='button' class='button1' id='button1_{$row['learnerID']}' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}' data-req-sch='{$row['REQSchedule']}' data-req-dur='{$row['REQsession_Duration']}'>Accept</button>";
+        echo "<button type='button' class='button2' id='button2_{$row['learnerID']}' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}' data-partner-id='$partner_id'>Decline</button>";
         echo '</div>';
     }
-     
 
     echo "</div>";
 }
