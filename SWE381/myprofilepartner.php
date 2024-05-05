@@ -30,10 +30,14 @@ $experience = addslashes($connection->real_escape_string($_POST['Experience']));
    
     $photo = $_POST['photo']; // Initialize with the existing photo
 
-  
-   
-    $languages = array();
-    $proficiencyLevels = array();
+   // Fetch languages and proficiency levels for the partner
+   $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
+   $stmtLanguages->bind_param("i", $_SESSION['partner_id']);
+   $stmtLanguages->execute();
+   $resultLanguages = $stmtLanguages->get_result();
+
+   $languages = array();
+   $proficiencyLevels = array();
 
     // Fetch languages and proficiency levels
     while ($row = $resultLanguages->fetch_assoc()) {
