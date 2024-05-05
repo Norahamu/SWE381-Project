@@ -30,30 +30,7 @@ $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     $old_image=$_POST['image_old'];
     $photo=$_FILES['photo']['name'];
 
-   // Fetch languages and proficiency levels for the partner
-   $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
-   $stmtLanguages->bind_param("i", $_SESSION['partner_id']);
-   $stmtLanguages->execute();
-   $resultLanguages = $stmtLanguages->get_result();
 
-   $languages = array();
-   $proficiencyLevels = array();
-
-    // Fetch languages and proficiency levels
-    while ($row = $resultLanguages->fetch_assoc()) {
-        $languages[] = $row['language'];
-        $proficiencyLevels[$row['language']] = $row['ProficiencyLevel']; // Store proficiency levels by language
-    }
-
-    // Check if a language is selected for the user
-    function isLanguageSelected($language, $userLanguages)
-    {
-        return in_array($language, $userLanguages);
-    }
-
-
-   
-    
     
     if($photo!=null){
     
@@ -111,26 +88,6 @@ $resultFetch = $stmtFetch->get_result();
 if ($resultFetch->num_rows > 0) {
     $userData = $resultFetch->fetch_assoc();
 
-    // Fetch languages and proficiency levels for the partner
-    $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
-    $stmtLanguages->bind_param("i", $_SESSION['partner_id']);
-    $stmtLanguages->execute();
-    $resultLanguages = $stmtLanguages->get_result();
-
-    $languages = array();
-    $ProficiencyLevel = array();
-
-    // Fetch languages and proficiency levels
-    while ($row = $resultLanguages->fetch_assoc()) {
-        $languages[] = $row['language'];
-        $ProficiencyLevel[] = $row['ProficiencyLevel'];
-    }
-
-    // Check if a language is selected for the user
-    function isLanguageSelected($language, $userLanguages)
-    {
-        return in_array($language, $userLanguages);
-    }
 
     // Assign user data to variables for pre-filling the form
     $firstName = $userData['first_name'];
@@ -148,6 +105,26 @@ if ($resultFetch->num_rows > 0) {
     $photo = $userData['photo']; 
 } else {
     // User not found, handle the error
+}
+// Fetch languages and proficiency levels for the partner
+$stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
+$stmtLanguages->bind_param("i", $_SESSION['partner_id']);
+$stmtLanguages->execute();
+$resultLanguages = $stmtLanguages->get_result();
+
+$languages = array();
+$ProficiencyLevel = array();
+
+// Fetch languages and proficiency levels
+while ($row = $resultLanguages->fetch_assoc()) {
+    $languages[] = $row['language'];
+    $ProficiencyLevel[] = $row['ProficiencyLevel'];
+}
+
+// Check if a language is selected for the user
+function isLanguageSelected($language, $userLanguages)
+{
+    return in_array($language, $userLanguages);
 }
 
 $stmtFetch->close();
