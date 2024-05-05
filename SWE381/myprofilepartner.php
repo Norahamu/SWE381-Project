@@ -30,17 +30,7 @@ $experience = addslashes($connection->real_escape_string($_POST['Experience']));
    
     $photo = $_POST['photo']; // Initialize with the existing photo
 
-    // Validate languages and proficiency
-    if (empty($languages) || empty($proficiencyLevels)) {
-        echo "<script>alert('Please select at least one language and proficiency level.'); window.location.href='signuppartner.html';</script>";
-        exit;
-    }
-
-    if (count($languages) !== count($proficiencyLevels)) {
-        echo "<script>alert('Each selected language must have a corresponding proficiency level.'); window.location.href='signuppartner.html';</script>";
-        exit;
-    }
-
+  
    
     $languages = array();
     $proficiencyLevels = array();
@@ -321,7 +311,7 @@ $(document).ready(function() {
 
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
- <!-- Pre-fill language checkboxes and select dropdowns -->
+<!-- Pre-fill language checkboxes and select dropdowns -->
 <label class="required">Click on the languages you want to teach and select your proficiency:</label>
 <div class="language-selection">
     <label class="cbx" for="cbx-46-arabic">
@@ -330,12 +320,13 @@ $(document).ready(function() {
     </label>
     <select name="proficiency_levels[Arabic]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
         <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($proficiencyLevels["Arabic"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($proficiencyLevels["Arabic"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($proficiencyLevels["Arabic"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
+        <option value="Beginner" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 <!-- Repeat similar code for other languages -->
+
 
 <div class="language-selection">
     <label class="cbx" for="cbx-46-english">
