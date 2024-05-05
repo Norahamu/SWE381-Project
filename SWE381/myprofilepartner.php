@@ -54,22 +54,35 @@ $experience = addslashes($connection->real_escape_string($_POST['Experience']));
         }
     }
 
-    // Handle file upload
-    $target_file = "assets/img/OIP.jpg";
-    // Check if file is uploaded
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['photo']['tmp_name'];
-        $fileName = $_FILES['photo']['name'];
-        $photo = "assets/img/";
-        $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-        $newFileName = $firstName . $lastName . "." . $fileExt;
-        $target_file = $photo . $newFileName;
+    $old_image=$_POST['image_old'];
+    $photo=$_FILES['photo']['name'];
     
-        if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-            echo "Sorry, there was an error uploading your file.";
-            exit;
-        }
+    
+    if($photo!=null){
+    
+      $update_filename=$photo;
     }
+    
+    else{
+      $update_filename=$old_image;
+    
+    }
+     
+      $target_file = "assets/img/OIP.jpg";
+      // Check if file is uploaded
+      if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+          $fileTmpPath = $_FILES['photo']['tmp_name'];
+          $fileName = $_FILES['photo']['name'];
+          $photo = "assets/img/";
+          $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+          $newFileName = $firstName . $lastName . "." . $fileExt;
+          $target_file = $photo . $newFileName;
+      
+          if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+              echo "Sorry, there was an error uploading your file.";
+              exit;
+          }
+      }
 
     
     // Check if the provided email already exists for another user
@@ -84,7 +97,7 @@ if ($result->num_rows > 0) {
    
         // New photo uploaded, update the photo field in the database
         $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-        $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $photo, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+        $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $update_filename, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
    
 
     if ($stmt->execute()) {
@@ -299,6 +312,7 @@ $(document).ready(function() {
           <div class="form-group"> 
               <label>Upload Photo</label> 
               <input type="file" class="form-control" name="photo" id="photo" > 
+              <input type=hidden name="image_old" value="<?php echo $photo;?>">
             </div> 
 
             <div class="checkbox-wrapper-46">
