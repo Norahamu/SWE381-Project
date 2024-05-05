@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'checkpartner';
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
@@ -100,7 +100,7 @@ if (!$result) {
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="allRequestsPartner.php">Language Learning Requests</a></li>
     <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
     <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>

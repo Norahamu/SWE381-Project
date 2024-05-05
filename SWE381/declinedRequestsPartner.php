@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'checkpartner';
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');

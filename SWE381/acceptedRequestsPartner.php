@@ -1,5 +1,6 @@
 <?php
-session_start();
+
+include 'checkpartner';
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
@@ -101,7 +102,7 @@ if(isset($_SESSION['learner_id'])){
               echo "<div class='session'>";
               echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
               echo "<strong class='TPName'>{$row['learner_first_name']} {$row['learner_last_name']}</strong><br>";           
-              echo "<h6 class='text2'>{$row['RStatus']}</h6>";
+              echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>";
               echo "</div>";
           }
           }

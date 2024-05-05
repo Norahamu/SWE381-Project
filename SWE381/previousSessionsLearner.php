@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'checklearner';
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
