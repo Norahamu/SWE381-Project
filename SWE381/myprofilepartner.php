@@ -24,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $age = $connection->real_escape_string($_POST['age']);
     $gender = $connection->real_escape_string($_POST['gender']);
     $culturalKnowledge = addslashes($connection->real_escape_string($_POST['cultural_knowledge']));
-$education = addslashes($connection->real_escape_string($_POST['Education']));
-$experience = addslashes($connection->real_escape_string($_POST['Experience']));
+    $education = addslashes($connection->real_escape_string($_POST['Education']));
+    $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
     $old_image=$_POST['image_old'];
     $photo=$_FILES['photo']['name'];
