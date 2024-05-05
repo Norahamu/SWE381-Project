@@ -30,6 +30,30 @@ $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     $old_image=$_POST['image_old'];
     $photo=$_FILES['photo']['name'];
 
+   // Fetch languages and proficiency levels for the partner
+   $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
+   $stmtLanguages->bind_param("i", $_SESSION['partner_id']);
+   $stmtLanguages->execute();
+   $resultLanguages = $stmtLanguages->get_result();
+
+   $languages = array();
+   $proficiencyLevels = array();
+
+    // Fetch languages and proficiency levels
+    while ($row = $resultLanguages->fetch_assoc()) {
+        $languages[] = $row['language'];
+        $proficiencyLevels[$row['language']] = $row['ProficiencyLevel']; // Store proficiency levels by language
+    }
+
+    // Check if a language is selected for the user
+    function isLanguageSelected($language, $userLanguages)
+    {
+        return in_array($language, $userLanguages);
+    }
+
+
+   
+    
     
     if($photo!=null){
     
@@ -41,21 +65,7 @@ $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     
     }
      
-      $target_file = "assets/img/OIP.jpg";
-      // Check if file is uploaded
-      if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-          $fileTmpPath = $_FILES['photo']['tmp_name'];
-          $fileName = $_FILES['photo']['name'];
-          $photo = "assets/img/";
-          $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-          $newFileName = $firstName . $lastName . "." . $fileExt;
-          $target_file = $photo . $newFileName;
       
-          if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-              echo "Sorry, there was an error uploading your file.";
-              exit;
-          }
-      }
 
     
     // Check if the provided email already exists for another user

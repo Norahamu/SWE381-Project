@@ -33,21 +33,7 @@ else{
 
 }
  
-  $target_file = "assets/img/OIP.jpg";
-  // Check if file is uploaded
-  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-      $fileTmpPath = $_FILES['photo']['tmp_name'];
-      $fileName = $_FILES['photo']['name'];
-      $photo = "assets/img/";
-      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-      $newFileName = $firstName . $lastName . "." . $fileExt;
-      $target_file = $photo . $newFileName;
-  
-      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-          echo "Sorry, there was an error uploading your file.";
-          exit;
-      }
-  }
+ 
  
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
