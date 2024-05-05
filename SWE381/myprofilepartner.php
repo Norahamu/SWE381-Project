@@ -27,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $education = addslashes($connection->real_escape_string($_POST['Education']));
 $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
-   
-    $photo = $_POST['photo']; // Initialize with the existing photo
+    $old_image=$_POST['image_old'];
+    $photo=$_FILES['photo']['name'];
 
    // Fetch languages and proficiency levels for the partner
    $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
@@ -52,8 +52,7 @@ $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     }
 
 
-    $old_image=$_POST['image_old'];
-    $photo=$_FILES['photo']['name'];
+   
     
     
     if($photo!=null){
