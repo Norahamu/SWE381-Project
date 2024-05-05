@@ -11,63 +11,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if ($connection->connect_error) { 
     die("Connection failed: " . $connection->connect_error); 
   } 
- $user_id=$_SESSION['learner_id'];
  
-
   $firstName = $connection->real_escape_string($_POST['first_name']); 
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
   $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
- // $photo = $_POST['photo']; // Initialize with the existing photo
+  
+$old_image=$_POST['image_old'];
+$photo=$_FILES['photo']['name'];
 
-   // Handle file upload
-   $target_file = "assets/img/OIP.jpg";
-   // Check if file is uploaded
-   if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-       $fileTmpPath = $_FILES['photo']['tmp_name'];
-       $fileName = $_FILES['photo']['name'];
-       $photo = "assets/img/";
-       $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-       $newFileName = $firstName . $lastName . "." . $fileExt;
-       $target_file = $photo . $newFileName;
-   
-       if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-           echo "Sorry, there was an error uploading your file.";
-           exit;
-       }
-   }
 
-$sql="select * from learners where learner_id='$user_id'";
-$user_info=$connection->query($sql);
-$oldphoto='';
-if($user_info->num_rows>0){
-  while($row=$user_info->fetch_assoc()){
-$oldPhoto=$row['photo'];
+if($photo!=null){
+
+  $update_filename=$photo;
+}
+
+else{
+  $update_filename=$old_image;
+
+}
+ 
+  $target_file = "assets/img/OIP.jpg";
+  // Check if file is uploaded
+  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+      $fileTmpPath = $_FILES['photo']['tmp_name'];
+      $fileName = $_FILES['photo']['name'];
+      $photo = "assets/img/";
+      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+      $newFileName = $firstName . $lastName . "." . $fileExt;
+      $target_file = $photo . $newFileName;
+  
+      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+          echo "Sorry, there was an error uploading your file.";
+          exit;
+      }
   }
-}
- //$oldPhoto=$user_info['photo']; 
-/*
-  $oldPhoto=$userData['photo'];
-
-  echo  $photo;
-
-if ($photo== null){
-
-$photo=$oldPhoto;
-
-Warning: Undefined array key "photo" in C:\xampp\htdocs\SWE381-Project\SWE381\myprofilelearner.php on line 23
-Array ( [name] => BenG.png [full_path] => BenG.png [type] => image/png [tmp_name] => C:\xampp\tmp\phpB7D9.tmp [error] => 0 [size] => 9828 )
-
-
-
-}
-*///print_r($_FILES['photo']);
-
-if($_FILES['photo']['size']==0||$_FILES['photo']['error']==0||$_FILES['photo']['error']==4){
-  $photo=$oldPhoto;
-}
+ 
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
 $result = $connection->query($checkEmailQuery);
@@ -76,9 +57,11 @@ if ($result->num_rows > 0) {
   // Email address is already registered for another user
   $_SESSION['email_already_registered'] = true;
 } else {
+
+  
      //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $update_filename, $city, $location, $_SESSION['learner_id']); 
  
   if ($stmt->execute()) {
     // Store success message in session variable
@@ -93,7 +76,7 @@ $connection->close();
 } 
 }
 
- 
+
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
 $username = "root"; 
@@ -146,7 +129,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
  
 ?> 
-
  
 <!DOCTYPE html> 
 <html lang="en"> 
@@ -263,6 +245,7 @@ $(document).ready(function() {
             <div class="form-group"> 
               <label>Upload Photo</label> 
               <input type="file" class="form-control" name="photo" id="photo" > 
+              <input type=hidden name="image_old" value="<?php echo $photo;?>">
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
@@ -346,7 +329,7 @@ $(document).ready(function() {
     }
 
     // Add event listeners to input fields
-    var inputFields = document.querySelectorAll('input, textarea, select, , input[type="checkbox"]');
+    var inputFields = document.querySelectorAll('input, textarea, select, ');
     inputFields.forEach(function(input) {
         input.addEventListener('input', handleInputChange);
         input.addEventListener('change', handleInputChange); // Adding change event listener
