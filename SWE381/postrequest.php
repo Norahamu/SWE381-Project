@@ -63,13 +63,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $partnerCount = $partnerCheckRow['count'];
 
         if ($partnerCount == 1) {
-            // Insert data into requests_partner table
-            $sql_partner = "INSERT INTO requests_partner (RequestID, PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
-            VALUES ('$requestID', '$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
+                        // Insert data into requests_partner table
+                $sql_partner = "INSERT INTO requests_partner (RequestID, PartnerID, LearnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status, request_date)
+                VALUES ('$requestID', '$partnerID', '$learnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status', NOW())";
 
-            // Insert data into requests_learner table
-            $sql_learner = "INSERT INTO requests_learner (RequestID, LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status)
-            VALUES ('$requestID', '$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status')";
+                // Insert data into requests_learner table
+                $sql_learner = "INSERT INTO requests_learner (RequestID, LearnerID, PartnerID, Language, ProficiencyLevel, SessionDuration, preferred_schedule, Status, request_date)
+                VALUES ('$requestID', '$learnerID', '$partnerID', '$language', '$level', '$sessionDuration', '$preferredSchedule', '$status', NOW())";
 
             // Execute both queries
             if ($conn->query($sql_partner) === TRUE && $conn->query($sql_learner) === TRUE) {
@@ -170,22 +170,22 @@ mysqli_close($conn);
 
 </head>
 <body>
+<!-- ======= Header ======= -->
 <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
-        <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo"
-                                                      class="img-fluid"></a>
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-        <ul>
-            <li><a class="nav-link scrollto" href="HomePage.html">Sign out</a></li>
-            <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
-            <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
-            <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
-            <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
-            <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
-        </ul>
+      <ul> 
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+      </ul>
     </nav>
-</header>
+  </header>
+  <!-- End Header -->
 
 <section id="req" class="req section-bg">
     <div class="container aos-init aos-animate" data-aos="fade-up">
@@ -256,51 +256,46 @@ mysqli_close($conn);
 
 
 
- <!-- ======= Footer ======= -->
+ 
+<!-- ======= Footer ======= -->
 <footer id="footer">
     <div class="footer-top">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 footer-contact">
-                    <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt=""
-                                                                   class="img-fluid"></a>
-                    <p>
-                        King Saud University <br>
-                        Riyadh <br>
-                        Saudi Arabia <br><br>
-                        <strong>Email:</strong> lingo@project.com<br>
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-6 footer-links">
-                    <h4>Useful Links</h4>
-                    <ul>
-                        <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner">My profile</a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.html">Sessions</a>
-                        </li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.html">Language Learning
-                                Requests</a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="PartnersList.html">Partner List</a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.html">Review my partner</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6 footer-links">
-                    <h4>Our Social Networks</h4>
-                    <div class="social-links mt-3">
-                        <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
-                        <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-                    </div>
-                </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <p>
+              King Saud University <br>
+              Riyadh <br>
+              Saudi Arabia <br><br>
+              <strong>Email:</strong> lingo@project.com<br>
+            </p>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
             </div>
+          </div>
         </div>
+      </div>
     </div>
     <div class="container footer-bottom clearfix">
-        <div class="copyright">
-            © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
-        </div>
-        <div class="credits"></div>
+      <div class="copyright">
+        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits"></div>
     </div>
-</footer>
+  </footer>
 </body>
 </html>
