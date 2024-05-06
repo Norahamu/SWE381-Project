@@ -15,6 +15,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $connection->connect_error);
     }
 
+    $dsn = "mysql:host=$servername;dbname=$database;charset=utf8mb4";
+      $options = [
+          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+          PDO::ATTR_EMULATE_PREPARES => false,
+      ];
+      try {
+          $pdo = new PDO($dsn, $username, $dbPassword, $options);
+      } catch (PDOException $e) {
+          die("Connection failed: " . $e->getMessage());
+      }
+    
     // Retrieve and sanitize form data
     $firstName = $connection->real_escape_string($_POST['first_name']);
     $lastName = $connection->real_escape_string($_POST['last_name']);
@@ -32,11 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $old_image=$_POST['image_old'];
     $photo=$_FILES['photo']['name'];
 
-   // Fetch existing languages and proficiency levels
-   $sqlFetch = "SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?";
-   $stmtFetch = $pdo->prepare($sqlFetch);
-   $stmtFetch->execute([$_SESSION['partner_id']]);
-   $languages = $stmtFetch->fetchAll(PDO::FETCH_ASSOC);
 
     
     if($photo!=null){
@@ -49,29 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     }
      
-        $languages = $_POST['languages'];
-        $proficiencyLevels = $_POST['proficiencyLevels'];
-
-        if (empty($languages) || empty($proficiencyLevels)) {
-            throw new Exception("Languages and proficiency levels cannot be empty.");
-        }
-
-        if (count($languages) !== count($proficiencyLevels)) {
-            throw new Exception("Each language must have a corresponding proficiency level.");
-        }
-
-        // Delete existing languages
-        $sqlDelete = "DELETE FROM partner_languages WHERE partner_id = ?";
-        $stmtDelete = $pdo->prepare($sqlDelete);
-        $stmtDelete->execute([$_SESSION['partner_id']]);
-
-        // Insert updated languages and proficiency levels
-        $sqlInsert = "INSERT INTO partner_languages (partner_id, language, ProficiencyLevel) VALUES (?, ?, ?)";
-        $stmtInsert = $pdo->prepare($sqlInsert);
-        foreach ($languages as $index => $language) {
-            $stmtInsert->execute([$_SESSION['partner_id'], $language, $proficiencyLevels[$index]]);
-        }
-
     
     // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
@@ -126,7 +110,10 @@ if ($result->num_rows > 0) {
   
   }
   }
+  
   }
+  
+
   
   }
 
@@ -145,6 +132,18 @@ $stmtFetch = $connection->prepare("SELECT * FROM partners WHERE partner_id = ?")
 $stmtFetch->bind_param("i", $_SESSION['partner_id']);
 $stmtFetch->execute();
 $resultFetch = $stmtFetch->get_result();
+
+
+// Attempt to establish a connection
+try {
+  $pdo = new PDO("mysql:host=$servername;dbname=$database;charset=utf8mb4", $username, $password);
+  // Set PDO attributes
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+  // Handle connection error
+  die("Connection failed: " . $e->getMessage());
+}
 
 // Fetch user data
 if ($resultFetch->num_rows > 0) {
@@ -167,29 +166,24 @@ if ($resultFetch->num_rows > 0) {
     $photo = $userData['photo']; 
 } 
 
-// Fetch languages and proficiency levels for the partner
-$stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
-$stmtLanguages->bind_param("i", $_SESSION['partner_id']);
-$stmtLanguages->execute();
-$resultLanguages = $stmtLanguages->get_result();
+// Fetch user's languages and proficiency levels
+$sqlLang = "SELECT * FROM partner_languages WHERE partner_id = ?";
+$stmtLang = $pdo->prepare($sqlLang);
+$stmtLang->execute([$_SESSION['partner_id']]);
+$languages = $stmtLang->fetchAll();
 
-$languages = array();
-$ProficiencyLevel = array();
-
-// Fetch languages and proficiency levels
-while ($row = $resultLanguages->fetch_assoc()) {
-    $languages[] = $row['language'];
-    $ProficiencyLevel[] = $row['ProficiencyLevel'];
+// Group languages and their proficiency levels
+$languageProficiency = array();
+foreach ($languages as $lang) {
+    $language = $lang['language'];
+    $proficiency = $lang['ProficiencyLevel'];
+    
+    // Add proficiency level to the language's array
+    if (!isset($languageProficiency[$language])) {
+        $languageProficiency[$language] = array();
+    }
+    $languageProficiency[$language][] = $proficiency;
 }
-
-// Check if a language is selected for the user
-function isLanguageSelected($language, $userLanguages)
-{
-    return in_array($language, $userLanguages);
-}
-
-$stmtFetch->close();
-$connection->close();
 
 ?>
 
@@ -320,65 +314,28 @@ $(document).ready(function() {
 
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
-<!-- Pre-fill language checkboxes and select dropdowns -->
-<label class="required">Click on the languages you want to teach and select your proficiency:</label>
-<div class="language-selection">
-    <label class="cbx" for="cbx-46-arabic">
-        <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
-        <span>Arabic</span>
-    </label>
-    <select name="proficiency_levels[Arabic]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-    </select>
-</div>
-<!-- Repeat similar code for other languages -->
-
-
-<div class="language-selection">
-    <label class="cbx" for="cbx-46-english">
-        <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
-        <span>English</span>
-    </label>
-    <select name="proficiency_levels[English]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if (isset($proficiencyLevels["English"]) && $proficiencyLevels["English"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if (isset($proficiencyLevels["English"]) && $proficiencyLevels["English"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if (isset($proficiencyLevels["English"]) && $proficiencyLevels["English"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-    </select>
-</div>
-
-
-
-<div class="language-selection">
-    <label class="cbx" for="cbx-46-french">
-        <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" <?php if (isLanguageSelected("French", $languages)) echo "checked"; ?> />
-        <span>French</span>
-    </label>
-    <select name="proficiency_levels[French]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if (isset($proficiencyLevels["French"]) && $proficiencyLevels["French"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if (isset($proficiencyLevels["French"]) && $proficiencyLevels["French"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if (isset($proficiencyLevels["French"]) && $proficiencyLevels["French"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-    </select>
-</div>
-
-  
-<div class="language-selection">
-    <label class="cbx" for="cbx-46-spanish">
-        <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" <?php if (isLanguageSelected("Spanish", $languages)) echo "checked"; ?> />
-        <span>Spanish</span>
-    </label>
-    <select name="proficiency_levels[Spanish]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if (isset($proficiencyLevels["Spanish"]) && $proficiencyLevels["Spanish"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if (isset($proficiencyLevels["Spanish"]) && $proficiencyLevels["Spanish"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if (isset($proficiencyLevels["Spanish"]) && $proficiencyLevels["Spanish"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
-    </select>
-</div>
-
+    <p>Languages:</p>
+    <?php foreach ($languageProficiency as $language => $proficiencies): ?>
+        <p><?php echo $language; ?></p>
+        <ul>
+            <?php foreach ($proficiencies as $proficiency): ?>
+                <li>
+                    <input type="checkbox" id="lang_<?php echo $language; ?>" name="languages[]" value="<?php echo $language; ?>" checked>
+                    <label for="lang_<?php echo $language; ?>"><?php echo $language; ?></label>
+                    <select name="proficiency_levels_<?php echo $language; ?>">
+                        <option value="">Select proficiency</option>
+                        <?php foreach ($proficiencies as $prof): ?>
+                            <?php
+                                // Check if the current proficiency level matches the stored proficiency level
+                                $selected = ($prof == $proficiency) ? 'selected' : '';
+                            ?>
+                            <option value="<?php echo $prof; ?>" <?php echo $selected; ?>><?php echo $prof; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endforeach; ?>
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
