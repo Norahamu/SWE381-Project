@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $firstName = $connection->real_escape_string($_POST['first_name']); 
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
-  $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
+  $password = $connection->real_escape_string($_POST['password']); 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
   
@@ -187,11 +187,7 @@ $(document).ready(function() {
       <div class="section-title"> 
         <h2>My Profile</h2> 
         <?php 
-      if ($photo == null) {
-                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
-                        } else {
                             echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
-                        }
                         ?>
       </div> 
       <div class="row"> 
@@ -203,26 +199,26 @@ $(document).ready(function() {
  
                 <label class="required">First Name</label> 
                 <input type="text" name="first_name" class="form-control" id="first_name" 
-                  value="<?php echo htmlspecialchars($firstName); ?>" > 
+                  value="<?php echo htmlspecialchars($firstName); ?>" required> 
  
               </div> 
               <div class="form-group col-md-6"> 
                 <label class="required">Last Name</label> 
                 <input type="text" name="last_name" class="form-control" id="last_name" 
-                  value="<?php echo htmlspecialchars($lastName); ?>" > 
+                  value="<?php echo htmlspecialchars($lastName); ?>" required> 
  
               </div> 
               <div class="form-group"> 
                 <label class="required">Email</label> 
                 <input type="email" name="email" class="form-control" id="email" 
-                  value="<?php echo htmlspecialchars($email); ?>"> 
+                  value="<?php echo htmlspecialchars($email); ?>"required> 
               </div> 
             </div> 
             
             <div class="form-group">
               <label for="psw" class="required">Password</label>
               <div class="input-group">
-                  <input type="password" class="form-control" value="<?php echo htmlspecialchars($password); ?>" id="psw" name="password" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character.">
+                  <input type="password" class="form-control" value="<?php echo htmlspecialchars($password); ?>" id="psw" name="password" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character."required>
                   
               </div>
           </div>  
@@ -235,11 +231,11 @@ $(document).ready(function() {
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
-              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($city); ?>"name="city" id="city" >
+              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($city); ?>"name="city" id="city" required>
               </div> 
             <div class="form-group"> 
               <label class="required">Location</label> 
-              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($location); ?>" name="location" id="location"> 
+              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($location); ?>" name="location" id="location" required> 
   
             </div> 
  

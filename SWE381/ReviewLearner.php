@@ -112,7 +112,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
                 <div>
                  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
     <div class="item1" style="display: flex; align-items: center;">
-        <h4 style="margin-right: 10px;">Choose a partner:*</h4>
+        <h4 style="margin-right: 10px;" class="required">Choose a partner:</h4>
          <select id="sel" name="allInfo" required>
         <?php 
           
@@ -135,7 +135,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
         </select>
     </div>
 <div style="display: flex; align-items: center; gap:0;">
-  <h4 style=" margin: 0px;">Rate:</h4>
+  <h4 style=" margin: 0px;" class="required">Rate:</h4>
   <div class="rate">
     <input type="radio" id="star5" name="rate" value="5" required />
     <label for="star5" title="text">5 stars</label>
@@ -150,7 +150,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
   </div>
 </div>
     <div class="evaluationfeedback">
-        <h4>Feedback:</h4>
+        <h4 class="required">Feedback:</h4>
         <textarea name="Feedback" rows="10" cols="40" placeholder="Write your feedback here"required></textarea>
     </div>
 </div>
