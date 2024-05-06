@@ -303,26 +303,15 @@ $(document).ready(function() {
 
     // Function to handle input and selection change
     function handleInputChange() {
-  var input = event.target;
-  var initialValue = input.dataset.initialValue; // Assuming initial values are stored in a data attribute
-
-  // Handle cases where initialValue might not be available (e.g., new form)
-  if (!initialValue) {
-    initialValue = input.value; // Set initial value if not provided
-    input.dataset.initialValue = initialValue; // Store for future comparisons
-  }
-
-  if (initialValue !== input.value) {
-    changesMade = true;
-  }
-}
+      changesMade = true;
+    }
 
     // Add event listeners to input fields
     var inputFields = document.querySelectorAll('input, textarea, select');
-inputFields.forEach(function (input) {
-  input.addEventListener('input', handleInputChange);
-  input.addEventListener('change', handleInputChange);
-});
+    inputFields.forEach(function (input) {
+      input.addEventListener('input', handleInputChange);
+      input.addEventListener('change', handleInputChange); // Adding change event listener
+    });
 
     // Add event listener to the "Save Changes" button
     var saveChangesBtn = document.getElementById('save-changes-btn');
