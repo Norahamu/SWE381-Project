@@ -175,6 +175,9 @@ $(document).ready(function() {
     });
 });
 </script>
+<div id="site">
+    <section class="section-bg">
+      <div class="section-title">
   <section id="signuplearner" class="signuplearner section-bg"> 
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
