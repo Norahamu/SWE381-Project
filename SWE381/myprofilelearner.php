@@ -122,8 +122,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  <meta charset="UTF-8"> <!-- character encoding-->
  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewport settings-->
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
-<title>Previous Sessions Learner</title>
-   <!-- icon -->
+<title>My Profile Learner</title>
+  <!-- icon -->
   <link href="assets/img/Lingoblue.png" rel="icon" >
 
   <!-- Google Fonts -->
@@ -135,7 +135,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 
   <!-- Main CSS File -->
@@ -147,25 +148,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 </head> 
  
 <body> 
-  <!-- ======= Header ======= --> 
-  <header id="header" class="fixed-top header-inner-pages"> 
-  <div class="container d-flex align-items-center"> 
-    <a href="index.html" class="logo me-auto">
-    
-    </a> 
-  </div> 
-  <nav id="navbar" class="navbar"> 
-    <ul> 
-      <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-      <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-      <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-      <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-      <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-      <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-    </ul> 
-  </nav> 
-</header> 
-  <!-- End Header --> 
+ <!-- ======= Header ======= -->
+ <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center">
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+    </div>
+    <nav id="navbar" class="navbar">
+      <ul> 
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilelearner.html">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsLearner.html">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="RequestsList.html">Manage Language Learning Request</a></li>
+    <li><a class="nav-link scrollto" href="PartnersList.html">Partners List</a></li>
+    <li><a class="nav-link scrollto" href="ReviewLearner.html">Review my Partner</a></li>
+      </ul>
+
+    </nav>
+  </header>
+  <!-- End Header -->
   <script>
 $(document).ready(function() {
     $("#togglePassword").click(function() {
@@ -178,9 +178,11 @@ $(document).ready(function() {
     });
 });
 </script>
-  <section id="signuplearner" class="signuplearner section-bg"> 
+<div id="site">
+    <section class="section-bg">
+      <div class="section-title">
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
-      <div class="section-title"> 
+   
         <h2>My Profile</h2> 
         <?php 
                             echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
@@ -250,79 +252,64 @@ $(document).ready(function() {
 </script> 
             </div> 
           </form> 
-        </div> 
-      </div> 
-    </div> 
-  </section> 
-  <!-- ======= Footer ======= --> 
-  <footer id="footer"> 
-    <div class="footer-top"> 
-      <div class="container"> 
-        <div class="row"> 
-          <div class="col-lg-3 col-md-6 footer-contact"> 
-            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a> 
-            <p> 
-              King Saud University <br> 
-              Riyadh <br> 
-              Saudi Arabia <br><br> 
-              <strong>Email:</strong> lingo@project.com<br> 
-            </p> 
-          </div> 
-          <div class="col-lg-3 col-md-6 footer-links"> 
-            <h4>Useful Links</h4> 
-            <ul> 
+          </div>
+    </section>
+  </div>
+ <!-- ======= Footer ======= -->
+ <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <p>
+              King Saud University <br>
+              Riyadh <br>
+              Saudi Arabia <br><br>
+              <strong>Email:</strong> lingo@project.com<br>
+            </p>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
               <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
-                           
-            </ul> 
-          </div> 
-          <div class="col-lg-3 col-md-6 footer-links"> 
-            <h4>Our Social Networks</h4> 
-            <div class="social-links mt-3"> 
-              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a> 
-              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a> 
-            </div> 
-          </div> 
-        </div> 
-      </div> 
-    </div> 
-    <div class="container footer-bottom clearfix"> 
-      <div class="copyright"> 
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved 
-      </div> 
-      <div class="credits"></div> 
-    </div> 
-  </footer>  
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom clearfix">
+      <div class="copyright">
+        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits"></div>
+    </div>
+  </footer>
   <script>
     // Variable to track changes
     var changesMade = false;
 
     // Function to handle input and selection change
     function handleInputChange() {
-  var input = event.target;
-  var initialValue = input.dataset.initialValue; // Assuming initial values are stored in a data attribute
-
-  // Handle cases where initialValue might not be available (e.g., new form)
-  if (!initialValue) {
-    initialValue = input.value; // Set initial value if not provided
-    input.dataset.initialValue = initialValue; // Store for future comparisons
-  }
-
-  if (initialValue !== input.value) {
-    changesMade = true;
-  }
-}
+      changesMade = true;
+    }
 
     // Add event listeners to input fields
     var inputFields = document.querySelectorAll('input, textarea, select');
-inputFields.forEach(function (input) {
-  input.addEventListener('input', handleInputChange);
-  input.addEventListener('change', handleInputChange);
-});
+    inputFields.forEach(function (input) {
+      input.addEventListener('input', handleInputChange);
+      input.addEventListener('change', handleInputChange); // Adding change event listener
+    });
 
     // Add event listener to the "Save Changes" button
     var saveChangesBtn = document.getElementById('save-changes-btn');
