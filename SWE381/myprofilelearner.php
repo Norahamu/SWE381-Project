@@ -177,10 +177,10 @@ $(document).ready(function() {
 });
 </script>
 <div id="site">
-    
-  <section id="signuplearner" class="signuplearner section-bg"> 
+    <section class="section-bg">
+      <div class="section-title">
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
-      <div class="section-title"> 
+   
         <h2>My Profile</h2> 
         <?php 
                             echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
