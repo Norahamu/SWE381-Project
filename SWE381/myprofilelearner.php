@@ -250,10 +250,9 @@ $(document).ready(function() {
 </script> 
             </div> 
           </form> 
-        </div> 
-      </div> 
-    </div> 
-  </section> 
+          </div>
+    </section>
+  </div>
  <!-- ======= Footer ======= -->
  <footer id="footer">
     <div class="footer-top">
