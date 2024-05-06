@@ -148,22 +148,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
 <body> 
   <!-- ======= Header ======= --> 
-  <header id="header" class="fixed-top header-inner-pages">
-            <div class="container d-flex align-items-center">
-                <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
-            </div>
-            <nav id="navbar" class="navbar">
-                <ul> 
-                    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-                </ul>
-
-            </nav>
-        </header>
+  <header id="header" class="fixed-top header-inner-pages"> 
+  <div class="container d-flex align-items-center"> 
+    <a href="index.html" class="logo me-auto">
+    
+    </a> 
+  </div> 
+  <nav id="navbar" class="navbar"> 
+    <ul> 
+      <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+      <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+      <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+      <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+      <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+      <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+    </ul> 
+  </nav> 
+</header> 
   <!-- End Header --> 
   <script>
 $(document).ready(function() {
@@ -181,9 +182,34 @@ $(document).ready(function() {
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
         <h2>My Profile</h2> 
-       
+        <?php 
+                            echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
+                        ?>
       </div> 
-
+      <div class="row"> 
+ 
+        <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
+          <form action="#" method="post" class="php-email-form" enctype="multipart/form-data"> 
+            <div class="row"> 
+              <div class="form-group col-md-6"> 
+ 
+                <label class="required">First Name</label> 
+                <input type="text" name="first_name" class="form-control" id="first_name" 
+                  value="<?php echo htmlspecialchars($firstName); ?>" required> 
+ 
+              </div> 
+              <div class="form-group col-md-6"> 
+                <label class="required">Last Name</label> 
+                <input type="text" name="last_name" class="form-control" id="last_name" 
+                  value="<?php echo htmlspecialchars($lastName); ?>" required> 
+ 
+              </div> 
+              <div class="form-group"> 
+                <label class="required">Email</label> 
+                <input type="email" name="email" class="form-control" id="email" 
+                  value="<?php echo htmlspecialchars($email); ?>"required> 
+              </div> 
+            </div> 
             
             <div class="form-group">
               <label for="psw" class="required">Password</label>
