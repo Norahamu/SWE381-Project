@@ -44,6 +44,11 @@ if ($result->num_rows > 0) {
   $_SESSION['email_already_registered'] = true;
 } else {
 
+
+
+  // Handle form submissions
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (isset($_POST['save_changes'])) {
   
      //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
@@ -60,8 +65,28 @@ $stmt->close();
 
 $connection->close(); 
 } 
+
+
+elseif (isset($_POST['delete_account'])) {
+  $connection = new mysqli($servername, $username, $dbPassword, $database); 
+  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id =?");
+  $stmtDelete->bind_param("i", $_SESSION['learner_id']); 
+  if ($stmtDelete->execute()) { 
+    header("Location: signuplearner.html"); 
+    exit(); 
+  } else { 
+    echo "<div class='error-message'>Error: " .
+      $stmtDelete->error . "</div>"; 
+  } 
+  $stmtDelete->close(); 
+  $connection->close(); 
+
+}
+}
 }
 
+
+}
 
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
@@ -234,18 +259,25 @@ $(document).ready(function() {
             </div> 
  
             <div class="text-center" style="display: flex; justify-content: space-between;"> 
+            
+            <form id="save-changes-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <input type="hidden" name="save_changes" value="1">
               <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button> 
- 
+              </form>
+              <form id="delete-account-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+              <input type="hidden" name="delete_account" value="1">
               <button type="button" id="delete-account-btn" name="delete_account" onclick="confirmDelete()" style="background-color: red; border: 0; padding: 12px 34px; color: #fff; transition: 0.4s; border-radius: 50px;">Delete my account</button>
+              </form>
 
-       
-       <script>
-    function confirmDelete() {
-        if (confirm("Are you sure you want to delete your account?")) {
-            window.location.href = "delete_account.php";
+              <script>
+        // Function to confirm account deletion
+        function confirmDelete() {
+            if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                // If user confirms, submit the form
+                document.getElementById("delete-account-form").submit();
+            }
         }
-    }
-</script> 
+    </script> 
             </div> 
           </form> 
         </div> 
