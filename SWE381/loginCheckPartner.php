@@ -28,7 +28,7 @@ if (isset($_POST['email']) && isset($_POST['psw'])) {
             $_SESSION['partner_id'] = $row['partner_id'];
             $_SESSION['email'] = $row['email'];
 
-            header('Location: AllReq.html'); 
+            header('Location: allRequestsPartner.php'); 
             exit;
         } else {
             echo '<script>alert("Invalid email or password."); window.location.href="loginpartner.html";</script>';
