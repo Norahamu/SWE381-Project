@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'checkpartner';
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
@@ -67,15 +67,14 @@ if(isset($_SESSION['learner_id'])){
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-      <ul> 
-     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+    <ul> 
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
-    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="allRequestsPartner.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="ReviewPartner.php">My reviews and rating</a></li>
     <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>
-
     </nav>
   </header>
   <!-- End Header -->
@@ -94,14 +93,14 @@ if(isset($_SESSION['learner_id'])){
           <?php
           
           if (!isset($result) || mysqli_num_rows($result) == 0) {
-       			echo "<br> <h3 class='sessions'>No sessions available.</h3>";
+       			echo "<br> <h3 class='sessions'>No requests available.</h3>";
     	   } else {
           // Fetch and display session details
           while ($row = mysqli_fetch_assoc($result)) {
               echo "<div class='session'>";
               echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
               echo "<strong class='TPName'>{$row['learner_first_name']} {$row['learner_last_name']}</strong><br>";           
-              echo "<h6 class='text2'>{$row['RStatus']}</h6>";
+              echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>";
               echo "</div>";
           }
           }
@@ -160,5 +159,18 @@ if(isset($_SESSION['learner_id'])){
       <div class="credits"></div>
     </div>
   </footer>
+  
+  <script>    
+  	const partnerNameElement = document.getElementById('partnerName');
+    partnerNameElement.addEventListener("click", redirectToLearnerPage);
+
+    function redirectToLearnerPage(event) {
+        event.preventDefault();
+        const learnerId = this.getAttribute('data-learner-id');
+        const url = `learnerCard.php?id=${learnerId}`;
+        window.location.href = url;
+    }
+   </script>
+  
 </body>
 </html>

@@ -83,7 +83,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
 <!-- ======= Header ======= -->
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
-      <a href="index.html" class="logo me-auto"><img src="img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
@@ -112,7 +112,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
                 <div>
                  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
     <div class="item1" style="display: flex; align-items: center;">
-        <h4 style="margin-right: 10px;">Choose a partner:*</h4>
+        <h4 style="margin-right: 10px;" class="required">Choose a partner:</h4>
          <select id="sel" name="allInfo" required>
         <?php 
           
@@ -135,9 +135,9 @@ header("Location: partnerInfo.php?partnerID=$pid");
         </select>
     </div>
 <div style="display: flex; align-items: center; gap:0;">
-  <h4 style=" margin: 0px;">Rate:</h4>
+  <h4 style=" margin: 0px;" class="required">Rate:</h4>
   <div class="rate">
-    <input type="radio" id="star5" name="rate" value="5" />
+    <input type="radio" id="star5" name="rate" value="5" required />
     <label for="star5" title="text">5 stars</label>
     <input type="radio" id="star4" name="rate" value="4" />
     <label for="star4" title="text">4 stars</label>
@@ -150,11 +150,11 @@ header("Location: partnerInfo.php?partnerID=$pid");
   </div>
 </div>
     <div class="evaluationfeedback">
-        <h4>Feedback:</h4>
-        <textarea name="Feedback" rows="10" cols="40" placeholder="Write your feedback here"></textarea>
+        <h4 class="required">Feedback:</h4>
+        <textarea name="Feedback" rows="10" cols="40" placeholder="Write your feedback here"required></textarea>
     </div>
 </div>
-                    <div class="text-center"><input type="submit" class="btn-log" style="margin-left:680px"></div>
+                    <div class="text-center"><input type="submit" class="btn-log"></div>
               </div>
             </div>
           </div>
@@ -169,7 +169,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
       <div class="container">
         <div class="row">
           <div class="col-lg-3 col-md-6 footer-contact">
-            <a href="index.html" class="logo me-auto"><img src="img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
             <p>
               King Saud University <br>
               Riyadh <br>

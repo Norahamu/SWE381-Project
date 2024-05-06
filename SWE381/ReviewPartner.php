@@ -34,28 +34,28 @@
       <ul> 
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsPartner.html">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="AllReq.html">Language Learning Requests</a></li>
     <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
-    <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>
 
     </nav>
   </header>
   <!-- End Header -->
-  
+   
  
  <div id="site">
  
 	  <div class="section-title">
 	 <h2> Reviews and Ratings</h2> </div>
-		                 <div class='review'>
-	
+			
+                      <div class='review'>
+
 		 <?php
              session_start();    
-if (isset($_SESSION['partner_id'])){
-   $partnerID = $_SESSION['partner_id'];
-}
+if (isset($_SESSION['partner_id'])) 
+  $partnerID = $_SESSION['partner_id'];
+
 
                 //$partnerID = 123456789;
                 $connection = mysqli_connect('localhost', 'root', '', 'lingo');
@@ -63,11 +63,15 @@ if (isset($_SESSION['partner_id'])){
                     die("Connection failed: " . mysqli_connect_error());
                 }
               else{
-                echo" 
-
+                 
+echo "
                         <div class='heading'>";
                     $sql4 = "SELECT * FROM review_and_rating WHERE partner_id = '$partnerID'";
                     $result4 = mysqli_query($connection, $sql4);
+                      
+                  if(mysqli_num_rows($result4)==0){echo "<p><em> No review yet.</em></p>";}
+
+                  else{
                     while ($row = mysqli_fetch_assoc($result4)) {
                         $learnerid = $row['learner_id'];
                         $star = $row['Rating'];
@@ -88,17 +92,19 @@ if (isset($_SESSION['partner_id'])){
                         echo "   </div> <!--stars-->";
 
                         echo "
-                           <br/ >    <h6>june, 2023</h6>
+                           
                         </div> <!--heading-->";
                         
                        
                        echo" <div class='learner-review'>
                             <p class ='Aleen'>".$review."</p>
                         </div> <!--learner review-->";
-                    
-                    }}
-                ?>	 </div> <!-- review1-->
-        </div> <!-- site-->
+                    }}}
+                 
+                   
+                ?>	                     </div> <!-- review1-->
+</div>
+        </div> <!-- site-->  
 <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="footer-top">
@@ -116,13 +122,12 @@ if (isset($_SESSION['partner_id'])){
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-			 <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
-			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
-                           <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
-             </ul>
+			  <li><i class="bx bx-chevron-right"></i> <a href="HomePage.html">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.html">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.html">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.html">Language Learning Requests</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.html">my review and rating </a></li>
+            </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Our Social Networks</h4>

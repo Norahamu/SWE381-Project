@@ -15,26 +15,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $firstName = $connection->real_escape_string($_POST['first_name']); 
   $lastName = $connection->real_escape_string($_POST['last_name']); 
   $email = $connection->real_escape_string($_POST['email']); 
-  $password = $connection->real_escape_string($_POST['password']); // Assuming the password is not hashed for simplicity 
+  $password = $connection->real_escape_string($_POST['password']); 
   $city = $connection->real_escape_string($_POST['city']); 
   $location = $connection->real_escape_string($_POST['location']); 
-  $photo = $_POST['photo'];
- 
-  $target_file = "assets/img/OIP.jpg";
-  // Check if file is uploaded
-  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-      $fileTmpPath = $_FILES['photo']['tmp_name'];
-      $fileName = $_FILES['photo']['name'];
-      $photo = "assets/img/";
-      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-      $newFileName = $firstName . $lastName . "." . $fileExt;
-      $target_file = $photo . $newFileName;
   
-      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-          echo "Sorry, there was an error uploading your file.";
-          exit;
-      }
-  }
+$old_image=$_POST['image_old'];
+$photo=$_FILES['photo']['name'];
+
+
+if($photo!=null){
+
+  $update_filename="assets/img/".$photo;
+}
+
+else{
+  $update_filename=$old_image;
+
+}
+ 
+ 
  
 // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM learners WHERE email = '$email' AND learner_id != '{$_SESSION['learner_id']}'";
@@ -44,9 +43,11 @@ if ($result->num_rows > 0) {
   // Email address is already registered for another user
   $_SESSION['email_already_registered'] = true;
 } else {
+
+  
      //UPDATE
   $stmt = $connection->prepare("UPDATE learners SET first_name=?, last_name=?, email=?, password=?, photo=?, city=?, location=? WHERE learner_id=?"); 
-  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $photo, $city, $location, $_SESSION['learner_id']); 
+  $stmt->bind_param("sssssssi", $firstName, $lastName, $email, $password, $update_filename, $city, $location, $_SESSION['learner_id']); 
  
   if ($stmt->execute()) {
     // Store success message in session variable
@@ -61,7 +62,7 @@ $connection->close();
 } 
 }
 
- 
+
 // Fetch user data for pre-filling the profile form 
 $servername = "localhost"; 
 $username = "root"; 
@@ -115,34 +116,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
 ?> 
  
-<!DOCTYPE html> 
-<html lang="en"> 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8"> <!-- character encoding-->
+ <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewport settings-->
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
+<title>Previous Sessions Learner</title>
+   <!-- icon -->
+  <link href="assets/img/Lingoblue.png" rel="icon" >
+
+  <!-- Google Fonts -->
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
  
-<head> 
- 
-  <meta charset="UTF-8"> <!-- character encoding--> 
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings--> 
-  <link rel="stylesheet" type="text/css" href="style.css" media="screen"> 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
- 
-  <title>My Profile Learner</title> 
-  <!-- icon --> 
-  <link href="assets/img/Lingoblue.png" rel="icon"> 
- 
-  <!-- Google Fonts --> 
-  <link rel="stylesheet" 
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"> 
- 
- 
-  <!-- Vendor CSS Files --> 
- 
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> 
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"> 
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"> 
- 
- 
-  <!-- Main CSS File --> 
-  <link href="style.css" rel="stylesheet"> 
+
+  <!-- Vendor CSS Files -->
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  <!-- Main CSS File -->
+  <link href="style.css" rel="stylesheet">
   <!-- JS Files -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
@@ -186,42 +183,38 @@ $(document).ready(function() {
       <div class="section-title"> 
         <h2>My Profile</h2> 
         <?php 
-      if ($photo == null) {
-                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
-                        } else {
                             echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
-                        }
                         ?>
       </div> 
       <div class="row"> 
  
         <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
-          <form action="#" method="post" class="php-email-form"> 
+          <form action="#" method="post" class="php-email-form" enctype="multipart/form-data"> 
             <div class="row"> 
               <div class="form-group col-md-6"> 
  
                 <label class="required">First Name</label> 
                 <input type="text" name="first_name" class="form-control" id="first_name" 
-                  value="<?php echo htmlspecialchars($firstName); ?>" > 
+                  value="<?php echo htmlspecialchars($firstName); ?>" required> 
  
               </div> 
               <div class="form-group col-md-6"> 
                 <label class="required">Last Name</label> 
                 <input type="text" name="last_name" class="form-control" id="last_name" 
-                  value="<?php echo htmlspecialchars($lastName); ?>" > 
+                  value="<?php echo htmlspecialchars($lastName); ?>" required> 
  
               </div> 
               <div class="form-group"> 
                 <label class="required">Email</label> 
                 <input type="email" name="email" class="form-control" id="email" 
-                  value="<?php echo htmlspecialchars($email); ?>"> 
+                  value="<?php echo htmlspecialchars($email); ?>"required> 
               </div> 
             </div> 
             
             <div class="form-group">
               <label for="psw" class="required">Password</label>
               <div class="input-group">
-                  <input type="password" class="form-control" value="<?php echo htmlspecialchars($password); ?>" id="psw" name="password" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character.">
+                  <input type="password" class="form-control" value="<?php echo htmlspecialchars($password); ?>" id="psw" name="password" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character."required>
                   
               </div>
           </div>  
@@ -230,14 +223,15 @@ $(document).ready(function() {
             <div class="form-group"> 
               <label>Upload Photo</label> 
               <input type="file" class="form-control" name="photo" id="photo" > 
+              <input type=hidden name="image_old" value="<?php echo $photo;?>">
             </div> 
             <div class="form-group"> 
               <label class="required">City</label> 
-              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($city); ?>"name="city" id="city" >
+              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($city); ?>"name="city" id="city" required>
               </div> 
             <div class="form-group"> 
               <label class="required">Location</label> 
-              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($location); ?>" name="location" id="location"> 
+              <input type="text" class="form-control"  value="<?php echo htmlspecialchars($location); ?>" name="location" id="location" required> 
   
             </div> 
  
@@ -302,61 +296,72 @@ $(document).ready(function() {
       </div> 
       <div class="credits"></div> 
     </div> 
-  </footer> 
-  <script> 
-    // Variable to track changes 
-    var changesMade = false; 
- 
-    // Function to handle input change 
-    function handleInputChange() { 
-      changesMade = true; 
-    } 
- 
-    // Add event listeners to input fields 
-    var inputFields = document.querySelectorAll('input, textarea'); 
-    inputFields.forEach(function (input) { 
-      input.addEventListener('input', handleInputChange); 
-    }); 
- 
-    // Add event listener to the "Save Changes" button 
-    var saveChangesBtn = document.getElementById('save-changes-btn'); 
-    saveChangesBtn.addEventListener('click', function (event) { 
-      // Check if changes have been made 
-      if (!changesMade) { 
-        event.preventDefault(); // Prevent form submission if no changes 
-        alert('No changes made.'); 
-      } 
-    }); 
-    <?php 
-if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
-    echo "var profileUpdatedSuccess = true;";
-    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
-} else {
-    echo "var profileUpdatedSuccess = false;";
-}
-?>
+  </footer>  
+  <script>
+    // Variable to track changes
+    var changesMade = false;
 
-// Add this JavaScript code to handle the success message
-if (profileUpdatedSuccess) {
-    alert('Profile updated successfully!');
-}
-<?php 
-if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
-    echo "var emailAlreadyRegistered = true;";
-    unset($_SESSION['email_already_registered']); // Unset session variable after handling
-} else {
-    echo "var emailAlreadyRegistered = false;";
-}
-?>
+    // Function to handle input and selection change
+    function handleInputChange() {
+  var input = event.target;
+  var initialValue = input.dataset.initialValue; // Assuming initial values are stored in a data attribute
 
-// Add this JavaScript code to handle the email already registered message
-if (emailAlreadyRegistered) {
-    alert('The email address is already registered. Please use another email.');
+  // Handle cases where initialValue might not be available (e.g., new form)
+  if (!initialValue) {
+    initialValue = input.value; // Set initial value if not provided
+    input.dataset.initialValue = initialValue; // Store for future comparisons
+  }
+
+  if (initialValue !== input.value) {
+    changesMade = true;
+  }
 }
 
+    // Add event listeners to input fields
+    var inputFields = document.querySelectorAll('input, textarea, select');
+inputFields.forEach(function (input) {
+  input.addEventListener('input', handleInputChange);
+  input.addEventListener('change', handleInputChange);
+});
 
-  </script> 
- 
+    // Add event listener to the "Save Changes" button
+    var saveChangesBtn = document.getElementById('save-changes-btn');
+    saveChangesBtn.addEventListener('click', function (event) {
+      // Check if changes have been made
+      if (!changesMade) {
+        event.preventDefault(); // Prevent form submission if no changes
+        alert('No changes made.');
+      }
+    });
+
+    <?php
+    if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+        echo "var profileUpdatedSuccess = true;";
+        unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+    } else {
+        echo "var profileUpdatedSuccess = false;";
+    }
+    ?>
+
+    // Add this JavaScript code to handle the success message
+    if (profileUpdatedSuccess) {
+        alert('Profile updated successfully!');
+    }
+
+    <?php
+    if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+        echo "var emailAlreadyRegistered = true;";
+        unset($_SESSION['email_already_registered']); // Unset session variable after handling
+    } else {
+        echo "var emailAlreadyRegistered = false;";
+    }
+    ?>
+
+    // Add this JavaScript code to handle the email already registered message
+    if (emailAlreadyRegistered) {
+        alert('The email address is already registered. Please use another email.');
+    }
+</script> 
 </body> 
  
 </html>

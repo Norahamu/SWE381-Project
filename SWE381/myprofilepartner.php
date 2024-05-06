@@ -1,177 +1,151 @@
-<?php 
-session_start(); 
+<?php
+session_start();
 
 // Define variables
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") { 
-  $servername = "localhost"; 
-  $username = "root"; 
-  $dbPassword = ""; 
-  $database = "lingo"; 
-  $connection = new mysqli($servername, $username, $dbPassword, $database); 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $servername = "localhost";
+    $username = "root";
+    $dbPassword = "";
+    $database = "lingo";
+    $connection = new mysqli($servername, $username, $dbPassword, $database);
 
-  if ($connection->connect_error) { 
-    die("Connection failed: " . $connection->connect_error); 
-  } 
+    if ($connection->connect_error) {
+        die("Connection failed: " . $connection->connect_error);
+    }
 
-   // Retrieve and sanitize form data
-   $firstName = $connection->real_escape_string($_POST['first_name']);
-   $lastName = $connection->real_escape_string($_POST['last_name']);
-   $email = $connection->real_escape_string($_POST['email']);
-   $password = $connection->real_escape_string($_POST['password']); // Hash the password for security
-   $location = $connection->real_escape_string($_POST['location']);
-   $age = $connection->real_escape_string($_POST['age']);
-   $gender = $connection->real_escape_string($_POST['gender']);
-   $culturalKnowledge = $connection->real_escape_string($_POST['cultural_knowledge']);
-   $education = $connection->real_escape_string($_POST['Education']);
-   $experience = $connection->real_escape_string($_POST['Experience']);
-   $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
-   $photo = $_POST['photo'];
-
-// Process proficiency levels for languages
-if (isset($_POST['languages'])) {
-  $languages = $_POST['languages'];
-
-  // Process proficiency levels for languages
-  foreach ($languages as $language) {
-      // Check if the proficiency level for the current language is set
-      if (isset($_POST[$language . '_proficiency'])) {
-          $proficiencyLevel = $connection->real_escape_string($_POST[$language . '_proficiency']);
-
-          // Perform SQL update for each language's proficiency level
-          $updateProficiencyQuery = "UPDATE partner_languages SET ProficiencyLevel = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
-          $connection->query($updateProficiencyQuery);
-      }
-  }
-}
+    // Retrieve and sanitize form data
+    $firstName = $connection->real_escape_string($_POST['first_name']);
+    $lastName = $connection->real_escape_string($_POST['last_name']);
+    $email = $connection->real_escape_string($_POST['email']);
+    $password = $connection->real_escape_string($_POST['password']); // Hash the password for security
+    $location = $connection->real_escape_string($_POST['location']);
+    $age = $connection->real_escape_string($_POST['age']);
+    $gender = $connection->real_escape_string($_POST['gender']);
+    $culturalKnowledge = addslashes($connection->real_escape_string($_POST['cultural_knowledge']));
+    $education = addslashes($connection->real_escape_string($_POST['Education']));
+    $experience = addslashes($connection->real_escape_string($_POST['Experience']));
+    $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
+    $old_image=$_POST['image_old'];
+    $photo=$_FILES['photo']['name'];
 
 
+    
+    if($photo!=null){
+    
+      $update_filename=$photo;
+    }
+    
+    else{
+      $update_filename=$old_image;
+    
+    }
+     
+      
 
-  
-
- 
-
-  $target_file = "assets/img/OIP.jpg";
-  // Check if file is uploaded
-  if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-      $fileTmpPath = $_FILES['photo']['tmp_name'];
-      $fileName = $_FILES['photo']['name'];
-      $photo = "assets/img/";
-      $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-      $newFileName = $firstName . $lastName . "." . $fileExt;
-      $target_file = $photo . $newFileName;
-  
-      if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-          echo "Sorry, there was an error uploading your file.";
-          exit;
-      }
-  }
-
-// Check if the provided email already exists for another user
+    
+    // Check if the provided email already exists for another user
 $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
 $result = $connection->query($checkEmailQuery);
 
 if ($result->num_rows > 0) {
-  // Email address is already registered for another user
-  $_SESSION['email_already_registered'] = true;
+    // Email address is already registered for another user
+    $_SESSION['email_already_registered'] = true;
 } else {
-  // UPDATE
-  $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?,cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-  $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $photo,  $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+    //UPDATE
+   
+        // New photo uploaded, update the photo field in the database
+        $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+        $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $update_filename, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+   
 
-  if ($stmt->execute()) {
-      // Store success message in session variable
-      $_SESSION['profile_updated_success'] = true;
-  } else {
-      echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
-  }
+    if ($stmt->execute()) {
+        // Store success message in session variable
+        $_SESSION['profile_updated_success'] = true;
+    } else {
+        echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+    }
 
-  $stmt->close();
-
-
- 
-  $connection->close(); 
-}
+    $stmt->close();
 }
 
-
-
-
-// Fetch user data for pre-filling the profile form 
-$servername = "localhost"; 
-$username = "root"; 
-$dbPassword = ""; 
-$database = "lingo"; 
-$connection = new mysqli($servername, $username, $dbPassword, $database); 
+$connection->close(); 
+}
+// Fetch user data for pre-filling the profile form
+$servername = "localhost";
+$username = "root";
+$dbPassword = "";
+$database = "lingo";
+$connection = new mysqli($servername, $username, $dbPassword, $database);
 
 $stmtFetch = $connection->prepare("SELECT * FROM partners WHERE partner_id = ?");
-$stmtFetch->bind_param("i", $_SESSION['partner_id']); 
-$stmtFetch->execute(); 
-$resultFetch = $stmtFetch->get_result(); 
+$stmtFetch->bind_param("i", $_SESSION['partner_id']);
+$stmtFetch->execute();
+$resultFetch = $stmtFetch->get_result();
 
 // Fetch user data
-if ($resultFetch->num_rows > 0) { 
-  $userData = $resultFetch->fetch_assoc(); 
+if ($resultFetch->num_rows > 0) {
+    $userData = $resultFetch->fetch_assoc();
 
-  
-  // Fetch languages and proficiency levels for the partner
-  $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
-  $stmtLanguages->bind_param("i", $_SESSION['partner_id']); 
-  $stmtLanguages->execute(); 
-  $resultLanguages = $stmtLanguages->get_result(); 
 
-  $languages = array();
-  $ProficiencyLevel= array();
+    // Assign user data to variables for pre-filling the form
+    $firstName = $userData['first_name'];
+    $lastName = $userData['last_name'];
+    $email = $userData['email'];
+    $password = $userData['password'];
+    $location = $userData['location'];
+    $photo = $userData['photo'];
+    $age = $userData['age'];
+    $gender = $userData['gender'];
+    $culturalKnowledge = $userData['cultural_knowledge'];
+    $education = $userData['Education'];
+    $experience = $userData['Experience'];
+    $pricePerSession = $userData['PricePerSession'];
+    $photo = $userData['photo']; 
+} else {
+    // User not found, handle the error
+}
+// Fetch languages and proficiency levels for the partner
+$stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
+$stmtLanguages->bind_param("i", $_SESSION['partner_id']);
+$stmtLanguages->execute();
+$resultLanguages = $stmtLanguages->get_result();
 
-  // Fetch languages and proficiency levels
-  while ($row = $resultLanguages->fetch_assoc()) {
+$languages = array();
+$ProficiencyLevel = array();
+
+// Fetch languages and proficiency levels
+while ($row = $resultLanguages->fetch_assoc()) {
     $languages[] = $row['language'];
     $ProficiencyLevel[] = $row['ProficiencyLevel'];
-  }
+}
 
 // Check if a language is selected for the user
-function isLanguageSelected($language, $userLanguages) {
-  return in_array($language, $userLanguages);
+function isLanguageSelected($language, $userLanguages)
+{
+    return in_array($language, $userLanguages);
 }
-  // Assign user data to variables for pre-filling the form 
-  $firstName = $userData['first_name']; 
-  $lastName = $userData['last_name']; 
-  $email = $userData['email']; 
-  $password = $userData['password']; 
-  $location = $userData['location']; 
-  $photo = $userData['photo']; 
-  $age = $userData['age']; 
-  $gender = $userData['gender']; 
-  $culturalKnowledge = $userData['cultural_knowledge']; 
-  $education = $userData['Education']; 
-  $experience = $userData['Experience']; 
-  $pricePerSession = $userData['PricePerSession']; 
-  
-} else { 
-  // User not found, handle the error
-} 
 
-$stmtFetch->close(); 
-$connection->close(); 
+$stmtFetch->close();
+$connection->close();
 
-// Handle form submission (delete profile) 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
-  $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
-  $stmtDelete->bind_param("i", $_SESSION['partner_id']); 
-  if ($stmtDelete->execute()) { 
-    header("Location: signuppartner.html"); 
-    exit(); 
-  } else { 
-    echo "<div class='error-message'>Error: " .
-      $stmtDelete->error . "</div>"; 
-  } 
-  $stmtDelete->close(); 
-  $connection->close(); 
-} 
-
-?> 
+// Handle form submission (delete profile)
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
+    $connection = new mysqli($servername, $username, $dbPassword, $database);
+    $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
+    $stmtDelete->bind_param("i", $_SESSION['partner_id']);
+    if ($stmtDelete->execute()) {
+        header("Location: signuppartner.html");
+        exit();
+    } else {
+        echo "<div class='error-message'>Error: " .
+            $stmtDelete->error . "</div>";
+    }
+    $stmtDelete->close();
+    $connection->close();
+}
+?>
 
 <!DOCTYPE html> 
 <html lang="en"> 
@@ -216,14 +190,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-      <ul> 
+    <ul> 
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
-    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="allRequestsPartner.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="ReviewPartner.php">My reviews and rating</a></li>
     <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
-       </ul>
+      </ul>
 
     </nav>
   </header>
@@ -260,7 +234,7 @@ $(document).ready(function() {
 
 
 
-  <form action="#" method="post" class="php-email-form"> 
+  <form action="#" method="post" class="php-email-form" enctype="multipart/form-data"> 
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
@@ -298,23 +272,26 @@ $(document).ready(function() {
           <div class="form-group"> 
               <label>Upload Photo</label> 
               <input type="file" class="form-control" name="photo" id="photo" > 
+              <input type=hidden name="image_old" value="<?php echo $photo;?>">
             </div> 
 
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
-  <label class="required">Click on the languages you want to teach and select your proficiency:</label>
-  <div class="language-selection">
+<!-- Pre-fill language checkboxes and select dropdowns -->
+<label class="required">Click on the languages you want to teach and select your proficiency:</label>
+<div class="language-selection">
     <label class="cbx" for="cbx-46-arabic">
         <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" <?php if (isLanguageSelected("Arabic", $languages)) echo "checked"; ?> />
         <span>Arabic</span>
     </label>
-    <select name="proficiency_levels" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="" >Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    <select name="proficiency_levels[Arabic]" class="form-control" <?php if (isLanguageSelected("Arabic", $languages)) echo ""; else echo "disabled"; ?>>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if (isset($proficiencyLevels["Arabic"]) && $proficiencyLevels["Arabic"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
+<!-- Repeat similar code for other languages -->
 
 
 <div class="language-selection">
@@ -322,11 +299,11 @@ $(document).ready(function() {
         <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" <?php if (isLanguageSelected("English", $languages)) echo "checked"; ?> />
         <span>English</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="" >Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    <select name="proficiency_levels[English]" class="form-control" <?php if (isLanguageSelected("English", $languages)) echo ""; else echo "disabled"; ?>>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if (isset($proficiencyLevels["English"]) && $proficiencyLevels["English"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if (isset($proficiencyLevels["English"]) && $proficiencyLevels["English"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if (isset($proficiencyLevels["English"]) && $proficiencyLevels["English"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 
@@ -337,11 +314,11 @@ $(document).ready(function() {
         <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" <?php if (isLanguageSelected("French", $languages)) echo "checked"; ?> />
         <span>French</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
+    <select name="proficiency_levels[French]" class="form-control" <?php if (isLanguageSelected("French", $languages)) echo ""; else echo "disabled"; ?>>
         <option value="">Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+        <option value="Beginner" <?php if (isset($proficiencyLevels["French"]) && $proficiencyLevels["French"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if (isset($proficiencyLevels["French"]) && $proficiencyLevels["French"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if (isset($proficiencyLevels["French"]) && $proficiencyLevels["French"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 
@@ -351,11 +328,11 @@ $(document).ready(function() {
         <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" <?php if (isLanguageSelected("Spanish", $languages)) echo "checked"; ?> />
         <span>Spanish</span>
     </label>
-    <select name="proficiency_levels[]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
-        <option value="" >Select proficiency</option>
-        <option value="Beginner" <?php if ($ProficiencyLevel === 'Beginner') echo 'selected'; ?>>Beginner</option>
-        <option value="Intermediate" <?php if ($ProficiencyLevel === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
-        <option value="Advanced" <?php if ($ProficiencyLevel === 'Advanced') echo 'selected'; ?>>Advanced</option>
+    <select name="proficiency_levels[Spanish]" class="form-control" <?php if (isLanguageSelected("Spanish", $languages)) echo ""; else echo "disabled"; ?>>
+        <option value="">Select proficiency</option>
+        <option value="Beginner" <?php if (isset($proficiencyLevels["Spanish"]) && $proficiencyLevels["Spanish"] === 'Beginner') echo 'selected'; ?>>Beginner</option>
+        <option value="Intermediate" <?php if (isset($proficiencyLevels["Spanish"]) && $proficiencyLevels["Spanish"] === 'Intermediate') echo 'selected'; ?>>Intermediate</option>
+        <option value="Advanced" <?php if (isset($proficiencyLevels["Spanish"]) && $proficiencyLevels["Spanish"] === 'Advanced') echo 'selected'; ?>>Advanced</option>
     </select>
 </div>
 
@@ -458,60 +435,61 @@ $(document).ready(function() {
     </div>
   </footer>
 
-  <script> 
-    // Variable to track changes 
-    var changesMade = false; 
- 
-    // Function to handle input change 
-    function handleInputChange() { 
-      changesMade = true; 
-    } 
- 
-    // Add event listeners to input fields 
-    var inputFields = document.querySelectorAll('input, textarea'); 
-    inputFields.forEach(function (input) { 
-      input.addEventListener('input', handleInputChange); 
-    }); 
- 
-    // Add event listener to the "Save Changes" button 
-    var saveChangesBtn = document.getElementById('save-changes-btn'); 
-    saveChangesBtn.addEventListener('click', function (event) { 
-      // Check if changes have been made 
-      if (!changesMade) { 
-        event.preventDefault(); // Prevent form submission if no changes 
-        alert('No changes made.'); 
-      } 
-    }); 
+  <script>
+    // Variable to track changes
+    var changesMade = false;
+
+    // Function to handle input and selection change
+    function handleInputChange() {
+        changesMade = true;
+    }
+
+    // Add event listeners to input fields
+    var inputFields = document.querySelectorAll('input, textarea, select, input[type="checkbox"]');
+    inputFields.forEach(function(input) {
+        input.addEventListener('input', handleInputChange);
+        input.addEventListener('change', handleInputChange); // Adding change event listener
+    });
+
+    // Add event listener to the "Save Changes" button
+    var saveChangesBtn = document.getElementById('save-changes-btn');
+    saveChangesBtn.addEventListener('click', function(event) {
+        // Check if changes have been made
+        if (!changesMade) {
+            event.preventDefault(); // Prevent form submission if no changes
+            alert('No changes made.');
+        }
+    });
+
     <?php 
-if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
-    echo "var profileUpdatedSuccess = true;";
-    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
-} else {
-    echo "var profileUpdatedSuccess = false;";
-}
-?>
+    if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+        echo "var profileUpdatedSuccess = true;";
+        unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+    } else {
+        echo "var profileUpdatedSuccess = false;"; 
+    }
+    ?>
 
-// Add this JavaScript code to handle the success message
-if (profileUpdatedSuccess) {
-    alert('Profile updated successfully!');
-}
-<?php 
-if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
-    echo "var emailAlreadyRegistered = true;";
-    unset($_SESSION['email_already_registered']); // Unset session variable after handling
-} else {
-    echo "var emailAlreadyRegistered = false;";
-}
-?>
+    // Add this JavaScript code to handle the success message
+    if (profileUpdatedSuccess) {
+        alert('Profile updated successfully!');
+    }
 
-// Add this JavaScript code to handle the email already registered message
-if (emailAlreadyRegistered) {
-    alert('The email address is already registered. Please use another email.');
-}
+    <?php
+    if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+        echo "var emailAlreadyRegistered = true;";
+        unset($_SESSION['email_already_registered']); // Unset session variable after handling
+    } else {
+        echo "var emailAlreadyRegistered = false;";
+    }
+    ?>
 
+    // Add this JavaScript code to handle the email already registered message
+    if (emailAlreadyRegistered) {
+        alert('The email address is already registered. Please use another email.');
+    }
+</script>
 
-  </script> 
- 
 </body> 
  
 </html>

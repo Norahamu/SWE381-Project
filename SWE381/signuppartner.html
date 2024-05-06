@@ -97,11 +97,11 @@ $(document).ready(function() {
           <div class="row">
             <div class="form-group col-md-6">
               <label class="required">First Name</label>
-              <input type="text" placeholder="Enter your first name" name="fname" class="form-control" id="fname" required>
+              <input type="text" placeholder="Enter your first name" name="fname" class="form-control" id="fname" required title="You must specify your first name">
             </div>
             <div class="form-group col-md-6">
               <label class="required">Last Name</label>
-              <input type="text" placeholder="Enter your last name" name="lname" class="form-control" id="lname" required>
+              <input type="text" placeholder="Enter your last name" name="lname" class="form-control" id="lname" required title="You must specify your last name">
             </div>
             <div class="form-group col-md-6">
               <label class="required">Age</label>
@@ -109,7 +109,7 @@ $(document).ready(function() {
             </div>
             <div class="form-group col-md-6">
     <label class="required">Gender</label>
-    <select name="gender" class="form-control">
+    <select name="gender" class="form-control" required title="You must choose your gender">
         <option value="">Select Gender</option>
         <option value="female">Female</option>
         <option value="male">Male</option>
@@ -117,7 +117,7 @@ $(document).ready(function() {
 </div>
             <div class="form-group">
               <label class="required">Email</label>
-              <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required>
+              <input type="email" class="form-control" placeholder="Enter your email" name="email" id="email" required title="You must specify your email">
             </div>
             <div class="form-group">
               <label for="psw" class="required">Password</label>
@@ -129,7 +129,7 @@ $(document).ready(function() {
                       </button>
                   </div>
               </div>
-          </div>  
+          </div>
             <div class="form-group">
               <label>Upload Photo</label>
               <input type="file" class="form-control" name="photo" id="photo">
@@ -137,7 +137,7 @@ $(document).ready(function() {
             <div class="checkbox-wrapper-46">
             <div class="checkbox-wrapper-46" id="language-form">
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
-  <div class="language-selection">
+  <div class="language-selection" required title="You must specify at least one language and proficiency">
     <label class="cbx" for="cbx-46-arabic">
       <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" />
       <span>Arabic</span>
@@ -201,22 +201,22 @@ $(document).ready(function() {
 </script>
         <div class="form-group"></div>
           <label class="required">Cultural Knowledge</label>
-          <textarea class="form-control" placeholder="Enter your cultural knowledge" name="cultural_knowledge" id="cultural_knowledge" rows="5" required></textarea>       </div>
+          <textarea class="form-control" placeholder="Enter your cultural knowledge" name="cultural_knowledge" id="cultural_knowledge" rows="5" required title="You must specify your cultural knowledge"></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
-          <textarea class="form-control" placeholder="Enter your experience" name="education" id="eduaction" rows="5" required></textarea>
+          <textarea class="form-control" placeholder="Enter your education" name="education" id="eduaction" rows="5" required title="You must specify your education"></textarea>
         </div>
         <div class="form-group">
           <label class="required">Experience</label>
-          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="experience" rows="5" required></textarea>
+          <textarea class="form-control" placeholder="Enter your experience" name="experience" id="experience" rows="5" required title="You must specify your experience"></textarea>
         </div>
         <div class="form-group">
           <label for="location" class="required">Location</label>
-          <input type="text" name="location" class="form-control" id="location" placeholder="Enter your location" required>
+          <input type="text" name="location" class="form-control" id="location" placeholder="Enter your location" required title="You must specify your location">
         </div>
         <div class="form-group col-md-6">
 <label class="required">Price per session</label>
-<input type="number" class="form-control" placeholder="Enter price in SAR" name="price" id="price" min="50" step="1" required>
+<input type="number" class="form-control" placeholder="Enter price in SAR" name="price" id="price" min="50" step="1" required title="Value must be greater than or equal 50.">
         </div>
         <div class="text-center">
           <button type="submit" class="btn-sign">Sign up</button>

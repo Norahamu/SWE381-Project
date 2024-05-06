@@ -24,11 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_NUMBER_INT);
     $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING);
     $location = filter_input(INPUT_POST, 'location', FILTER_SANITIZE_STRING);
-    $culturalKnowledge = filter_input(INPUT_POST, 'cultural_knowledge', FILTER_SANITIZE_STRING);
-    $education = filter_input(INPUT_POST, 'education', FILTER_SANITIZE_STRING);
-if (empty($education)) {
-    $education = "Not Specified";}
-    $experience = filter_input(INPUT_POST, 'experience', FILTER_SANITIZE_STRING);
+    $culturalKnowledge = addslashes(filter_input(INPUT_POST, 'cultural_knowledge', FILTER_SANITIZE_STRING));
+    $education = addslashes(filter_input(INPUT_POST, 'education', FILTER_SANITIZE_STRING));
+    if (empty($education)) {
+        $education = "Not Specified";
+    }
+    $experience = addslashes(filter_input(INPUT_POST, 'experience', FILTER_SANITIZE_STRING));
     $pricePerSession = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_INT);
     $languages = isset($_POST['languages']) ? $_POST['languages'] : [];
     $proficiencyLevels = isset($_POST['proficiency_levels']) ? $_POST['proficiency_levels'] : [];
