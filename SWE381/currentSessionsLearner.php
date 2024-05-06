@@ -1,5 +1,5 @@
 <?php
-include 'checklearner';
+session_start();
 
 $servername = "localhost";
 $username = "root";
