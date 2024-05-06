@@ -116,34 +116,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
 ?> 
  
-<!DOCTYPE html> 
-<html lang="en"> 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8"> <!-- character encoding-->
+ <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewport settings-->
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
+<title>Previous Sessions Learner</title>
+   <!-- icon -->
+  <link href="assets/img/Lingoblue.png" rel="icon" >
+
+  <!-- Google Fonts -->
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
  
-<head> 
- 
-  <meta charset="UTF-8"> <!-- character encoding--> 
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings--> 
-  <link rel="stylesheet" type="text/css" href="style.css" media="screen"> 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
- 
-  <title>My Profile Learner</title> 
-  <!-- icon --> 
-  <link href="assets/img/Lingoblue.png" rel="icon"> 
- 
-  <!-- Google Fonts --> 
-  <link rel="stylesheet" 
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"> 
- 
- 
-  <!-- Vendor CSS Files --> 
- 
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> 
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"> 
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"> 
- 
- 
-  <!-- Main CSS File --> 
-  <link href="style.css" rel="stylesheet"> 
+
+  <!-- Vendor CSS Files -->
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  <!-- Main CSS File -->
+  <link href="style.css" rel="stylesheet">
   <!-- JS Files -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
@@ -307,24 +303,24 @@ $(document).ready(function() {
 
     // Function to handle input and selection change
     function handleInputChange() {
-        changesMade = true;
+      changesMade = true;
     }
 
     // Add event listeners to input fields
-    var inputFields = document.querySelectorAll('input, textarea, select, ');
-    inputFields.forEach(function(input) {
-        input.addEventListener('input', handleInputChange);
-        input.addEventListener('change', handleInputChange); // Adding change event listener
+    var inputFields = document.querySelectorAll('input, textarea, select');
+    inputFields.forEach(function (input) {
+      input.addEventListener('input', handleInputChange);
+      input.addEventListener('change', handleInputChange); // Adding change event listener
     });
 
     // Add event listener to the "Save Changes" button
     var saveChangesBtn = document.getElementById('save-changes-btn');
-    saveChangesBtn.addEventListener('click', function(event) {
-        // Check if changes have been made
-        if (!changesMade) {
-            event.preventDefault(); // Prevent form submission if no changes
-            alert('No changes made.');
-        }
+    saveChangesBtn.addEventListener('click', function (event) {
+      // Check if changes have been made
+      if (!changesMade) {
+        event.preventDefault(); // Prevent form submission if no changes
+        alert('No changes made.');
+      }
     });
 
     <?php
