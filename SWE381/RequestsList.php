@@ -22,6 +22,15 @@ $conn = mysqli_connect(DB_HOST, DB_USER, DB_PSWD, DB_NAME);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
+// Define the threshold date
+$threshold_date = date('Y-m-d', strtotime('-5 days'));
+
+// SQL query to delete requests older than 5 days with pending status
+$deleteQuery1 = "DELETE FROM requests_partner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
+$deleteQuery2 = "DELETE FROM requests_learner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
+
+$deleteResult1 = mysqli_query($conn, $deleteQuery1);
+$deleteResult2 = mysqli_query($conn, $deleteQuery2);
 // Retrieve learner ID from session or wherever it's stored
 $learner_id = $_SESSION['learner_id']; // Change 'learner_id' to match your session variable name
 
