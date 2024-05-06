@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  <meta charset="UTF-8"> <!-- character encoding-->
  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewport settings-->
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" > 
-<title>Previous Sessions Learner</title>
+<title>MY Profile Learner</title>
    <!-- icon -->
   <link href="assets/img/Lingoblue.png" rel="icon" >
 
