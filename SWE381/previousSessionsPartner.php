@@ -1,5 +1,5 @@
 <?php
-include 'checkpartner';
+session_start();
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
@@ -96,7 +96,15 @@ if(isset($_SESSION['partner_id'])){
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
+<<<<<<< HEAD
     <ul> 
+=======
+<<<<<<< HEAD
+      <ul> 
+=======
+    <ul> 
+>>>>>>> 6be22685145a66767da5152606899084bc62963f
+>>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
@@ -143,7 +151,7 @@ if(isset($_SESSION['partner_id'])){
       </div>
     </section>
   </div>
-     <!-- ======= Footer ======= -->
+<!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="footer-top">
       <div class="container">
@@ -160,13 +168,12 @@ if(isset($_SESSION['partner_id'])){
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-               <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+             <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
-			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
-                           <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
-            
+              <li><i class="bx bx-chevron-right"></i> <a href="allRequestsPartner.php">Language Learning Requests</a></li>
+     <li><i class="bx bx-chevron-right"></i> <a href="ReviewPartner.php">my review and rating </a></li>
+        <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
@@ -181,7 +188,7 @@ if(isset($_SESSION['partner_id'])){
     </div>
     <div class="container footer-bottom clearfix">
       <div class="copyright">
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
       </div>
       <div class="credits"></div>
     </div>

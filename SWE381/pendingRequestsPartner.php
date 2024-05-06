@@ -1,5 +1,5 @@
 <?php
-include 'checkpartner';
+session_start();
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
@@ -14,6 +14,16 @@ if (!$conn) {
 
 if(isset($_SESSION['partner_id'])){
     $partner_id = $_SESSION['partner_id'];
+    
+    // Define the threshold date
+	$threshold_date = date('Y-m-d', strtotime('-5 days'));
+
+	// SQL query to delete requests older than 5 days with pending status
+	$deleteQuery1 = "DELETE FROM requests_partner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
+	$deleteQuery2 = "DELETE FROM requests_learner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
+
+	$deleteResult1 = mysqli_query($conn, $deleteQuery1);
+	$deleteResult2 = mysqli_query($conn, $deleteQuery2);
 
 $query = "SELECT L.first_name AS learner_first_name, 
                  L.last_name AS learner_last_name, 
@@ -197,7 +207,11 @@ $("#button1").click(function(){
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
+<<<<<<< HEAD
     <ul> 
+=======
+      <ul> 
+>>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
@@ -229,7 +243,7 @@ if (!isset($result) || mysqli_num_rows($result) == 0) {
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
-    echo "<a href='#' class='PName partnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
+    echo "<a href='#' class='PName learnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
     echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>"; 
               
     if ($row['RStatus'] == 'Pending') {
@@ -247,7 +261,7 @@ while ($row = mysqli_fetch_assoc($result)) {
       </div>
     </section>
   </div>
-     <!-- ======= Footer ======= -->
+<!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="footer-top">
       <div class="container">
@@ -264,12 +278,12 @@ while ($row = mysqli_fetch_assoc($result)) {
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+             <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
-			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
-                           <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="allRequestsPartner.php">Language Learning Requests</a></li>
+     <li><i class="bx bx-chevron-right"></i> <a href="ReviewPartner.php">my review and rating </a></li>
+        <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
@@ -284,15 +298,15 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
     <div class="container footer-bottom clearfix">
       <div class="copyright">
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
       </div>
       <div class="credits"></div>
     </div>
   </footer>
   
-     <script>    
+<script>
     // Select all elements with the class 'partnerName'
-    const partnerNameElements = document.querySelectorAll('.partnerName');
+    const partnerNameElements = document.querySelectorAll('.learnerName');
 
     // Loop through each element and attach event listener
     partnerNameElements.forEach(function(element) {
@@ -300,14 +314,15 @@ while ($row = mysqli_fetch_assoc($result)) {
     });
 
     function redirectToLearnerPage(event) {
-        event.preventDefault();
-        const partnerId = this.getAttribute('data-partner-id');
-        const requestID = this.getAttribute('data-req-id');
-        const learnerID = this.getAttribute('data-learner-id');
+    event.preventDefault();
+    const partnerId = this.getAttribute('data-partner-id');
+    const requestID = this.getAttribute('data-req-id');
+    const learnerID = this.getAttribute('data-learner-id');
 
-        const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`;
-        window.location.href = url;
-    }
+    const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`; // enclose URL in backticks
+    window.location.href = url;
+}
+
 </script>
    
    
