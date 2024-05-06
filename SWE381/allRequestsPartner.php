@@ -16,7 +16,8 @@ if(isset($_SESSION['partner_id'])){
     $partner_id = $_SESSION['partner_id'];
     
 // Define the threshold date
-$threshold_date = date('Y-m-d', strtotime('-5 days'));
+$threshold_date = date('Y-m-d H:i:s', strtotime('-5 days'));
+echo "<script>console.log('$threshold_date');</script>";
 
 // SQL query to delete requests older than 5 days with pending status
 $deleteQuery1 = "DELETE FROM requests_partner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
@@ -24,6 +25,9 @@ $deleteQuery2 = "DELETE FROM requests_learner WHERE Status = 'Pending' AND reque
 
 $deleteResult1 = mysqli_query($conn, $deleteQuery1);
 $deleteResult2 = mysqli_query($conn, $deleteQuery2);
+
+echo "<script>console.log('The query result:');</script>";
+echo "<script>console.log('$deleteResult2');</script>";
 
 
 
@@ -210,7 +214,11 @@ $(".button1").click(function(){
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 >>>>>>> bf48123bb4d80664d580e9b673b3545152f4ef25
+=======
+>>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
+>>>>>>> c43eb558e4fc82c8dba0dac55b1018cab5d4f696
     </nav>
   </header>
   <!-- End Header -->
@@ -218,7 +226,6 @@ $(".button1").click(function(){
 <section class="section-bg">
  <div class="section-title">
 <h2>Language Learning Requests</h2> </div>
-<br>
 
 <div class="menu">
 
@@ -236,7 +243,7 @@ if (!isset($result) || mysqli_num_rows($result) == 0) {
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='session'>";
     echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
-    echo "<a href='#' class='PName partnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
+    echo "<a href='#' class='PName learnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";    
     echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>"; 
 
     if ($row['RStatus'] == 'Pending') {
@@ -300,7 +307,7 @@ while ($row = mysqli_fetch_assoc($result)) {
   </footer>
 <script>
     // Select all elements with the class 'partnerName'
-    const partnerNameElements = document.querySelectorAll('.partnerName');
+    const partnerNameElements = document.querySelectorAll('.learnerName');
 
     // Loop through each element and attach event listener
     partnerNameElements.forEach(function(element) {
@@ -308,14 +315,15 @@ while ($row = mysqli_fetch_assoc($result)) {
     });
 
     function redirectToLearnerPage(event) {
-        event.preventDefault();
-        const partnerId = this.getAttribute('data-partner-id');
-        const requestID = this.getAttribute('data-req-id');
-        const learnerID = this.getAttribute('data-learner-id');
+    event.preventDefault();
+    const partnerId = this.getAttribute('data-partner-id');
+    const requestID = this.getAttribute('data-req-id');
+    const learnerID = this.getAttribute('data-learner-id');
 
-        const url = learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID};
-        window.location.href = url;
-    }
+    const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`; // enclose URL in backticks
+    window.location.href = url;
+}
+
 </script>
 
 <?php

@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $firstName = $connection->real_escape_string($_POST['first_name']);
     $lastName = $connection->real_escape_string($_POST['last_name']);
     $email = $connection->real_escape_string($_POST['email']);
-    $password = $connection->real_escape_string($_POST['password']); // Hash the password for security
+    $password = $connection->real_escape_string($_POST['password']); 
     $location = $connection->real_escape_string($_POST['location']);
     $age = $connection->real_escape_string($_POST['age']);
     $gender = $connection->real_escape_string($_POST['gender']);
@@ -27,9 +27,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $education = addslashes($connection->real_escape_string($_POST['Education']));
     $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
+    $languages = $connection->real_escape_string($_POST['languages']) ? $_POST['languages'] : [];
+    $proficiencyLevels = $connection->real_escape_string($_POST['proficiency_levels']) ? $_POST['proficiency_levels'] : [];
     $old_image=$_POST['image_old'];
     $photo=$_FILES['photo']['name'];
 
+   // Fetch existing languages and proficiency levels
+   $sqlFetch = "SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?";
+   $stmtFetch = $pdo->prepare($sqlFetch);
+   $stmtFetch->execute([$_SESSION['partner_id']]);
+   $languages = $stmtFetch->fetchAll(PDO::FETCH_ASSOC);
 
     
     if($photo!=null){
@@ -42,7 +49,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     }
      
-      
+        $languages = $_POST['languages'];
+        $proficiencyLevels = $_POST['proficiencyLevels'];
+
+        if (empty($languages) || empty($proficiencyLevels)) {
+            throw new Exception("Languages and proficiency levels cannot be empty.");
+        }
+
+        if (count($languages) !== count($proficiencyLevels)) {
+            throw new Exception("Each language must have a corresponding proficiency level.");
+        }
+
+        // Delete existing languages
+        $sqlDelete = "DELETE FROM partner_languages WHERE partner_id = ?";
+        $stmtDelete = $pdo->prepare($sqlDelete);
+        $stmtDelete->execute([$_SESSION['partner_id']]);
+
+        // Insert updated languages and proficiency levels
+        $sqlInsert = "INSERT INTO partner_languages (partner_id, language, ProficiencyLevel) VALUES (?, ?, ?)";
+        $stmtInsert = $pdo->prepare($sqlInsert);
+        foreach ($languages as $index => $language) {
+            $stmtInsert->execute([$_SESSION['partner_id'], $language, $proficiencyLevels[$index]]);
+        }
 
     
     // Check if the provided email already exists for another user
@@ -103,9 +131,8 @@ if ($resultFetch->num_rows > 0) {
     $experience = $userData['Experience'];
     $pricePerSession = $userData['PricePerSession'];
     $photo = $userData['photo']; 
-} else {
-    // User not found, handle the error
-}
+} 
+
 // Fetch languages and proficiency levels for the partner
 $stmtLanguages = $connection->prepare("SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?");
 $stmtLanguages->bind_param("i", $_SESSION['partner_id']);

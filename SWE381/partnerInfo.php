@@ -23,7 +23,6 @@
         <!-- Main CSS File -->
         <link href="style.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="cssPartnerInfo.css">
-        <link rel="stylesheet" type="text/css" href="ratingpartnerstyle.css">
 
     </head>
     <body>
@@ -104,7 +103,7 @@
                         
                         for ($x = 1; $x <= $avr; $x++) {
 
-                            echo " <input value='5' name= 'rate' id='star5' type='radio'> <label title='text' for='star5'></label>";
+                            echo " <label></label>";
                         }
                     }
                     echo "    </div>
