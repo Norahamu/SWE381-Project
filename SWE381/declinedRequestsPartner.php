@@ -28,7 +28,9 @@ if(isset($_SESSION['learner_id'])){
 	$query = "SELECT L.first_name AS learner_first_name, 
                  	L.last_name AS learner_last_name, 
                  	L.photo AS learner_photo, 
-                 	PR.Status AS RStatus
+                 	L.learner_id AS learnerID,
+                 	PR.Status AS RStatus,
+                 	PR.RequestID AS REQID
           	FROM requests_partner AS PR
           	JOIN learners AS L ON PR.learnerID = L.learner_ID
           	WHERE PR.partnerID = $partner_id AND PR.Status='Declined'";
@@ -110,7 +112,7 @@ if(isset($_SESSION['learner_id'])){
           while ($row = mysqli_fetch_assoc($result)) {
               echo "<div class='session'>";
               echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
-              echo "<strong class='TPName'>{$row['learner_first_name']} {$row['learner_last_name']}</strong><br>";           
+              echo "<a href='#' class='PName learnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";           
               echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>";
               echo "</div>";
           }
@@ -170,9 +172,9 @@ if(isset($_SESSION['learner_id'])){
     </div>
   </footer>
   
-  <script>
+<script>
     // Select all elements with the class 'partnerName'
-    const partnerNameElements = document.querySelectorAll('.partnerName');
+    const partnerNameElements = document.querySelectorAll('.learnerName');
 
     // Loop through each element and attach event listener
     partnerNameElements.forEach(function(element) {
@@ -180,14 +182,15 @@ if(isset($_SESSION['learner_id'])){
     });
 
     function redirectToLearnerPage(event) {
-        event.preventDefault();
-        const partnerId = this.getAttribute('data-partner-id');
-        const requestID = this.getAttribute('data-req-id');
-        const learnerID = this.getAttribute('data-learner-id');
+    event.preventDefault();
+    const partnerId = this.getAttribute('data-partner-id');
+    const requestID = this.getAttribute('data-req-id');
+    const learnerID = this.getAttribute('data-learner-id');
 
-        const url = learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID};
-        window.location.href = url;
-    }
+    const url = `learnerCard.php?learnerID=${learnerID}&partnerId=${partnerId}&requestID=${requestID}`; // enclose URL in backticks
+    window.location.href = url;
+}
+
 </script>
   
 </body>
