@@ -10,6 +10,7 @@ try {
     $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PSWD);
     // Set the PDO error mode to exception
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   
 } catch(PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
@@ -21,6 +22,15 @@ $conn = mysqli_connect(DB_HOST, DB_USER, DB_PSWD, DB_NAME);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
+// Define the threshold date
+$threshold_date = date('Y-m-d', strtotime('-5 days'));
+
+// SQL query to delete requests older than 5 days with pending status
+$deleteQuery1 = "DELETE FROM requests_partner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
+$deleteQuery2 = "DELETE FROM requests_learner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
+
+$deleteResult1 = mysqli_query($conn, $deleteQuery1);
+$deleteResult2 = mysqli_query($conn, $deleteQuery2);
 // Retrieve learner ID from session or wherever it's stored
 $learner_id = $_SESSION['learner_id']; // Change 'learner_id' to match your session variable name
 
@@ -60,23 +70,22 @@ mysqli_close($conn);
     <link href="sessionsStyle.css" rel="stylesheet">
 </head>
 <body>
-
-<header id="header" class="fixed-top header-inner-pages">
+<!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
-        <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-        <ul>
-            <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+      <ul> 
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
                     <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
                     <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
                     <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
                     <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-        </ul>
+      </ul>
     </nav>
-</header>
-
+  </header>
+  <!-- End Header -->
 
 
 <section class="section-bg">
@@ -137,7 +146,7 @@ mysqli_close($conn);
                             // Optionally, you can update the UI to reflect the canceled request
                             alert('Request canceled successfully');
                             // Optionally, you can reload the page or update the UI
-                            // window.location.reload();
+                            window.location.reload();
                         } else {
                             alert('Failed to cancel request');
                         }
@@ -153,40 +162,45 @@ mysqli_close($conn);
 </script>
 
  <!-- ======= Footer ======= -->
-<footer id="footer">
+ <footer id="footer">
     <div class="footer-top">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 footer-contact">
-                    <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
-                    <p>
-                        King Saud University <br>
-                        Riyadh <br>
-                        Saudi Arabia <br><br>
-                        <strong>Email:</strong> lingo@project.com<br>
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-6 footer-links">
-                    <h4>Useful Links</h4>
-                    <ul>
-                        <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <p>
+              King Saud University <br>
+              Riyadh <br>
+              Saudi Arabia <br><br>
+              <strong>Email:</strong> lingo@project.com<br>
+            </p>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
-                    </ul>
-                </div>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
             </div>
+          </div>
         </div>
+      </div>
     </div>
     <div class="container footer-bottom clearfix">
-        <div class="copyright">
-            © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
-        </div>
-        <div class="credits"></div>
+      <div class="copyright">
+        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits"></div>
     </div>
-</footer>
+  </footer>
 
 </body>
 </html>

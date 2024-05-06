@@ -46,10 +46,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["request_id"])) {
         $response = array("success" => false, "error" => "Failed to delete the request: " . $e->getMessage());
         echo json_encode($response);
     }
+    
+    // Reload the page after successful cancellation
+    echo '<script>window.location.reload(); </script>';
+    
 } else {
     // If request is not POST or request_id is not set, return a failure response
     $response = array("success" => false, "error" => "Invalid request");
     echo json_encode($response);
 }
 ?>
+
 
