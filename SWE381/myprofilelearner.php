@@ -148,23 +148,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
  
 <body> 
   <!-- ======= Header ======= --> 
-  <header id="header" class="fixed-top header-inner-pages"> 
-  <div class="container d-flex align-items-center"> 
-    <a href="index.html" class="logo me-auto">
-    
-    </a> 
-  </div> 
-  <nav id="navbar" class="navbar"> 
-    <ul> 
-      <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-      <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-      <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-      <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-      <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-      <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-    </ul> 
-  </nav> 
-</header> 
+  <header id="header" class="fixed-top header-inner-pages">
+            <div class="container d-flex align-items-center">
+                <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+            </div>
+            <nav id="navbar" class="navbar">
+                <ul> 
+                    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+                </ul>
+
+            </nav>
+        </header>
   <!-- End Header --> 
   <script>
 $(document).ready(function() {
