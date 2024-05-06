@@ -147,25 +147,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 </head> 
  
 <body> 
-  <!-- ======= Header ======= --> 
-  <header id="header" class="fixed-top header-inner-pages"> 
-  <div class="container d-flex align-items-center"> 
-    <a href="index.html" class="logo me-auto">
-    
-    </a> 
-  </div> 
-  <nav id="navbar" class="navbar"> 
-    <ul> 
-      <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-      <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-      <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-      <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-      <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-      <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-    </ul> 
-  </nav> 
-</header> 
-  <!-- End Header --> 
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center">
+      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+    </div>
+    <nav id="navbar" class="navbar">
+      <ul> 
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- End Header -->
   <script>
 $(document).ready(function() {
     $("#togglePassword").click(function() {
@@ -254,49 +251,46 @@ $(document).ready(function() {
       </div> 
     </div> 
   </section> 
-  <!-- ======= Footer ======= --> 
-  <footer id="footer"> 
-    <div class="footer-top"> 
-      <div class="container"> 
-        <div class="row"> 
-          <div class="col-lg-3 col-md-6 footer-contact"> 
-            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a> 
-            <p> 
-              King Saud University <br> 
-              Riyadh <br> 
-              Saudi Arabia <br><br> 
-              <strong>Email:</strong> lingo@project.com<br> 
-            </p> 
-          </div> 
-          <div class="col-lg-3 col-md-6 footer-links"> 
-            <h4>Useful Links</h4> 
-            <ul> 
+ <!-- ======= Footer ======= -->
+ <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
+            <p>
+              King Saud University <br>
+              Riyadh <br>
+              Saudi Arabia <br><br>
+              <strong>Email:</strong> lingo@project.com<br>
+            </p>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
               <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
-                           
-            </ul> 
-          </div> 
-          <div class="col-lg-3 col-md-6 footer-links"> 
-            <h4>Our Social Networks</h4> 
-            <div class="social-links mt-3"> 
-              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a> 
-              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a> 
-            </div> 
-          </div> 
-        </div> 
-      </div> 
-    </div> 
-    <div class="container footer-bottom clearfix"> 
-      <div class="copyright"> 
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved 
-      </div> 
-      <div class="credits"></div> 
-    </div> 
-  </footer>  
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom clearfix">
+      <div class="copyright">
+        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits"></div>
+    </div>
+  </footer>
   <script>
     // Variable to track changes
     var changesMade = false;
