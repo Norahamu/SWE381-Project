@@ -61,10 +61,16 @@ if ($result->num_rows > 0) {
     echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
 }
 
+
 $stmt->close();
 
 $connection->close(); 
 } 
+// Check for successful profile update and redirect to this page to clear POST data
+if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+  unset($_SESSION['profile_updated_success']);
+  header("Location: ".$_SERVER['PHP_SELF']);
+  exit();}
 
 
 elseif (isset($_POST['delete_account'])) {
@@ -352,34 +358,34 @@ $(document).ready(function() {
         alert('No changes made.');
       }
     });
-
     <?php
-    if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
-        echo "var profileUpdatedSuccess = true;";
-        unset($_SESSION['profile_updated_success']); // Unset session variable after handling
-    } else {
-        echo "var profileUpdatedSuccess = false;";
-    }
-    ?>
+if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+    echo "var profileUpdatedSuccess = true;";
+    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+} else {
+    echo "var profileUpdatedSuccess = false;";
+}
+?>
 
-    // Add this JavaScript code to handle the success message
-    if (profileUpdatedSuccess) {
-        alert('Profile updated successfully!');
-    }
+// Add this JavaScript code to handle the email already registered message
+<?php
+if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+    echo "var emailAlreadyRegistered = true;";
+    unset($_SESSION['email_already_registered']); // Unset session variable after handling
+} else {
+    echo "var emailAlreadyRegistered = false;";
+}
+?>
 
-    <?php
-    if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
-        echo "var emailAlreadyRegistered = true;";
-        unset($_SESSION['email_already_registered']); // Unset session variable after handling
-    } else {
-        echo "var emailAlreadyRegistered = false;";
-    }
-    ?>
+// Add this JavaScript code to handle the success message
+if (profileUpdatedSuccess) {
+    alert('Profile updated successfully!');
+}
 
-    // Add this JavaScript code to handle the email already registered message
-    if (emailAlreadyRegistered) {
-        alert('The email address is already registered. Please use another email.');
-    }
+// Add this JavaScript code to handle the email already registered message
+if (emailAlreadyRegistered) {
+    alert('The email address is already registered. Please use another email.');
+}
 </script> 
 </body> 
  
