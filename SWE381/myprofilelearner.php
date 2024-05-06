@@ -150,9 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <!-- ======= Header ======= --> 
   <header id="header" class="fixed-top header-inner-pages"> 
   <div class="container d-flex align-items-center"> 
-    <a href="index.html" class="logo me-auto">
-    
-    </a> 
+    <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
   </div> 
   <nav id="navbar" class="navbar"> 
     <ul> 

@@ -70,7 +70,6 @@ if(isset($_SESSION['learner_id'])){
                     <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
                     <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
       </ul>
-
     </nav>
   </header>
   <!-- End Header -->
