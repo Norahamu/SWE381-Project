@@ -81,25 +81,59 @@ if ($result->num_rows > 0) {
     // Email address is already registered for another user
     $_SESSION['email_already_registered'] = true;
 } else {
-    //UPDATE
-   
-        // New photo uploaded, update the photo field in the database
-        $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-        $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $update_filename, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
-   
+    
 
+  // Handle form submissions
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['save_changes'])) {
+    
+       //UPDATE
+     $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+          $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $update_filename, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+     
+  
     if ($stmt->execute()) {
-        // Store success message in session variable
-        $_SESSION['profile_updated_success'] = true;
-    } else {
-        echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
-    }
+      // Store success message in session variable
+      $_SESSION['profile_updated_success'] = true;
+  } else {
+      echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+  }
+  
+  
+  $stmt->close();
+  $connection->close(); 
+  } 
+  // Check for successful profile update and redirect to this page to clear POST data
+  if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+    unset($_SESSION['profile_updated_success']);
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit();}
+  
+  
+  elseif (isset($_POST['delete_account'])) {
+    $connection = new mysqli($servername, $username, $dbPassword, $database); 
+    $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id =?");
+    $stmtDelete->bind_param("i", $_SESSION['partner_id']); 
+    if ($stmtDelete->execute()) { 
+      header("Location: signuppartner.html"); 
+      exit(); 
+    } else { 
+      echo "<div class='error-message'>Error: " .
+        $stmtDelete->error . "</div>"; 
+    } 
+    $stmtDelete->close(); 
+    $connection->close(); 
+  
+  }
+  }
+  }
+  
+  }
 
-    $stmt->close();
-}
 
-$connection->close(); 
-}
+
+
+
 // Fetch user data for pre-filling the profile form
 $servername = "localhost";
 $username = "root";
@@ -157,21 +191,6 @@ function isLanguageSelected($language, $userLanguages)
 $stmtFetch->close();
 $connection->close();
 
-// Handle form submission (delete profile)
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
-    $connection = new mysqli($servername, $username, $dbPassword, $database);
-    $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
-    $stmtDelete->bind_param("i", $_SESSION['partner_id']);
-    if ($stmtDelete->execute()) {
-        header("Location: signuppartner.html");
-        exit();
-    } else {
-        echo "<div class='error-message'>Error: " .
-            $stmtDelete->error . "</div>";
-    }
-    $stmtDelete->close();
-    $connection->close();
-}
 ?>
 
 <!DOCTYPE html> 
@@ -246,12 +265,9 @@ $(document).ready(function() {
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
         <h2>My Profile</h2> 
-        <?php
-        if ($photo == null) {
-                            echo "<img class = 'personal' src='assets/img/OIP.jpg' width ='90' height= '80' alt='personal'>";
-                        } else {
+        <h2>My Profile</h2> 
+        <?php 
                             echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
-                        }
                         ?>
       </div> 
       <div class="row"> 
@@ -402,17 +418,24 @@ $(document).ready(function() {
 <input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="PricePerSession" id="PricePerSession" min="50" step="1" >
         </div>
        <div class="text-center" style="display: flex; justify-content: space-between;">
-        <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
-        <button type="button" id="delete-account-btn" name="delete_account" onclick="confirmDelete()" style="background-color: red; border: 0; padding: 12px 34px; color: #fff; transition: 0.4s; border-radius: 50px;">Delete my account</button>
+       <form id="save-changes-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <input type="hidden" name="save_changes" value="1">
+              <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button> 
+              </form>
+              <form id="delete-account-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+              <input type="hidden" name="delete_account" value="1">
+              <button type="button" id="delete-account-btn" name="delete_account" onclick="confirmDelete()" style="background-color: red; border: 0; padding: 12px 34px; color: #fff; transition: 0.4s; border-radius: 50px;">Delete my account</button>
+              </form>
 
-       
-       <script>
-    function confirmDelete() {
-        if (confirm("Are you sure you want to delete your account?")) {
-            window.location.href = "delete_account.php";
+              <script>
+        // Function to confirm account deletion
+        function confirmDelete() {
+            if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                // If user confirms, submit the form
+                document.getElementById("delete-account-form").submit();
+            }
         }
-    }
-</script> 
+    </script> 
 
     </div>
     </form>
@@ -461,62 +484,60 @@ $(document).ready(function() {
       <div class="credits"></div>
     </div>
   </footer>
-
   <script>
     // Variable to track changes
     var changesMade = false;
 
     // Function to handle input and selection change
     function handleInputChange() {
-        changesMade = true;
+      changesMade = true;
     }
 
     // Add event listeners to input fields
-    var inputFields = document.querySelectorAll('input, textarea, select, input[type="checkbox"]');
-    inputFields.forEach(function(input) {
-        input.addEventListener('input', handleInputChange);
-        input.addEventListener('change', handleInputChange); // Adding change event listener
+    var inputFields = document.querySelectorAll('input, textarea, select');
+    inputFields.forEach(function (input) {
+      input.addEventListener('input', handleInputChange);
+      input.addEventListener('change', handleInputChange); // Adding change event listener
     });
 
     // Add event listener to the "Save Changes" button
     var saveChangesBtn = document.getElementById('save-changes-btn');
-    saveChangesBtn.addEventListener('click', function(event) {
-        // Check if changes have been made
-        if (!changesMade) {
-            event.preventDefault(); // Prevent form submission if no changes
-            alert('No changes made.');
-        }
+    saveChangesBtn.addEventListener('click', function (event) {
+      // Check if changes have been made
+      if (!changesMade) {
+        event.preventDefault(); // Prevent form submission if no changes
+        alert('No changes made.');
+      }
     });
-
-    <?php 
-    if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
-        echo "var profileUpdatedSuccess = true;";
-        unset($_SESSION['profile_updated_success']); // Unset session variable after handling
-    } else {
-        echo "var profileUpdatedSuccess = false;"; 
-    }
-    ?>
-
-    // Add this JavaScript code to handle the success message
-    if (profileUpdatedSuccess) {
-        alert('Profile updated successfully!');
-    }
-
     <?php
-    if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
-        echo "var emailAlreadyRegistered = true;";
-        unset($_SESSION['email_already_registered']); // Unset session variable after handling
-    } else {
-        echo "var emailAlreadyRegistered = false;";
-    }
-    ?>
+if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+    echo "var profileUpdatedSuccess = true;";
+    unset($_SESSION['profile_updated_success']); // Unset session variable after handling
+} else {
+    echo "var profileUpdatedSuccess = false;";
+}
+?>
 
-    // Add this JavaScript code to handle the email already registered message
-    if (emailAlreadyRegistered) {
-        alert('The email address is already registered. Please use another email.');
-    }
-</script>
+// Add this JavaScript code to handle the email already registered message
+<?php
+if (isset($_SESSION['email_already_registered']) && $_SESSION['email_already_registered']) {
+    echo "var emailAlreadyRegistered = true;";
+    unset($_SESSION['email_already_registered']); // Unset session variable after handling
+} else {
+    echo "var emailAlreadyRegistered = false;";
+}
+?>
 
+// Add this JavaScript code to handle the success message
+if (profileUpdatedSuccess) {
+    alert('Profile updated successfully!');
+}
+
+// Add this JavaScript code to handle the email already registered message
+if (emailAlreadyRegistered) {
+    alert('The email address is already registered. Please use another email.');
+}
+</script> 
 </body> 
  
 </html>
