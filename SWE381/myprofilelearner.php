@@ -303,14 +303,18 @@ $(document).ready(function() {
 
     // Function to handle input and selection change
     function handleInputChange() {
-      changesMade = true;
-    }
+  var input = event.target;
+  var initialValue = input.dataset.initialValue; // Assuming you store initial values in a data attribute
+  if (initialValue !== input.value) {
+    changesMade = true;
+  }
+}
 
     // Add event listeners to input fields
     var inputFields = document.querySelectorAll('input, textarea, select');
     inputFields.forEach(function (input) {
       input.addEventListener('input', handleInputChange);
-      input.addEventListener('change', handleInputChange); // Adding change event listener
+      
     });
 
     // Add event listener to the "Save Changes" button
