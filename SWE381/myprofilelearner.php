@@ -307,24 +307,24 @@ $(document).ready(function() {
 
     // Function to handle input and selection change
     function handleInputChange() {
-        changesMade = true;
+      changesMade = true;
     }
 
     // Add event listeners to input fields
-    var inputFields = document.querySelectorAll('input, textarea, select, ');
-    inputFields.forEach(function(input) {
-        input.addEventListener('input', handleInputChange);
-        input.addEventListener('change', handleInputChange); // Adding change event listener
+    var inputFields = document.querySelectorAll('input, textarea, select');
+    inputFields.forEach(function (input) {
+      input.addEventListener('input', handleInputChange);
+      input.addEventListener('change', handleInputChange); // Adding change event listener
     });
 
     // Add event listener to the "Save Changes" button
     var saveChangesBtn = document.getElementById('save-changes-btn');
-    saveChangesBtn.addEventListener('click', function(event) {
-        // Check if changes have been made
-        if (!changesMade) {
-            event.preventDefault(); // Prevent form submission if no changes
-            alert('No changes made.');
-        }
+    saveChangesBtn.addEventListener('click', function (event) {
+      // Check if changes have been made
+      if (!changesMade) {
+        event.preventDefault(); // Prevent form submission if no changes
+        alert('No changes made.');
+      }
     });
 
     <?php
