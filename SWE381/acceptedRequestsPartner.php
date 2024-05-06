@@ -1,6 +1,6 @@
 <?php
 
-include 'checkpartner';
+session_start();
 
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
@@ -13,8 +13,18 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-if(isset($_SESSION['learner_id'])){
+if(isset($_SESSION['partner_id'])){
     $partner_id = $_SESSION['partner_id'];
+    
+    // Define the threshold date
+	$threshold_date = date('Y-m-d', strtotime('-5 days'));
+
+	// SQL query to delete requests older than 5 days with pending status
+	$deleteQuery1 = "DELETE FROM requests_partner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
+	$deleteQuery2 = "DELETE FROM requests_learner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
+
+	$deleteResult1 = mysqli_query($conn, $deleteQuery1);
+	$deleteResult2 = mysqli_query($conn, $deleteQuery2);
     
 	$query = "SELECT L.first_name AS learner_first_name, 
                  	L.last_name AS learner_last_name, 
@@ -72,8 +82,8 @@ if(isset($_SESSION['learner_id'])){
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
-    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="allRequestsPartner.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="ReviewPartner.php">My reviews and rating</a></li>
     <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>
 
@@ -116,7 +126,7 @@ if(isset($_SESSION['learner_id'])){
       </div>
     </section>
   </div>
-     <!-- ======= Footer ======= -->
+<!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="footer-top">
       <div class="container">
@@ -136,10 +146,9 @@ if(isset($_SESSION['learner_id'])){
              <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
-			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
-                           <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
-           
+              <li><i class="bx bx-chevron-right"></i> <a href="allRequestsPartner.php">Language Learning Requests</a></li>
+     <li><i class="bx bx-chevron-right"></i> <a href="ReviewPartner.php">my review and rating </a></li>
+        <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
@@ -154,7 +163,7 @@ if(isset($_SESSION['learner_id'])){
     </div>
     <div class="container footer-bottom clearfix">
       <div class="copyright">
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
       </div>
       <div class="credits"></div>
     </div>

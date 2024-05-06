@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 DEFINE('DB_USER', 'root');
 DEFINE('DB_PSWD', '');
 DEFINE('DB_HOST', 'localhost');
@@ -10,9 +12,11 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+if(isset($_SESSION['partner_id'])){
+    $partner_id = $_SESSION['partner_id'];
+
 $learner_id = $_GET['learnerID']; 
 $request_id = $_GET['requestID'];
-$partner_id = $_GET['partnerId'];
 
 
 $query = "SELECT L.first_name AS learner_first_name, 
@@ -37,6 +41,7 @@ $result = mysqli_query($conn, $query);
 
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
+}
 }
 ?>
 
@@ -189,12 +194,12 @@ $("#button1").click(function(){
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
-   <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-                    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
-                    <li><a class="nav-link scrollto" href="allRequestsPartner.php">Manage Language Learning Request</a></li>
-                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+    <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
+    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
+    <li><a class="nav-link scrollto" href="allRequestsPartner.php">Language Learning Requests</a></li>
+    <li><a class="nav-link scrollto" href="ReviewPartner.php">My reviews and rating</a></li>
+    <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>
 
     </nav>
@@ -272,7 +277,7 @@ $("#button1").click(function(){
       </div>
     </div>
   </div>
-     <!-- ======= Footer ======= -->
+<!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="footer-top">
       <div class="container">
@@ -289,13 +294,12 @@ $("#button1").click(function(){
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-               <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
-                           
+             <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="allRequestsPartner.php">Language Learning Requests</a></li>
+     <li><i class="bx bx-chevron-right"></i> <a href="ReviewPartner.php">my review and rating </a></li>
+        <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
             </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
@@ -310,7 +314,7 @@ $("#button1").click(function(){
     </div>
     <div class="container footer-bottom clearfix">
       <div class="copyright">
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
       </div>
       <div class="credits"></div>
     </div>
