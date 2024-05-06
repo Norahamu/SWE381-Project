@@ -81,20 +81,18 @@ header("Location: partnerInfo.php?partnerID=$pid");
 </head>
 <body>
 <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top header-inner-pages">
+ <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
       <ul> 
-   <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
                     <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
                     <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
                     <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
                     <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
       </ul>
-
     </nav>
   </header>
   <!-- End Header -->
@@ -112,7 +110,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
                 <div>
                  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
     <div class="item1" style="display: flex; align-items: center;">
-        <h4 style="margin-right: 10px;">Choose a partner:*</h4>
+        <h4 style="margin-right: 10px;" class="required">Choose a partner:</h4>
          <select id="sel" name="allInfo" required>
         <?php 
           
@@ -135,7 +133,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
         </select>
     </div>
 <div style="display: flex; align-items: center; gap:0;">
-  <h4 style=" margin: 0px;">Rate:</h4>
+  <h4 style=" margin: 0px;" class="required">Rate:</h4>
   <div class="rate">
     <input type="radio" id="star5" name="rate" value="5" required />
     <label for="star5" title="text">5 stars</label>
@@ -150,7 +148,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
   </div>
 </div>
     <div class="evaluationfeedback">
-        <h4>Feedback:</h4>
+        <h4 class="required">Feedback:</h4>
         <textarea name="Feedback" rows="10" cols="40" placeholder="Write your feedback here"required></textarea>
     </div>
 </div>
@@ -163,7 +161,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
       </form>
     </div>
   </section>
-      <!-- ======= Footer ======= -->
+     <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="footer-top">
       <div class="container">
@@ -180,13 +178,11 @@ header("Location: partnerInfo.php?partnerID=$pid");
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-			 <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
                                 <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
-            </ul>
           </div>
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Our Social Networks</h4>
@@ -200,7 +196,7 @@ header("Location: partnerInfo.php?partnerID=$pid");
     </div>
     <div class="container footer-bottom clearfix">
       <div class="copyright">
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
       </div>
       <div class="credits"></div>
     </div>
