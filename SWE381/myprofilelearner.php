@@ -25,7 +25,7 @@ $photo=$_FILES['photo']['name'];
 
 if($photo!=null){
 
-  $update_filename=$photo;
+  $update_filename="assets/img/".$photo;
 }
 
 else{
@@ -182,7 +182,9 @@ $(document).ready(function() {
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
         <h2>My Profile</h2> 
-       
+        <?php 
+                            echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
+                        ?>
       </div> 
       <div class="row"> 
  
