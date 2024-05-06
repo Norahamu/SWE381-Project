@@ -100,7 +100,7 @@ $connection->close();
 /// Handle form submission (delete profile) 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) { 
   $connection = new mysqli($servername, $username, $dbPassword, $database); 
-  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id = ?");
+  $stmtDelete = $connection->prepare("DELETE FROM learners WHERE learner_id =?");
   $stmtDelete->bind_param("i", $_SESSION['learner_id']); 
   if ($stmtDelete->execute()) { 
     header("Location: signuplearner.html"); 
@@ -180,7 +180,9 @@ $(document).ready(function() {
     <div class="container aos-init aos-animate" data-aos="fade-up"> 
       <div class="section-title"> 
         <h2>My Profile</h2> 
-        
+        <?php 
+                            echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
+                        ?>
       </div> 
       <div class="row"> 
  
