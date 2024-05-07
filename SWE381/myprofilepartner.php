@@ -1,4 +1,4 @@
-<<?php
+<?php
 session_start();
 
 // Define variables
@@ -26,18 +26,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $education = addslashes($connection->real_escape_string($_POST['Education']));
     $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
-   
-    $old_image = $_POST['image_old'];
-    $photo = $_FILES['photo']['name'];
-
-    if ($photo != null) {
-
-        $update_filename = $photo;
-    } else {
-        $update_filename = $old_image;
-
+    $old_image=$_POST['image_old'];
+    $photo=$_FILES['photo']['name'];
+    
+    
+    if($photo!=null){
+    
+      $update_filename=$photo;
     }
-
+    
+    else{
+      $update_filename=$old_image;
+    
+    }
+    
+        // Check if file is uploaded
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['photo']['tmp_name'];
+            $fileName = $_FILES['photo']['name'];
+            $target_dir = "assets/img/";
+            $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+            $newFileName = $firstName . $lastName . "." . $fileExt;
+            $update_filename = $target_dir . $newFileName;
+        
+            if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $update_filename)) {
+                echo "Sorry, there was an error uploading your file.";
+                exit;
+            }
+        }
     // Check if the provided email already exists for another user
     $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
     $result = $connection->query($checkEmailQuery);
@@ -214,7 +230,7 @@ $(document).ready(function() {
        
         <h2>My Profile</h2>
         <?php
-echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
+echo "<img class = 'personal' src='$photo' width ='90' height= '80' alt='personal'>";
 ?>
       </div>
       <div class="row">
