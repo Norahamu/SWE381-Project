@@ -98,7 +98,7 @@ if(isset($_SESSION['learner_id'])){
  <div class="section-title">
 <h2>Language Learning Requests</h2> </div>
 
-<div class="menu">
+<div class="menu" style='position:relative; right:-500px;'>
   <a href="allRequestsPartner.php" >All</a>
   <a href="acceptedRequestsPartner.php"  >Accepted</a>
   <a href="pendingRequestsPartner.php">Pending</a>
@@ -114,8 +114,8 @@ if(isset($_SESSION['learner_id'])){
           // Fetch and display session details
           while ($row = mysqli_fetch_assoc($result)) {
               echo "<div class='session'>";
-              echo "<img src='{$row['learner_photo']}' alt='{$row['learner_first_name']} photo' class='image--cover'>";
-              echo "<a href='#' class='PName learnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";           
+              echo "<img src='{$row['learner_photo']}' style='position:relative; right:-10px; bottom:-8px;' alt='{$row['learner_first_name']} photo' class='image--cover'>";
+              echo "<a href='#' style='position:relative; right:-15px; bottom:-8px;' class='PName learnerName' data-partner-id='$partner_id' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'>{$row['learner_first_name']} {$row['learner_last_name']}</a><br>";           
               echo "<h6 class='text2'>Status: {$row['RStatus']}</h6>";
               echo "</div>";
           }

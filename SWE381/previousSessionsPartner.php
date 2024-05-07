@@ -101,10 +101,13 @@ if(isset($_SESSION['partner_id'])){
 =======
 <<<<<<< HEAD
       <ul> 
+<<<<<<< HEAD
 =======
     <ul> 
 >>>>>>> 6be22685145a66767da5152606899084bc62963f
 >>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
+=======
+>>>>>>> 09e19c7533ae850ea6b63ed1e737dba716e69618
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
