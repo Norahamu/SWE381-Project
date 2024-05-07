@@ -12,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $connection->connect_error);
     }
 
-<<<<<<< HEAD
     $dsn = "mysql:host=$servername;dbname=$database;charset=utf8mb4";
       $options = [
           PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -26,8 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
     
     // Retrieve and sanitize form data
-=======
->>>>>>> 81f2810bdf65bb7019b560a00efad7b5f05f9a54
     $firstName = $connection->real_escape_string($_POST['first_name']);
     $lastName = $connection->real_escape_string($_POST['last_name']);
     $email = $connection->real_escape_string($_POST['email']);
