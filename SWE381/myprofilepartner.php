@@ -28,7 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
     $old_image=$_POST['image_old'];
     $photo=$_FILES['photo']['name'];
-    
+    $languages = $_POST['language']; // Array of selected languages
+    $proficiencyLevels = $_POST['ProficiencyLevel']; // Array of corresponding proficiency levels
+
     
     if($photo!=null){
     
@@ -68,11 +70,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['save_changes'])) {
 
                 //UPDATE
+
+              // Check if language and proficiency level arrays are set and not empty
+if (!isset($languages) || !isset($proficiencyLevels) || empty($languages) || empty($proficiencyLevels)) {
+  echo "<script>alert('Please select at least one language and proficiency level.'); window.location.href='myprofilepartner.php'</script>";
+  exit;
+}
+
+// Validate that languages and proficiency levels are arrays
+if (!is_array($languages) || !is_array($proficiencyLevels)) {
+  echo "<script>alert('Invalid data for languages or proficiency levels.'); window.location.href='myprofilepartner.php'</script>";
+  exit;
+}
+
+// Check if the number of languages matches the number of proficiency levels
+if (count($languages) !== count($proficiencyLevels)) {
+  echo "<script>alert('Each selected language must have a corresponding proficiency level.'); window.location.href='myprofilepartner.php'</script>";
+  exit;
+}
+else{
                 $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
                 $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $update_filename, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
-              // Update languages and proficiency levels in the database
-               $languages = $_POST['language']; // Array of selected languages
-               $proficiencyLevels = $_POST['ProficiencyLevel']; // Array of corresponding proficiency levels
+               // Update languages and proficiency levels in the database
+        if (isset($_POST['language']) && isset($_POST['ProficiencyLevel'])) {
+          $languages = $_POST['language']; // Array of selected languages
+          $proficiencyLevels = $_POST['ProficiencyLevel']; // Array of corresponding proficiency levels
+
+          // First, delete unchecked languages
+          $uncheckedLanguages = array_diff(getExistingLanguages(), $languages);
+          foreach ($uncheckedLanguages as $uncheckedLanguage) {
+              $deleteLanguageQuery = "DELETE FROM partner_languages WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$uncheckedLanguage'";
+              $connection->query($deleteLanguageQuery);
+          }
+
+          // Then, update existing languages and insert new ones
+          foreach ($languages as $index => $language) {
+              $proficiencyLevel = $proficiencyLevels[$index]; // Get proficiency level for this language
+
+              // Check if the language already exists for the user
+              $checkLanguageQuery = "SELECT * FROM partner_languages WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+              $result = $connection->query($checkLanguageQuery);
+
+              if ($result->num_rows > 0) {
+                  // Language already exists, check if proficiency level has changed
+                  $row = $result->fetch_assoc();
+                  if ($row['ProficiencyLevel'] !== $proficiencyLevel) {
+                      // Update proficiency level
+                      $updateLanguageQuery = "UPDATE partner_languages SET ProficiencyLevel = '$proficiencyLevel' WHERE partner_id = '{$_SESSION['partner_id']}' AND language = '$language'";
+                      $connection->query($updateLanguageQuery);
+                  }
+              } else {
+                  // Language does not exist, insert it into the database
+                  $insertLanguageQuery = "INSERT INTO partner_languages (partner_id, language, ProficiencyLevel) VALUES ('{$_SESSION['partner_id']}', '$language', '$proficiencyLevel')";
+                  $connection->query($insertLanguageQuery);
+              }
+          }
+      } else {
+          // Handle case where no language is chosen
+         
+          "<script>alert('Please select at least one language and proficiency level.');</script>";
+          exit();
+      }
 
                 if ($stmt->execute()) {
                     // Store success message in session variable
@@ -83,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                
                 $stmt->close();
                 $connection->close();
-            }
+            }}
 
 
             // Check for successful profile update and redirect to this page to clear POST data
@@ -111,6 +169,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 }
+// Function to get existing languages for the current user
+function getExistingLanguages() {
+  global $connection;
+  $existingLanguages = [];
+  $query = "SELECT language FROM partner_languages WHERE partner_id = '{$_SESSION['partner_id']}'";
+  $result = $connection->query($query);
+  if ($result->num_rows > 0) {
+      while ($row = $result->fetch_assoc()) {
+          $existingLanguages[] = $row['language'];
+      }
+  }
+  return $existingLanguages;
+}
 
 // Fetch user data for pre-filling the profile form
 $servername = "localhost";
@@ -123,7 +194,7 @@ $stmtFetch = $connection->prepare("SELECT * FROM partners WHERE partner_id = ?")
 $stmtFetch->bind_param("i", $_SESSION['partner_id']);
 $stmtFetch->execute();
 $resultFetch = $stmtFetch->get_result();
-
+ 
 
 // Fetch user data
 if ($resultFetch->num_rows > 0) {
@@ -143,15 +214,6 @@ if ($resultFetch->num_rows > 0) {
     $experience = $userData['Experience'];
     $pricePerSession = $userData['PricePerSession'];
     $photo = $userData['photo'];
-}
-
-$sql3 = "SELECT * FROM partner_languages WHERE partner_id  = '{$_SESSION['partner_id']}'";
-$result3 = mysqli_query($connection, $sql3);
-echo " my proficiency level: ";
-while ($row2 = mysqli_fetch_assoc($result3)) {
-    $lang = $row2['language'];
-    $ProficiencyLevel = $row2['ProficiencyLevel'];
-    
 }
 
 ?>
