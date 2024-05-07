@@ -322,7 +322,7 @@ $(document).ready(function() {
                 <li>
                     <input type="checkbox" id="lang_<?php echo $language; ?>" name="languages[]" value="<?php echo $language; ?>" checked>
                     <label for="lang_<?php echo $language; ?>"><?php echo $language; ?></label>
-                    <select name="proficiency_levels_<?php echo $language; ?>">
+                    <select name="proficiency_levels[<?php echo $language; ?>]">
                         <option value="">Select proficiency</option>
                         <?php foreach ($proficiencies as $prof): ?>
                             <?php
