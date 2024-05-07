@@ -12,7 +12,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-if(isset($_SESSION['learner_id'])){
+if(isset($_SESSION['partner_id'])){
     $partner_id = $_SESSION['partner_id'];
     
     // Define the threshold date

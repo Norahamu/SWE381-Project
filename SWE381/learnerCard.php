@@ -213,7 +213,7 @@ $("#button1").click(function(){
   <a href="pendingRequestsPartner.php">Pending</a>
   <a href="declinedRequestsPartner.php">Declined</a>
 </div>
-<div id="site">
+<div id="site" style='position:relative; right:-500px;'>
           
   <div id="drag" class="cv instaFade wrap">
     <div class="mainDetails">
