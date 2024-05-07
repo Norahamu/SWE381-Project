@@ -103,7 +103,7 @@ if(isset($_SESSION['partner_id'])){
   <a href="declinedRequestsPartner.php">Declined</a>
 </div>
 
-<div id="site">
+<div id="site" class="sessions">
           <?php
           
           if (!isset($result) || mysqli_num_rows($result) == 0) {

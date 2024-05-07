@@ -17,7 +17,6 @@ if(isset($_SESSION['partner_id'])){
     
 // Define the threshold date
 $threshold_date = date('Y-m-d H:i:s', strtotime('-5 days'));
-echo "<script>console.log('$threshold_date');</script>";
 
 // SQL query to delete requests older than 5 days with pending status
 $deleteQuery1 = "DELETE FROM requests_partner WHERE Status = 'Pending' AND request_date <= '$threshold_date'";
@@ -26,8 +25,6 @@ $deleteQuery2 = "DELETE FROM requests_learner WHERE Status = 'Pending' AND reque
 $deleteResult1 = mysqli_query($conn, $deleteQuery1);
 $deleteResult2 = mysqli_query($conn, $deleteQuery2);
 
-echo "<script>console.log('The query result:');</script>";
-echo "<script>console.log('$deleteResult2');</script>";
 
 
 
@@ -88,8 +85,6 @@ $(document).ready(function(){
         var requestID = $(this).data('req-id');
         var partnerId = $(this).data('partner-id');
         
-        console.log("partnerId:", partnerId);
-
         $.ajax({
             url: "declineRequest.php",
             method: "POST",
@@ -151,7 +146,6 @@ $(".button1").click(function(){
 
         // After looping through all sessions, check if there was any overlap
         if (!overlap) {
-            console.log("no overlap");
             $.get("acceptRequest.php", { 
                 LID: learnerID, 
                 PID: partnerId,
