@@ -62,7 +62,7 @@ button:hover {
 .cards {
     flex-direction: column;
     gap: 20px;
-	 align-items: flex-start; 
+  align-items: flex-start; 
 }
 
 .cards .card {
@@ -133,7 +133,4 @@ button:hover {
     margin-left: 0px;
     object-fit: cover;
     object-position: center right;
-    position: relative;
-    right: -5px;
-    bottom: -10px;
 }
