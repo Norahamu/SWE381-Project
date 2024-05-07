@@ -2099,7 +2099,6 @@ text-decoration:none;
 }
 .rate:not(:checked) > label {
   float:right;
-  width:1em;
   overflow:hidden;
   white-space:nowrap;
   cursor:pointer;
