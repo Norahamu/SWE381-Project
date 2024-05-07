@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-// Define variables
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $servername = "localhost";
     $username = "root";
@@ -15,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $connection->connect_error);
     }
 
-    // Retrieve and sanitize form data
     $firstName = $connection->real_escape_string($_POST['first_name']);
     $lastName = $connection->real_escape_string($_POST['last_name']);
     $email = $connection->real_escape_string($_POST['email']);
@@ -32,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $old_image=$_POST['image_old'];
     $photo=$_FILES['photo']['name'];
 
-   // Fetch existing languages and proficiency levels
    $sqlFetch = "SELECT language, ProficiencyLevel FROM partner_languages WHERE partner_id = ?";
    $stmtFetch = $pdo->prepare($sqlFetch);
    $stmtFetch->execute([$_SESSION['partner_id']]);

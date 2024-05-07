@@ -207,11 +207,7 @@ $("#button1").click(function(){
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-<<<<<<< HEAD
-    <ul> 
-=======
       <ul> 
->>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>

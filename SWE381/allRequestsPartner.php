@@ -211,10 +211,6 @@ $(".button1").click(function(){
     <li><a class="nav-link scrollto" href="ReviewPartner.php">My reviews and rating</a></li>
     <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>
-<<<<<<< HEAD
-=======
-
->>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
     </nav>
   </header>
   <!-- End Header -->
