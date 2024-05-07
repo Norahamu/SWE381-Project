@@ -212,6 +212,7 @@ $(".button1").click(function(){
     <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 <<<<<<< HEAD
@@ -219,6 +220,8 @@ $(".button1").click(function(){
 =======
 >>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
 >>>>>>> c43eb558e4fc82c8dba0dac55b1018cab5d4f696
+=======
+>>>>>>> 81f2810bdf65bb7019b560a00efad7b5f05f9a54
     </nav>
   </header>
   <!-- End Header -->

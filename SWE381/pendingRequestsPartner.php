@@ -209,6 +209,7 @@ $("#button1").click(function(){
     <nav id="navbar" class="navbar">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     <ul> 
 =======
 =======
@@ -223,6 +224,9 @@ $("#button1").click(function(){
       <ul> 
 >>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
 >>>>>>> c43eb558e4fc82c8dba0dac55b1018cab5d4f696
+=======
+      <ul> 
+>>>>>>> 81f2810bdf65bb7019b560a00efad7b5f05f9a54
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>

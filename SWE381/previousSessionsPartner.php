@@ -96,8 +96,8 @@ if(isset($_SESSION['partner_id'])){
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-<<<<<<< HEAD
     <ul> 
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
       <ul> 
@@ -115,6 +115,8 @@ if(isset($_SESSION['partner_id'])){
 =======
 >>>>>>> 09e19c7533ae850ea6b63ed1e737dba716e69618
 >>>>>>> be62785f512eab66c3c85fdd39cc53ea371a2dd2
+=======
+>>>>>>> 81f2810bdf65bb7019b560a00efad7b5f05f9a54
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
