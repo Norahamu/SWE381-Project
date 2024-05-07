@@ -75,7 +75,7 @@ if(isset($_SESSION['partner_id'])){
 <body>
 
 <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top header-inner-pages">
+<header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
@@ -129,7 +129,7 @@ if(isset($_SESSION['partner_id'])){
     </section>
   </div>
 <!-- ======= Footer ======= -->
-  <footer id="footer">
+<footer id="footer">
     <div class="footer-top">
       <div class="container">
         <div class="row">
@@ -149,15 +149,7 @@ if(isset($_SESSION['partner_id'])){
               <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="allRequestsPartner.php">Language Learning Requests</a></li>
-<<<<<<< HEAD
-			  <li><i class="bx bx-chevron-right"></i> <a href="ReviewPartner.php">my review and rating </a></li>
-=======
      <li><i class="bx bx-chevron-right"></i> <a href="ReviewPartner.php">my review and rating </a></li>
-<<<<<<< HEAD
->>>>>>> bf48123bb4d80664d580e9b673b3545152f4ef25
-=======
->>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
->>>>>>> c43eb558e4fc82c8dba0dac55b1018cab5d4f696
         <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
             </ul>
           </div>
@@ -178,7 +170,8 @@ if(isset($_SESSION['partner_id'])){
       <div class="credits"></div>
     </div>
   </footer>
-  
+  <!-- ======= end Footer ======= -->
+
   <script>
     // Select all elements with the class 'partnerName'
     const partnerNameElements = document.querySelectorAll('.learnerName');
@@ -201,4 +194,4 @@ if(isset($_SESSION['partner_id'])){
 </script>
   
 </body>
-</html>
+</html> 
