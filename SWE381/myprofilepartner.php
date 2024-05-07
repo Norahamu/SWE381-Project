@@ -306,19 +306,19 @@ echo "<img class = 'personal' src='$photo' width ='90' height= '80' alt='persona
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
-              <input type="text" value="<?php echo htmlspecialchars($firstName); ?>" name="first_name" class="form-control" id="fname">
+              <input type="text" value="<?php echo htmlspecialchars($firstName); ?>" name="first_name" class="form-control" id="fname" required>
             </div>
             <div class="form-group col-md-6">
               <label class="required">Last Name</label>
-              <input type="text" value="<?php echo htmlspecialchars($lastName); ?>" name="last_name" class="form-control" id="lname" >
+              <input type="text" value="<?php echo htmlspecialchars($lastName); ?>" name="last_name" class="form-control" id="lname" required>
             </div>
             <div class="form-group col-md-6">
               <label class="required">Age</label>
-              <input type="number" class="form-control" id="age" name="age" value="<?php echo htmlspecialchars($age); ?>">
+              <input type="number" class="form-control" id="age" name="age"  min="18" value="<?php echo htmlspecialchars($age); ?>"required>
             </div>
             <div class="form-group col-md-6">
   <label class="required">Gender</label>
-  <select name="gender" class="form-control">
+  <select name="gender" class="form-control" required>
     <option value="">Select Gender</option>
     <option value="female" <?php if ($gender === 'female') {
     echo 'selected';
@@ -332,7 +332,7 @@ echo "<img class = 'personal' src='$photo' width ='90' height= '80' alt='persona
 </div>
             <div class="form-group">
               <label class="required">Email</label>
-              <input type="email" class="form-control"value="<?php echo htmlspecialchars($email); ?>" name="email" id="email" >
+              <input type="email" class="form-control"value="<?php echo htmlspecialchars($email); ?>" name="email" id="email" required>
             </div>
             <div class="form-group">
               <label for="psw" class="required">Password</label>
@@ -349,7 +349,9 @@ echo "<img class = 'personal' src='$photo' width ='90' height= '80' alt='persona
               <input type=hidden name="image_old" value="<?php echo $photo; ?>">
             </div>
 
-
+            <div class="checkbox-wrapper-46" id="language-form">
+  <label class="required">Click on the languages you want to teach and select your proficiency:</label>
+  <div class="language-selection" required title="You must specify at least one language and proficiency">
 <?php
             
 // Fetch available languages and proficiency levels
@@ -364,34 +366,42 @@ while ($rowLanguage = $resultLanguages->fetch_assoc()) {
     $userLanguages[$rowLanguage['language']] = $rowLanguage['ProficiencyLevel'];
 }
 
-// Generate checkboxes and select dropdowns for each language
 foreach ($availableLanguages as $language) {
-    echo "<div class='language-selection'>";
-    echo "<label class='cbx' for='cbx-46-$language'>";
-    echo "<input class='inp-cbx' id='cbx-46-$language' type='checkbox' name='language[]' value='$language' " . (isset($userLanguages[$language]) ? 'checked' : '') . " />";
-    echo "<span>$language</span>";
-    echo "</label>";
-    echo "<select name='ProficiencyLevel[]' class='form-control' " . (isset($userLanguages[$language]) ? '' : 'disabled') . ">";
-    echo "<option value=''>Select proficiency</option>";
-    foreach ($proficiencyLevels as $level) {
-        echo "<option value='$level' " . ($userLanguages[$language] === $level ? 'selected' : '') . ">$level</option>";
-    }
-    echo "</select>";
-    echo "</div>";
+  $isChecked = isset($userLanguages[$language]);
+  echo "<div class='language-selection'>";
+  echo "<label class='cbx' for='cbx-46-$language'>";
+  echo "<input class='inp-cbx' id='cbx-46-$language' type='checkbox' name='language[$language]' value='$language' " . ($isChecked ? 'checked' : '') . " />";
+  echo "<span>$language</span>";
+  echo "</label>";
+  echo "<select name='ProficiencyLevel[$language]' class='form-control'" . ($isChecked ? 'required' : 'disabled') . ">";
+  echo "<option value=''>Select proficiency</option>";
+  foreach ($proficiencyLevels as $level) {
+      $isSelected = ($userLanguages[$language] === $level);
+      echo "<option value='$level' " . ($isSelected ? 'selected' : '') . ">$level</option>";
+  }
+  echo "</select>";
+  echo "</div>";
 }
 ?>
+ </div>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.inp-cbx').forEach(function(checkbox) {
-      checkbox.addEventListener('change', function() {
-        let selectElement = checkbox.closest('.language-selection').querySelector('.form-control');
-        selectElement.disabled = !checkbox.checked;
-        if (!checkbox.checked) {
-          selectElement.value = '';
-        }
-      });
+document.addEventListener("DOMContentLoaded", function() {
+    var checkboxes = document.querySelectorAll('.inp-cbx');
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            var selectId = 'select' + this.id; 
+            var selectElement = document.querySelector('[name="ProficiencyLevel[' + this.value + ']"]');
+            if (this.checked) {
+                selectElement.required = true;
+                selectElement.disabled = false;
+            } else {
+                selectElement.required = false;
+                selectElement.disabled = true;
+                selectElement.value = ''; 
+            }
+        });
     });
-  });
+});
 </script>
         <div class="form-group"></div>
 
@@ -399,22 +409,22 @@ foreach ($availableLanguages as $language) {
 
 
           <label class="required">Cultural Knowledge</label>
-          <textarea class="form-control"  name="cultural_knowledge" id="cultural_knowledge" rows="5"><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
+          <textarea class="form-control"  name="cultural_knowledge" id="cultural_knowledge" rows="5" required><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
         <div class="form-group">
           <label class="required">Education</label>
-          <textarea class="form-control"name="Education" id="Education" rows="5" ><?php echo htmlspecialchars($education); ?></textarea>
+          <textarea class="form-control"name="Education" id="Education" rows="5" required><?php echo htmlspecialchars($education); ?></textarea>
         </div>
         <div class="form-group">
           <label class="required">Experience</label>
-          <textarea class="form-control"name="Experience" id="Experience" rows="5" ><?php echo htmlspecialchars($experience); ?></textarea>
+          <textarea class="form-control"name="Experience" id="Experience" rows="5" required><?php echo htmlspecialchars($experience); ?></textarea>
         </div>
         <div class="form-group">
           <label for="location" class="required">Location</label>
-          <input type="text" name="location" class="form-control" id="location" value="<?php echo htmlspecialchars($location); ?>">
+          <input type="text" name="location" class="form-control" id="location" value="<?php echo htmlspecialchars($location); ?>" required>
         </div>
         <div class="form-group col-md-6">
 <label class="required">Price per session</label>
-<input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="PricePerSession" id="PricePerSession" min="50" step="1" >
+<input type="number" class="form-control" value="<?php echo htmlspecialchars($pricePerSession); ?>" name="PricePerSession" id="PricePerSession" min="50" step="1" required>
         </div>
        <div class="text-center" style="display: flex; justify-content: space-between;">
        <form id="save-changes-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
