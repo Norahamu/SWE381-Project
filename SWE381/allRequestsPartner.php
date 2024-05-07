@@ -198,12 +198,12 @@ $(".button1").click(function(){
 <body>
 
 <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top header-inner-pages">
+<header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-    <ul> 
+      <ul> 
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
@@ -211,17 +211,7 @@ $(".button1").click(function(){
     <li><a class="nav-link scrollto" href="ReviewPartner.php">My reviews and rating</a></li>
     <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
       </ul>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
->>>>>>> bf48123bb4d80664d580e9b673b3545152f4ef25
-=======
->>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
->>>>>>> c43eb558e4fc82c8dba0dac55b1018cab5d4f696
-=======
->>>>>>> 81f2810bdf65bb7019b560a00efad7b5f05f9a54
     </nav>
   </header>
   <!-- End Header -->
@@ -266,7 +256,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </section>
   </div>
 <!-- ======= Footer ======= -->
-  <footer id="footer">
+<footer id="footer">
     <div class="footer-top">
       <div class="container">
         <div class="row">
@@ -307,6 +297,8 @@ while ($row = mysqli_fetch_assoc($result)) {
       <div class="credits"></div>
     </div>
   </footer>
+  <!-- ======= end Footer ======= -->
+
 <script>
     // Select all elements with the class 'partnerName'
     const partnerNameElements = document.querySelectorAll('.learnerName');
