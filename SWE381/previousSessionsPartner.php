@@ -98,9 +98,6 @@ if(isset($_SESSION['partner_id'])){
     <nav id="navbar" class="navbar">
 <<<<<<< HEAD
       <ul> 
-=======
-    <ul> 
->>>>>>> 6be22685145a66767da5152606899084bc62963f
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>

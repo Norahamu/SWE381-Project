@@ -40,10 +40,10 @@ display: none;}
     object-position: center;
 }
 
-.TPName{
+a .TPName{
 	position: relative;
-    left: 10px;
-    top: 7px;
+    left: 15px;
+    top: 20px;
 }
 
 
