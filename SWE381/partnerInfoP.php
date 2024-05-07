@@ -27,24 +27,24 @@
 
     </head>
     <body>
-     <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top header-inner-pages">
-    <div class="container d-flex align-items-center">
-      <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
-    </div>
-    <nav id="navbar" class="navbar">
-    <ul> 
-    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="allRequestsPartner.php">Language Learning Requests</a></li>
-    <li><a class="nav-link scrollto" href="ReviewPartner.php">My reviews and rating</a></li>
-    <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
-      </ul>
+        <!-- ======= Header ======= -->
+        <header id="header" class="fixed-top header-inner-pages">
+            <div class="container d-flex align-items-center">
+                <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
+            </div>
+            <nav id="navbar" class="navbar">
+                <ul> 
+                    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+                    <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="AllReq.php">Language Learning Requests</a></li>
+                    <li><a class="nav-link scrollto" href="reviewAndRatingPartner.php">My reviews and rating</a></li>
+                    <li><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
+                </ul>
 
-    </nav>
-  </header>
-  <!-- End Header -->
+            </nav>
+        </header>
+        <!-- End Header -->
 
 
 
@@ -99,10 +99,10 @@
 
                     if ($counter != 0) {
                         $avr = $rate / $counter;
-                        
+
                         for ($x = 1; $x <= $avr; $x++) {
 
-                            echo " <input value='5' name= 'rate' id='star5' type='radio'> <label title='text' for='star5'></label>";
+                            echo "  <label style='pointer-events:none;'></label>";
                         }
                     }
                     echo "    </div>
@@ -180,15 +180,13 @@
                             $review = $row['Review'];
                             $sql5 = "SELECT * FROM learners WHERE learner_id = '$learnerid'";
                             $result5 = mysqli_query($connection, $sql5);
-                            
-                            
+
                             echo" 
                  <div class='review'>
 
 
                         <div class='heading'>";
 
-                           
                             while ($row = mysqli_fetch_assoc($result5)) {
                                 $img = $row['photo'];
                                 $fn = $row['first_name'];
@@ -208,7 +206,7 @@
                         </div> <!--heading-->";
 
                             echo" <div class='learner-review'>
-                            <p class ='Aleen'>" . $review . "</p>
+                            <p class ='Aleen' style='margin-top: 10px;'>" . $review . "</p>
                         </div> <!--learner review-->
                         </div> <!-- review1-->";
                         }
@@ -232,47 +230,47 @@
         <br>
         <br>
         <br>
-      <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
-            <p>
-              King Saud University <br>
-              Riyadh <br>
-              Saudi Arabia <br><br>
-              <strong>Email:</strong> lingo@project.com<br>
-            </p>
-          </div>
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-			  <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
-			  <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
-                           <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Social Networks</h4>
-            <div class="social-links mt-3">
-              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
-              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        <!-- ======= Footer ======= -->
+        <footer id="footer">
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 footer-contact">
+                            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
+                            <p>
+                                King Saud University <br>
+                                Riyadh <br>
+                                Saudi Arabia <br><br>
+                                <strong>Email:</strong> lingo@project.com<br>
+                            </p>
+                        </div>
+                        <div class="col-lg-3 col-md-6 footer-links">
+                            <h4>Useful Links</h4>
+                            <ul>
+                                <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="AllReq.php">Language Learning Requests</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="reviewAndRatingPartner.php">my review and rating </a></li>
+                                <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-3 col-md-6 footer-links">
+                            <h4>Our Social Networks</h4>
+                            <div class="social-links mt-3">
+                                <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+                                <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container footer-bottom clearfix">
-      <div class="copyright">
-        © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits"></div>
-    </div>
-  </footer>
+            <div class="container footer-bottom clearfix">
+                <div class="copyright">
+                    © Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
+                </div>
+                <div class="credits"></div>
+            </div>
+        </footer>
 </body>
 </html>
