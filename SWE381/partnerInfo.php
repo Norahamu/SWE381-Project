@@ -104,7 +104,7 @@
 
                         for ($x = 1; $x <= $avr; $x++) {
 
-                            echo "  <label style='pointer-events:none;' ></label>";
+                            echo "  <label style='pointer-events:none; color:#ffc700;' ></label>";
                         }
                     }
                     echo "    </div>
