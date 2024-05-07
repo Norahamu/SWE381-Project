@@ -91,32 +91,12 @@ if(isset($_SESSION['partner_id'])){
 <body>
 
 <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top header-inner-pages">
+<header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-    <ul> 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
       <ul> 
-<<<<<<< HEAD
-=======
-    <ul> 
->>>>>>> 6be22685145a66767da5152606899084bc62963f
-<<<<<<< HEAD
->>>>>>> bf48123bb4d80664d580e9b673b3545152f4ef25
-=======
->>>>>>> c2ebd3371547c2a6ba329df74ae9f9cb53ecc42e
-<<<<<<< HEAD
->>>>>>> c43eb558e4fc82c8dba0dac55b1018cab5d4f696
-=======
-=======
->>>>>>> 09e19c7533ae850ea6b63ed1e737dba716e69618
->>>>>>> be62785f512eab66c3c85fdd39cc53ea371a2dd2
-=======
->>>>>>> 81f2810bdf65bb7019b560a00efad7b5f05f9a54
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
@@ -163,47 +143,48 @@ if(isset($_SESSION['partner_id'])){
       </div>
     </section>
   </div>
-<!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a>
-            <p>
-              King Saud University <br>
-              Riyadh <br>
-              Saudi Arabia <br><br>
-              <strong>Email:</strong> lingo@project.com<br>
-            </p>
-          </div>
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-             <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="allRequestsPartner.php">Language Learning Requests</a></li>
-     <li><i class="bx bx-chevron-right"></i> <a href="ReviewPartner.php">my review and rating </a></li>
-        <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Social Networks</h4>
-            <div class="social-links mt-3">
-              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
-              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container footer-bottom clearfix">
-      <div class="copyright">
-        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits"></div>
-    </div>
-  </footer>
+<!-- ======= Footer ======= --> 
+<footer id="footer"> 
+    <div class="footer-top"> 
+      <div class="container"> 
+        <div class="row"> 
+          <div class="col-lg-3 col-md-6 footer-contact"> 
+            <a href="index.html" class="logo me-auto"><img src="assets/img/Lingoblue.png" alt="" class="img-fluid"></a> 
+            <p> 
+              King Saud University <br> 
+              Riyadh <br> 
+              Saudi Arabia <br><br> 
+              <strong>Email:</strong> lingo@project.com<br> 
+            </p> 
+          </div> 
+          <div class="col-lg-3 col-md-6 footer-links"> 
+            <h4>Useful Links</h4> 
+            <ul> 
+             <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li> 
+              <li><i class="bx bx-chevron-right"></i> <a href="myprofilepartner.php">My profile</a></li> 
+              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsPartner.php">Sessions</a></li> 
+              <li><i class="bx bx-chevron-right"></i> <a href="allRequestsPartner.php">Language Learning Requests</a></li> 
+     <li><i class="bx bx-chevron-right"></i> <a href="ReviewPartner.php">my review and rating </a></li> 
+        <li><i class="bx bx-chevron-right"></i><a class="nav-link scrollto" href="PartnersListP.php">Partners List</a></li> 
+            </ul> 
+          </div> 
+          <div class="col-lg-3 col-md-6 footer-links"> 
+            <h4>Our Social Networks</h4> 
+            <div class="social-links mt-3"> 
+              <a href="https://www.instagram.com/" class="instagram"><i class="bx bxl-instagram"></i></a> 
+              <a href="https://www.linkedin.com/" class="linkedin"><i class="bx bxl-linkedin"></i></a> 
+            </div> 
+          </div> 
+        </div> 
+      </div> 
+    </div> 
+    <div class="container footer-bottom clearfix"> 
+      <div class="copyright"> 
+        ©️ Copyright <strong><span>Lingo</span></strong>. All Rights Reserved 
+      </div> 
+      <div class="credits"></div> 
+    </div> 
+  </footer> 
+  <!-- ======= end Footer ======= -->
 </body>
 </html>
