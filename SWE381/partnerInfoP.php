@@ -23,7 +23,6 @@
         <!-- Main CSS File -->
         <link href="style.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="cssPartnerInfo.css">
-        <link rel="stylesheet" type="text/css" href="ratingpartnerstyle.css">
 
     </head>
     <body>

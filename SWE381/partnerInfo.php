@@ -23,7 +23,6 @@
         <!-- Main CSS File -->
         <link href="style.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="cssPartnerInfo.css">
-        <link rel="stylesheet" type="text/css" href="ratingpartnerstyle.css">
 
     </head>
     <body>
@@ -39,7 +38,6 @@
                     <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
                     <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
                     <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
 
                 </ul>
 
