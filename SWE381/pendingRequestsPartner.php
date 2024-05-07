@@ -231,7 +231,7 @@ $("#button1").click(function(){
 </div>
 
 
-<div id="site">
+<div id="site" class="sessions">
             <?php        
 if (!isset($result) || mysqli_num_rows($result) == 0) {
     echo "<br> <h3 class='sessions'>No requests available.</h3>";

@@ -12,7 +12,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-if(isset($_SESSION['learner_id'])){
+if(isset($_SESSION['partner_id'])){
     $partner_id = $_SESSION['partner_id'];
     
     // Define the threshold date
@@ -102,7 +102,7 @@ if(isset($_SESSION['learner_id'])){
   <a href="declinedRequestsPartner.php" class="selected">Declined</a>
 </div>
 
-<div id="site">
+<div id="site" class="sessions">
           <?php
           
           if (!isset($result) || mysqli_num_rows($result) == 0) {

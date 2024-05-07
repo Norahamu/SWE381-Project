@@ -33,7 +33,7 @@ if (isset($_GET['PID'], $_GET['REQID'], $_GET['LID'], $_GET['reqDate'], $_GET['r
 
         $sessionID = generateSessionID();
 
-        // Insert the new session using prepared statements
+        // Insert the new session 
         $insertQuery = "INSERT INTO sessions (session_id, partner_id, learner_id, session_date, session_time, duration) VALUES (:sessionID, :partnerID, :learnerID, :requDate, :requTime, :reqDuration)";
         $stmtInsert = $pdo->prepare($insertQuery);
 
@@ -50,7 +50,7 @@ if (isset($_GET['PID'], $_GET['REQID'], $_GET['LID'], $_GET['reqDate'], $_GET['r
             throw new PDOException("Error inserting new session.");
         }
 
-        // Update the request status to accepted using prepared statements
+        // Update the request status to accepted 
         $acceptQuery = "UPDATE requests_partner SET Status = 'Accepted' WHERE RequestID = :requestID AND LearnerID = :learnerID";
         $stmtAccept = $pdo->prepare($acceptQuery);
         $stmtAccept->bindParam(':requestID', $requestID);
@@ -60,21 +60,18 @@ if (isset($_GET['PID'], $_GET['REQID'], $_GET['LID'], $_GET['reqDate'], $_GET['r
             throw new PDOException("Error updating request status.");
         }
 
-        // Additional query 1: Update requests_learner table
         $updateLearnerQuery = "UPDATE requests_learner SET Status = 'Accepted' WHERE RequestID = :requestID AND PartnerID = :partnerID";
         $stmtUpdateLearner = $pdo->prepare($updateLearnerQuery);
         $stmtUpdateLearner->bindParam(':requestID', $requestID);
         $stmtUpdateLearner->bindParam(':partnerID', $partnerID);
         $stmtUpdateLearner->execute();
 
-        // Additional query 2: Insert into partner_sessions table
         $insertPartnerSessionQuery = "INSERT INTO partner_sessions (partner_id, session_id, session_status) VALUES (:partnerID, :sessionID, 'Current')";
         $stmtInsertPartnerSession = $pdo->prepare($insertPartnerSessionQuery);
         $stmtInsertPartnerSession->bindParam(':partnerID', $partnerID);
         $stmtInsertPartnerSession->bindParam(':sessionID', $sessionID);
         $stmtInsertPartnerSession->execute();
 
-        // Additional query 3: Insert into learner_sessions table
         $insertLearnerSessionQuery = "INSERT INTO learner_sessions (learner_id, session_id, session_status) VALUES (:learnerID, :sessionID, 'Current')";
         $stmtInsertLearnerSession = $pdo->prepare($insertLearnerSessionQuery);
         $stmtInsertLearnerSession->bindParam(':learnerID', $learnerID);
