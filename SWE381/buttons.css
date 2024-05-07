@@ -133,4 +133,7 @@ button:hover {
     margin-left: 0px;
     object-fit: cover;
     object-position: center right;
+    position: relative;
+    right: -5px;
+    bottom: -10px;
 }
