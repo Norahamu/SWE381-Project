@@ -121,7 +121,6 @@ $("#button1").click(function(){
 
     // Check for overlapping sessions before accepting the request
     $.getJSON("partnerSessions.php?PID=" + partnerId, function(response) {
-        console.log("Button1 after partnerSessions");
     }).done(function(response) {
         var overlap = false;
         response.forEach(function(session) {
@@ -139,14 +138,12 @@ $("#button1").click(function(){
             // Check for overlap between session and requested time
             if (requested_start < session_end && requested_end > session_start) {
                 overlap = true;
-                console.log("Sessions overlap");
                 // You might want to break the loop here if you only need to check for any overlap
             }
         });
 
         // After looping through all sessions, check if there was any overlap
         if (!overlap) {
-            console.log("no overlap");
             $.get("acceptRequest.php", { 
                 LID: learnerID, 
                 PID: partnerId,
@@ -155,7 +152,6 @@ $("#button1").click(function(){
                 reqTime: requTime, 
                 reqDuration: RDur 
             }, function(response) {
-                console.log(response); // Log the response to see its structure
                 try {
                     var jsonResponse = JSON.parse(response); // Parse JSON response
                     if (jsonResponse.success) {
@@ -263,8 +259,8 @@ $("#button1").click(function(){
               echo "Preferred Schedule: ".$formatted_datetime;
 			  if ($row['RStatus'] == 'Pending') {
 			      echo '<div class="button-container">';
-        		  echo "<button type='button' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['preferred_schedule']}'   data-req-dur='{$row['Session_Duration']}' >Accept</button>";
- 			      echo "<button type='button' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
+        		  echo "<button type='button' style='right:260px' class='button1' id='button1' data-partner-id='$partner_id'  data-learner-id='{$row['learnerID']}'  data-req-id='{$row['REQID']}'    data-req-sch='{$row['preferred_schedule']}'   data-req-dur='{$row['Session_Duration']}' >Accept</button>";
+ 			      echo "<button type='button' style='right:160px' class='button2' id='button2' data-learner-id='{$row['learnerID']}' data-req-id='{$row['REQID']}'  data-partner-id='$partner_id'>Decline</button>";
         		  echo '</div>';
     		  }             
               echo "</div>";
