@@ -114,12 +114,7 @@ if ($result->num_rows > 0) {
   }
   
 
-  
   }
-
-
-
-
 
 // Fetch user data for pre-filling the profile form
 $servername = "localhost";
