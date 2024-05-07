@@ -23,6 +23,7 @@
         <!-- Main CSS File -->
         <link href="style.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="cssPartnerInfo.css">
+        <link rel="stylesheet" type="text/css" href="ratingpartnerstyle.css">
 
     </head>
     <body>
@@ -33,13 +34,13 @@
             </div>
             <nav id="navbar" class="navbar">
                 <ul> 
-                   <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
-    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
-    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
-    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
-    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
-    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
-                    
+                    <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
+                    <li><a class="nav-link scrollto" href="myprofilelearner.php">My profile</a></li>
+                    <li><a class="nav-link scrollto" href="currentSessionsLearner.php">Sessions</a></li>
+                    <li><a class="nav-link scrollto" href="RequestsList.php">Manage Language Learning Request</a></li>
+                    <li><a class="nav-link scrollto" href="PartnerList.php">Partners List</a></li>
+                    <li><a class="nav-link scrollto" href="ReviewLearner.php">Review my Partner</a></li>
+
                 </ul>
 
             </nav>
@@ -100,10 +101,10 @@
 
                     if ($counter != 0) {
                         $avr = $rate / $counter;
-                        
+
                         for ($x = 1; $x <= $avr; $x++) {
 
-                            echo " <label></label>";
+                            echo "  <label style='pointer-events:none;' ></label>";
                         }
                     }
                     echo "    </div>
@@ -181,15 +182,12 @@
                             $review = $row['Review'];
                             $sql5 = "SELECT * FROM learners WHERE learner_id = '$learnerid'";
                             $result5 = mysqli_query($connection, $sql5);
-                            
-                           
+
                             echo" 
-                 <div class='review'>
+                       <div class='review'>
 
 
                         <div class='heading'>";
-
-                           
                             while ($row = mysqli_fetch_assoc($result5)) {
                                 $img = $row['photo'];
                                 $fn = $row['first_name'];
@@ -209,7 +207,7 @@
                         </div> <!--heading-->";
 
                             echo" <div class='learner-review'>
-                            <p class ='Aleen'>" . $review . "</p>
+                            <p class ='Aleen' style='margin-top: 10px;' >" . $review . "</p>
                         </div> <!--learner review-->
                         </div> <!-- review1-->";
                         }
@@ -250,13 +248,13 @@
                         <div class="col-lg-3 col-md-6 footer-links">
                             <h4>Useful Links</h4>
                             <ul>
-                                 <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
-			  <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
-           
+                                <li><i class="bx bx-chevron-right"></i> <a href="logout.php">Sign out</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="myprofilelearner.php">My profile</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="currentSessionsLearner.php">Sessions</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="RequestsList.php">Language Learning Requests</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="PartnerList.php">Partner List</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="ReviewLearner.php">Review my partner</a></li>
+
                             </ul>
                         </div>
                         <div class="col-lg-3 col-md-6 footer-links">
