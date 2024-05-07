@@ -1,8 +1,7 @@
-<?php
+<<?php
 session_start();
 
 // Define variables
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $servername = "localhost";
@@ -27,53 +26,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $education = addslashes($connection->real_escape_string($_POST['Education']));
     $experience = addslashes($connection->real_escape_string($_POST['Experience']));
     $pricePerSession = $connection->real_escape_string($_POST['PricePerSession']);
-    $old_image=$_POST['image_old'];
-    $photo=$_FILES['photo']['name'];
-    $languages = array();
-    $ProficiencyLevel = array();
-
-
-    
-    if($photo!=null){
-    
-      $update_filename=$photo;
-    }
-    
-    else{
-      $update_filename=$old_image;
-    
-    }
-     
-      
-
-    
-    // Check if the provided email already exists for another user
-$checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
-$result = $connection->query($checkEmailQuery);
-
-if ($result->num_rows > 0) {
-    // Email address is already registered for another user
-    $_SESSION['email_already_registered'] = true;
-} else {
-    //UPDATE
    
-        // New photo uploaded, update the photo field in the database
-        $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
-        $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $update_filename, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
-   
+    $old_image = $_POST['image_old'];
+    $photo = $_FILES['photo']['name'];
 
-    if ($stmt->execute()) {
-        // Store success message in session variable
-        $_SESSION['profile_updated_success'] = true;
+    if ($photo != null) {
+
+        $update_filename = $photo;
     } else {
-        echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+        $update_filename = $old_image;
+
     }
 
-    $stmt->close();
+    // Check if the provided email already exists for another user
+    $checkEmailQuery = "SELECT * FROM partners WHERE email = '$email' AND partner_id != '{$_SESSION['partner_id']}'";
+    $result = $connection->query($checkEmailQuery);
+
+    if ($result->num_rows > 0) {
+        // Email address is already registered for another user
+        $_SESSION['email_already_registered'] = true;
+    } else {
+
+        // Handle form submissions
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (isset($_POST['save_changes'])) {
+
+                //UPDATE
+                $stmt = $connection->prepare("UPDATE partners SET first_name=?, last_name=?, email=?, password=?, photo=?, location=?, cultural_knowledge=?, Education=?, Experience=?, PricePerSession=?, age=?, gender=? WHERE partner_id=?");
+                $stmt->bind_param("ssssssssssssi", $firstName, $lastName, $email, $password, $update_filename, $location, $culturalKnowledge, $education, $experience, $pricePerSession, $age, $gender, $_SESSION['partner_id']);
+              // Update languages and proficiency levels in the database
+               $languages = $_POST['language']; // Array of selected languages
+               $proficiencyLevels = $_POST['ProficiencyLevel']; // Array of corresponding proficiency levels
+
+                if ($stmt->execute()) {
+                    // Store success message in session variable
+                    $_SESSION['profile_updated_success'] = true;
+                } else {
+                    echo "<div class='error-message'>Error: " . $stmt->error . "</div>";
+                }
+               
+                $stmt->close();
+                $connection->close();
+            }
+
+
+            // Check for successful profile update and redirect to this page to clear POST data
+            if (isset($_SESSION['profile_updated_success']) && $_SESSION['profile_updated_success']) {
+                unset($_SESSION['profile_updated_success']);
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            } elseif (isset($_POST['delete_account'])) {
+                $connection = new mysqli($servername, $username, $dbPassword, $database);
+                $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id =?");
+                $stmtDelete->bind_param("i", $_SESSION['partner_id']);
+                if ($stmtDelete->execute()) {
+                    header("Location: signuppartner.html");
+                    exit();
+                } else {
+                    echo "<div class='error-message'>Error: " .
+                    $stmtDelete->error . "</div>";
+                }
+                $stmtDelete->close();
+                $connection->close();
+
+            }
+        }
+
+    }
+
 }
 
-$connection->close(); 
-}
 // Fetch user data for pre-filling the profile form
 $servername = "localhost";
 $username = "root";
@@ -86,9 +108,12 @@ $stmtFetch->bind_param("i", $_SESSION['partner_id']);
 $stmtFetch->execute();
 $resultFetch = $stmtFetch->get_result();
 
+
 // Fetch user data
 if ($resultFetch->num_rows > 0) {
     $userData = $resultFetch->fetch_assoc();
+
+    // Assign user data to variables for pre-filling the form
     $firstName = $userData['first_name'];
     $lastName = $userData['last_name'];
     $email = $userData['email'];
@@ -101,69 +126,64 @@ if ($resultFetch->num_rows > 0) {
     $education = $userData['Education'];
     $experience = $userData['Experience'];
     $pricePerSession = $userData['PricePerSession'];
-    $photo = $userData['photo']; 
-} 
- 
-// Handle form submission (delete profile)
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
-    $connection = new mysqli($servername, $username, $dbPassword, $database);
-    $stmtDelete = $connection->prepare("DELETE FROM partners WHERE partner_id = ?");
-    $stmtDelete->bind_param("i", $_SESSION['partner_id']);
-    if ($stmtDelete->execute()) {
-        header("Location: signuppartner.html");
-        exit();
-    } else {
-        echo "<div class='error-message'>Error: " .
-            $stmtDelete->error . "</div>";
-    }
-    $stmtDelete->close();
-    $connection->close();
+    $photo = $userData['photo'];
 }
+
+$sql3 = "SELECT * FROM partner_languages WHERE partner_id  = '{$_SESSION['partner_id']}'";
+$result3 = mysqli_query($connection, $sql3);
+echo " my proficiency level: ";
+while ($row2 = mysqli_fetch_assoc($result3)) {
+    $lang = $row2['language'];
+    $ProficiencyLevel = $row2['ProficiencyLevel'];
+    
+}
+
 ?>
-<!DOCTYPE html> 
-<html lang="en"> 
- 
-<head> 
- 
-  <meta charset="UTF-8"> <!-- character encoding--> 
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings--> 
-  <link rel="stylesheet" type="text/css" href="style.css" media="screen"> 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
- 
-  <title>My Profile Partner</title> 
-  <!-- icon --> 
-  <link href="assets/img/Lingoblue.png" rel="icon"> 
- 
-  <!-- Google Fonts --> 
-  <link rel="stylesheet" 
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"> 
- 
- 
-  <!-- Vendor CSS Files --> 
- 
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> 
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"> 
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"> 
- 
- 
-  <!-- Main CSS File --> 
-  <link href="style.css" rel="stylesheet"> 
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8"> <!-- character encoding-->
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- viewpoet settings-->
+  <link rel="stylesheet" type="text/css" href="style.css" media="screen">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <title>My Profile Partner</title>
+  <!-- icon -->
+  <link href="assets/img/Lingoblue.png" rel="icon">
+
+  <!-- Google Fonts -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:300,300i,400,400i,600,600i,700,700i&family=Jost:300,300i,400,400i,500,500i,600,600i,700,700i&family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i">
+
+
+  <!-- Vendor CSS Files -->
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+
+
+  <!-- Main CSS File -->
+  <link href="style.css" rel="stylesheet">
   <!-- JS Files -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
- 
-</head> 
- 
-<body> 
+
+</head>
+
+<body>
 
 
-  <!-- ======= Header ======= --> 
+  <!-- ======= Header ======= -->
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center">
       <a href="index.html" class="logo me-auto"><img src="assets/img/Lingowhite.png" alt="Lingo logo" class="img-fluid"></a>
     </div>
     <nav id="navbar" class="navbar">
-    <ul> 
+    <ul>
     <li><a class="nav-link scrollto " href="logout.php">Sign out</a></li>
     <li><a class="nav-link scrollto" href="myprofilepartner.php">My profile</a></li>
     <li><a class="nav-link scrollto" href="currentSessionsPartner.php">Sessions</a></li>
@@ -174,24 +194,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
 
     </nav>
   </header>
-  <!-- End Header --> 
-  
-  <section id="signuplearner" class="signuplearner section-bg"> 
-    <div class="container aos-init aos-animate" data-aos="fade-up"> 
-      <div class="section-title"> 
-        <h2>My Profile</h2> 
-        <?php 
-                            echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
-                        ?>
-      </div> 
-      <div class="row"> 
- 
-        <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch"> 
-      
+  <!-- End Header -->
+  <script>
+$(document).ready(function() {
+    $("#togglePassword").click(function() {
+        var password = $("#password");
+        var type = password.attr("type") === "password" ? "text" : "password";
+        password.attr("type", type);
+
+        // toggle the eye / eye-slash icon
+        $(this).toggleClass("fa-eye fa-eye-slash");
+    });
+});
+</script>
+
+  <section id="signuplearner" class="signuplearner section-bg">
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+      <div class="section-title">
+       
+        <h2>My Profile</h2>
+        <?php
+echo "<img class = 'personal' src='assets/img/$photo' width ='90' height= '80' alt='personal'>";
+?>
+      </div>
+      <div class="row">
+
+        <div class="col-lg-12 mt-9 mt-lg-0 d-flex align-items-stretch">
 
 
 
-  <form action="#" method="post" class="php-email-form" enctype="multipart/form-data"> 
+
+  <form action="#" method="post" class="php-email-form" enctype="multipart/form-data">
           <div class="row">
             <div class="form-group col-md-6">
                    <label class="required">First Name</label>
@@ -209,8 +242,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
   <label class="required">Gender</label>
   <select name="gender" class="form-control">
     <option value="">Select Gender</option>
-    <option value="female" <?php if ($gender === 'female') echo 'selected'; ?>>Female</option>
-    <option value="male" <?php if ($gender === 'male') echo 'selected'; ?>>Male</option>
+    <option value="female" <?php if ($gender === 'female') {
+    echo 'selected';
+}
+?>>Female</option>
+    <option value="male" <?php if ($gender === 'male') {
+    echo 'selected';
+}
+?>>Male</option>
   </select>
 </div>
             <div class="form-group">
@@ -221,14 +260,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
               <label for="psw" class="required">Password</label>
               <div class="input-group">
                   <input type="password" class="form-control" value="<?php echo htmlspecialchars($password); ?>" id="psw" name="password" placeholder="Enter your password" required minlength="8" maxlength="15" pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$" title="Password must be 8-15 characters long and include at least one special character.">
+
               </div>
-          </div> 
-          <div class="form-group"> 
-              <label>Upload Photo</label> 
-              <input type="file" class="form-control" name="photo" id="photo" > 
-              <input type=hidden name="image_old" value="<?php echo $photo;?>">
-            </div> 
+          </div>
+
+
+          <div class="form-group">
+              <label>Upload Photo</label>
+              <input type="file" class="form-control" name="photo" id="photo" >
+              <input type=hidden name="image_old" value="<?php echo $photo; ?>">
+            </div>
+
+
+<?php
+            
+// Fetch available languages and proficiency levels
+$availableLanguages = ['Arabic', 'English', 'French', 'Spanish']; // List of available languages in the form
+$proficiencyLevels = ['Beginner', 'Intermediate', 'Advanced']; // List of proficiency levels
+
+// Fetch user's language proficiency levels from the database
+$sqlLanguages = "SELECT * FROM partner_languages WHERE partner_id = '{$_SESSION['partner_id']}'";
+$resultLanguages = $connection->query($sqlLanguages);
+$userLanguages = [];
+while ($rowLanguage = $resultLanguages->fetch_assoc()) {
+    $userLanguages[$rowLanguage['language']] = $rowLanguage['ProficiencyLevel'];
+}
+
+// Generate checkboxes and select dropdowns for each language
+foreach ($availableLanguages as $language) {
+    echo "<div class='language-selection'>";
+    echo "<label class='cbx' for='cbx-46-$language'>";
+    echo "<input class='inp-cbx' id='cbx-46-$language' type='checkbox' name='language[]' value='$language' " . (isset($userLanguages[$language]) ? 'checked' : '') . " />";
+    echo "<span>$language</span>";
+    echo "</label>";
+    echo "<select name='ProficiencyLevel[]' class='form-control' " . (isset($userLanguages[$language]) ? '' : 'disabled') . ">";
+    echo "<option value=''>Select proficiency</option>";
+    foreach ($proficiencyLevels as $level) {
+        echo "<option value='$level' " . ($userLanguages[$language] === $level ? 'selected' : '') . ">$level</option>";
+    }
+    echo "</select>";
+    echo "</div>";
+}
+?>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.inp-cbx').forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+        let selectElement = checkbox.closest('.language-selection').querySelector('.form-control');
+        selectElement.disabled = !checkbox.checked;
+        if (!checkbox.checked) {
+          selectElement.value = '';
+        }
+      });
+    });
+  });
+</script>
         <div class="form-group"></div>
+
+
+
+
           <label class="required">Cultural Knowledge</label>
           <textarea class="form-control"  name="cultural_knowledge" id="cultural_knowledge" rows="5"><?php echo htmlspecialchars($culturalKnowledge); ?></textarea>       </div>
         <div class="form-group">
@@ -250,7 +341,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
        <div class="text-center" style="display: flex; justify-content: space-between;">
        <form id="save-changes-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <input type="hidden" name="save_changes" value="1">
-              <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button> 
+              <button type="submit" id="save-changes-btn" style="margin-right: auto;">Save Changes</button>
               </form>
               <form id="delete-account-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
               <input type="hidden" name="delete_account" value="1">
@@ -265,14 +356,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
                 document.getElementById("delete-account-form").submit();
             }
         }
-    </script> 
+    </script>
 
     </div>
     </form>
-        </div> 
-      </div> 
-    </div> 
-  </section> 
+        </div>
+      </div>
+    </div>
+  </section>
  <!-- ======= Footer ======= -->
  <footer id="footer">
     <div class="footer-top">
@@ -367,7 +458,7 @@ if (profileUpdatedSuccess) {
 if (emailAlreadyRegistered) {
     alert('The email address is already registered. Please use another email.');
 }
-</script> 
-</body> 
- 
+</script>
+</body>
+
 </html>
