@@ -349,7 +349,7 @@ echo "<img class = 'personal' src='$photo' width ='90' height= '80' alt='persona
               <input type=hidden name="image_old" value="<?php echo $photo; ?>">
             </div>
 
-            <div class="checkbox-wrapper-46" id="language-form">
+           <div class="checkbox-wrapper-46" id="language-form">
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
   <div class="language-selection" required title="You must specify at least one language and proficiency">
 <?php
@@ -369,7 +369,7 @@ while ($rowLanguage = $resultLanguages->fetch_assoc()) {
 foreach ($availableLanguages as $language) {
   $isChecked = isset($userLanguages[$language]);
   echo "<div class='language-selection'>";
-  echo "<label class='cbx' for='cbx-46-$language'>";
+  echo "<label class='cbx' for='cbx-46-$language' style='margin-right: 10px; display: flex; align-items: center;'>";
   echo "<input class='inp-cbx' id='cbx-46-$language' type='checkbox' name='language[$language]' value='$language' " . ($isChecked ? 'checked' : '') . " />";
   echo "<span>$language</span>";
   echo "</label>";

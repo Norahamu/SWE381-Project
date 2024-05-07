@@ -134,11 +134,10 @@ $(document).ready(function() {
               <label>Upload Photo</label>
               <input type="file" class="form-control" name="photo" id="photo">
             </div>
-            <div class="checkbox-wrapper-46">
-            <div class="checkbox-wrapper-46" id="language-form">
+            <div id="language-form">
   <label class="required">Click on the languages you want to teach and select your proficiency:</label>
   <div class="language-selection" required title="You must specify at least one language and proficiency">
-    <label class="cbx" for="cbx-46-arabic">
+    <label class="cbx" for="cbx-46-arabic" style='margin-right: 10px; display: flex; align-items: center'>
       <input class="inp-cbx" id="cbx-46-arabic" type="checkbox" name="languages[]" value="Arabic" />
       <span>Arabic</span>
     </label>
@@ -150,7 +149,7 @@ $(document).ready(function() {
     </select>
   </div>
   <div class="language-selection">
-    <label class="cbx" for="cbx-46-english">
+    <label class="cbx" for="cbx-46-english" style='margin-right: 10px; display: flex; align-items: center'>
       <input class="inp-cbx" id="cbx-46-english" type="checkbox" name="languages[]" value="English" />
       <span>English</span>
     </label>
@@ -162,7 +161,7 @@ $(document).ready(function() {
     </select>
   </div>
   <div class="language-selection">
-    <label class="cbx" for="cbx-46-french">
+    <label class="cbx" for="cbx-46-french" style='margin-right: 10px; display: flex; align-items: center'>
       <input class="inp-cbx" id="cbx-46-french" type="checkbox" name="languages[]" value="French" />
       <span>French</span>
     </label>
@@ -174,7 +173,7 @@ $(document).ready(function() {
     </select>
   </div>
   <div class="language-selection">
-    <label class="cbx" for="cbx-46-spanish">
+    <label class="cbx" for="cbx-46-spanish" style='margin-right: 10px; display: flex; align-items: center'>
       <input class="inp-cbx" id="cbx-46-spanish" type="checkbox" name="languages[]" value="Spanish" />
       <span>Spanish</span>
     </label>
@@ -185,7 +184,6 @@ $(document).ready(function() {
       <option value="Advanced">Advanced</option>
     </select>
   </div>
-</div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.inp-cbx').forEach(function(checkbox) {
